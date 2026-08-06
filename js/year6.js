@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 6 configuration and question bank. */
-YEAR_CONFIGS[6] = {"title":"Year 6 Rapid Fire Mental Maths","skillLabel":"Year 6 Skill","mixed":"Mixed Year 6 Skills","labels":{"addsub":"Addition & Subtraction","multdiv":"Multiplication & Division","order":"Order of Operations","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","decimalShift":"Decimal Multiplication & Division","percentages":"Percentages","ratio":"Ratio & Proportion","negatives":"Negative Numbers","units":"Units & Time","mixed":"Mixed Year 6 Skills","review":"Mistake Review","placeRounding":"Place Value, Rounding & Estimation","inverseOperations":"Missing Numbers & Inverse Operations","fdpConversions":"Fraction, Decimal & Percentage Conversion","mixedFractions":"Mixed Numbers & Equivalent Fractions","equationsMachines":"Simple Equations & Function Machines","sequencesPatterns":"Sequences & Number Patterns","statistics":"Mean, Median, Mode & Range","perimeterAreaVolume":"Perimeter, Area & Volume","speedDistanceTime":"Speed, Distance & Time","probability":"Basic Probability","fractionWordProblems":"Fraction Operations Word Problems","triangleQuadAngles":"Triangle & Quadrilateral Angles"},"skills":["addsub","multdiv","order","factors","fractions","fractionWordProblems","decimals","decimalShift","percentages","ratio","negatives","units","placeRounding","inverseOperations","fdpConversions","mixedFractions","equationsMachines","sequencesPatterns","statistics","perimeterAreaVolume","triangleQuadAngles","speedDistanceTime","probability"],"levels":[["starter","Starter — Year 5 Review"],["core","Core — Year 6"],["challenge","Challenge — Year 6+"]],"teacher":"Year 6 includes 23 targeted banks. Triangle & Quadrilateral Angles develops fast recall of angle sums, right and isosceles triangles, quadrilaterals and simple equal-angle reasoning."};
+YEAR_CONFIGS[6] = {"title":"Year 6 Rapid Fire Mental Maths","skillLabel":"Year 6 Skill","mixed":"Mixed Year 6 Skills","labels":{"addsub":"Addition & Subtraction","multdiv":"Multiplication & Division","order":"Order of Operations","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","decimalShift":"Decimal Multiplication & Division","percentages":"Percentages","ratio":"Ratio & Proportion","negatives":"Negative Numbers","units":"Units & Time","mixed":"Mixed Year 6 Skills","review":"Mistake Review","placeRounding":"Place Value, Rounding & Estimation","inverseOperations":"Missing Numbers & Inverse Operations","fdpConversions":"Fraction, Decimal & Percentage Conversion","mixedFractions":"Mixed Numbers & Equivalent Fractions","equationsMachines":"Simple Equations & Function Machines","sequencesPatterns":"Sequences & Number Patterns","statistics":"Mean, Median, Mode & Range","perimeterAreaVolume":"Perimeter, Area & Volume","speedDistanceTime":"Speed, Distance & Time","probability":"Basic Probability","fractionWordProblems":"Fraction Operations Word Problems","triangleQuadAngles":"Triangle & Quadrilateral Angles","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","remaindersPatterns":"Remainders & Repeating Patterns"},"skills":["addsub","multdiv","mentalStrategies","order","factors","remaindersPatterns","fractions","fractionWordProblems","decimals","decimalShift","percentages","moneyChange","ratio","negatives","units","calendarDates","placeRounding","inverseOperations","fdpConversions","mixedFractions","equationsMachines","sequencesPatterns","statistics","perimeterAreaVolume","triangleQuadAngles","speedDistanceTime","probability"],"levels":[["starter","Starter — Year 5 Review"],["core","Core — Year 6"],["challenge","Challenge — Year 6+"]],"teacher":"Year 6 includes 27 targeted banks. New mental-strategy, money, calendar and remainder banks add practical, quick questions without difficult fractions or long calculations."};
 BASE_STORAGE_BY_YEAR[6] = {"stars":"dyaaY6RapidStars","hero":"dyaaY6RapidHero","best":"dyaaY6RapidBest","mistakes":"dyaaY6RapidMistakes"};
 
 /* ===== YEAR 6 QUESTION GENERATORS ===== */
@@ -1178,7 +1178,195 @@ function y6GenTriangleQuadAngles() {
   return q('triangleQuadAngles', `A triangle has two equal angles and a third angle of ${third}°. Each equal angle is ?°`, (180 - third) / 2, 'Subtract the third angle, then halve the remainder.');
 }
 
+
+
+/* ===== YEAR 6 EASY MENTAL-MATH ADDITIONS ===== */
+
+function y6GenMentalStrategies() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) {
+    const n = randInt(4, 50) * 2;
+    return q('mentalStrategies', `${n} × 0.5 = ?`, n / 2, 'Multiplying by 0.5 means finding half.');
+  }
+  if (t === 2) {
+    const n = randInt(3, 30) * 4;
+    return q('mentalStrategies', `${n} × 0.25 = ?`, n / 4, 'Multiplying by 0.25 means finding one quarter.');
+  }
+  if (t === 3) {
+    const n = randInt(2, 30) * 2;
+    return q('mentalStrategies', `${n} × 1.5 = ?`, n + n / 2, 'Add the number and half of the number.');
+  }
+  if (t === 4) {
+    const n = randInt(2, 40);
+    return q('mentalStrategies', `${n} ÷ 0.5 = ?`, n * 2, 'Dividing by 0.5 doubles the number.');
+  }
+  if (t === 5) {
+    const n = randInt(2, 20);
+    return q('mentalStrategies', `${n} ÷ 0.25 = ?`, n * 4, 'Dividing by one quarter gives four groups per whole.');
+  }
+  if (t === 6) {
+    const n = randInt(2, 16) * 4;
+    return q('mentalStrategies', `${n} × 25 = ?`, n * 25, 'Use groups of four: 4 × 25 = 100.');
+  }
+  if (t === 7) {
+    const n = randInt(4, 50);
+    return q('mentalStrategies', `${n} × 99 = ?`, n * 99, 'Multiply by 100, then subtract the number once.');
+  }
+  const n = randInt(4, 30) * 4;
+  return q('mentalStrategies', `75% of ${n} = ?`, n * 3 / 4, 'Find three quarters of the number.');
+}
+
+function y6GenMoneyChange() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) {
+    const price = pick([20, 30, 40, 50, 60, 80, 100]);
+    return q('moneyChange', `A $${price} item is reduced by 10%. Sale price = $?`, price * 0.9, 'Find 10%, then subtract it.');
+  }
+  if (t === 2) {
+    const price = pick([20, 40, 60, 80, 100, 120, 160]);
+    return q('moneyChange', `A $${price} item is reduced by 25%. Sale price = $?`, price * 0.75, 'A 25% discount leaves 75% of the price.');
+  }
+  if (t === 3) {
+    const price = pick([20, 30, 40, 50, 60, 80, 100, 120]);
+    return q('moneyChange', `A $${price} item is half price. Sale price = $?`, price / 2, 'Half price means divide by 2.');
+  }
+  if (t === 4) {
+    const quantity = randInt(2, 8);
+    const unit = pick([3, 4, 5, 6, 8, 10, 12]);
+    return q('moneyChange', `${quantity} tickets cost $${quantity * unit}. Cost per ticket = $?`, unit, 'Divide the total cost by the number of tickets.');
+  }
+  if (t === 5) {
+    const cost = pick([20, 30, 40, 50, 60, 80]);
+    const profit = pick([5, 10, 15, 20]);
+    return q('moneyChange', `An item costs $${cost} and is sold for $${cost + profit}. Profit = $?`, profit, 'Profit = selling price − cost price.');
+  }
+  if (t === 6) {
+    const people = randInt(2, 8);
+    const each = pick([4, 5, 6, 8, 10, 12]);
+    return q('moneyChange', `A $${people * each} bill is shared equally by ${people} people. Each pays $?`, each, 'Divide the bill by the number of people.');
+  }
+  if (t === 7) {
+    const price = pick([40, 60, 80, 100, 120, 160]);
+    const discount = pick([25, 50]);
+    const sale = price * (1 - discount / 100);
+    const pay = sale <= 50 ? 50 : sale <= 100 ? 100 : 200;
+    return q('moneyChange', `A $${price} item is reduced by ${discount}%. You pay $${pay}. Change = $?`, pay - sale, 'Find the sale price, then subtract it from the amount paid.');
+  }
+  const firstQty = pick([2, 3, 4, 5]);
+  const firstCost = pick([6, 9, 12, 15, 20]);
+  const unit = firstCost / firstQty;
+  const targetQty = firstQty * 2;
+  if (!Number.isInteger(unit)) return y6GenMoneyChange();
+  return q('moneyChange', `${firstQty} items cost $${firstCost}. At the same price, ${targetQty} items cost $?`, targetQty * unit, 'Double both the quantity and the cost.');
+}
+
+function y6GenCalendarDates() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) {
+    const weeks = randInt(3, 12);
+    const extra = randInt(1, 6);
+    return q('calendarDates', `${weeks} weeks and ${extra} days = ? days`, weeks * 7 + extra, 'Convert weeks to days, then add.');
+  }
+  if (t === 2) {
+    const start = randInt(1, 18);
+    const gap = randInt(5, 13);
+    return q('calendarDates', `A course starts on day ${start} and finishes on day ${start + gap}. How many days pass?`, gap, 'Subtract the start date from the finish date.');
+  }
+  if (t === 3) {
+    const startCode = randInt(1, 7);
+    const add = randInt(15, 60);
+    const answer = ((startCode - 1 + add) % 7) + 1;
+    return q('calendarDates', `Today is weekday ${startCode}. What weekday number is it ${add} days later? Use 1=Monday, ..., 7=Sunday.`, answer, 'Reduce the number of days using groups of 7.');
+  }
+  if (t === 4) {
+    const interval = pick([2, 3, 4, 5, 6, 7]);
+    const laterEvents = randInt(3, 10);
+    return q('calendarDates', `An event repeats every ${interval} days. How many days after the first event is the ${laterEvents + 1}th event?`, interval * laterEvents, 'There are that many equal intervals after the first event.');
+  }
+  if (t === 5) {
+    const firstMonthDays = pick([30, 31]);
+    const start = firstMonthDays - randInt(3, 8);
+    const end = randInt(3, 10);
+    return q('calendarDates', `A trip begins after day ${start} of a ${firstMonthDays}-day month and ends on day ${end} of the next month. How many days pass?`, firstMonthDays - start + end, 'Add the remaining days in the first month and the days in the next month.');
+  }
+  if (t === 6) {
+    const months = pick([[31, 28], [30, 31], [31, 30], [31, 31]]);
+    return q('calendarDates', `Two consecutive months contain ${months[0]} and ${months[1]} days. Total = ? days`, months[0] + months[1], 'Add the month lengths.');
+  }
+  if (t === 7) {
+    const interval = pick([3, 4, 5, 6, 7]);
+    const days = interval * randInt(4, 12);
+    return q('calendarDates', `How many complete ${interval}-day cycles fit into ${days} days?`, days / interval, 'Divide the total days by the cycle length.');
+  }
+  return q('calendarDates', 'February in a leap year has ? days', 29, 'A leap-year February has 29 days.');
+}
+
+function y6GenRemaindersPatterns() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+
+  if (t === 1) {
+    const divisor = randInt(3, 12);
+    const quotient = randInt(5, 18);
+    const remainder = randInt(1, divisor - 1);
+    return q('remaindersPatterns', `Remainder when ${divisor * quotient + remainder} is divided by ${divisor} = ?`, remainder, 'Subtract the nearest lower multiple.');
+  }
+  if (t === 2) {
+    const divisor = randInt(3, 12);
+    const remainder = randInt(1, divisor - 1);
+    const number = divisor * randInt(5, 16) + remainder;
+    return q('remaindersPatterns', `Smallest number to add to ${number} to make it divisible by ${divisor} = ?`, divisor - remainder, 'Add enough to reach the next multiple.');
+  }
+  if (t === 3) {
+    const divisor = randInt(3, 12);
+    const remainder = randInt(1, divisor - 1);
+    const number = divisor * randInt(5, 16) + remainder;
+    return q('remaindersPatterns', `Smallest number to subtract from ${number} to make it divisible by ${divisor} = ?`, remainder, 'Subtract the remainder.');
+  }
+  if (t === 4) {
+    const group = randInt(4, 10);
+    const full = randInt(5, 15);
+    const left = randInt(1, group - 1);
+    return q('remaindersPatterns', `${group * full + left} objects are grouped in ${group}s. How many full groups are made?`, full, 'Count only complete groups.');
+  }
+  if (t === 5) {
+    const cycle = pick([[1, 3, 5, 7], [2, 5, 8], [4, 7, 10, 13], [3, 6, 9, 12, 15]]);
+    const position = randInt(15, 60);
+    return q('remaindersPatterns', `The pattern ${cycle.join(', ')} repeats. Term ${position} = ?`, cycle[(position - 1) % cycle.length], 'Use the position within the repeating cycle.');
+  }
+  if (t === 6) {
+    const a = pick([3, 4, 5, 6]);
+    const b = pick([4, 6, 8, 10]);
+    return q('remaindersPatterns', `One light flashes every ${a} seconds and another every ${b} seconds. They flash together again after ? seconds`, lcm(a, b), 'Find the first common multiple.');
+  }
+  if (t === 7) {
+    const capacity = randInt(5, 12);
+    const full = randInt(5, 15);
+    const extra = randInt(1, capacity - 1);
+    return q('remaindersPatterns', `A box holds ${capacity} items. Boxes needed for ${capacity * full + extra} items = ?`, full + 1, 'The leftover items require one extra box.');
+  }
+  if (t === 8) {
+    const divisor = randInt(4, 12);
+    const multiple = divisor * randInt(8, 20);
+    const number = multiple - randInt(1, divisor - 1);
+    return q('remaindersPatterns', `Next multiple of ${divisor} after ${number} = ?`, multiple, 'Count forward to the next multiple.');
+  }
+  const startCode = randInt(1, 7);
+  const add = randInt(20, 100);
+  return q('remaindersPatterns', `Weekday ${startCode} is followed by ${add} days. New weekday number (1=Monday, ..., 7=Sunday) = ?`, ((startCode - 1 + add) % 7) + 1, 'Use the remainder after dividing by 7.');
+}
+
 YEAR_BANKS[6] = {
+  "mentalStrategies": y6GenMentalStrategies,
+  "moneyChange": y6GenMoneyChange,
+  "calendarDates": y6GenCalendarDates,
+  "remaindersPatterns": y6GenRemaindersPatterns,
   "triangleQuadAngles": y6GenTriangleQuadAngles,
   "addsub": y6GenAddSub,
   "multdiv": y6GenMultDiv,

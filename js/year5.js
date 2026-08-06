@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 5 configuration and question bank. */
-YEAR_CONFIGS[5] = {"title":"Year 5 Rapid Fire Mental Maths","skillLabel":"Year 5 Skill","mixed":"Mixed Year 5 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","twoDigitMultiplication":"Two-Digit × Two-Digit","division":"Division","placevalue":"×/÷ 10, 100, 1000, 0.1, 0.01 & 0.001","doubles":"Doubles & Halves","fractions":"Fractions of Quantities","decimals":"Decimal Mental Maths","decimalShift":"Decimal Multiplication & Division","rounding":"Place Value & Rounding","missing":"Missing Numbers & Inverse Operations","factorsDivisibility":"Factors, Multiples & Divisibility","fractionCompare":"Fraction Equivalence & Comparison","fractionAddSub":"Fraction Addition & Subtraction","basicPercentages":"Basic Percentages","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences","mixed":"Mixed Year 5 Skills","review":"Mistake Review","fractionWordProblems":"Fraction Addition & Subtraction Word Problems","anglesLinePoint":"Angles on Lines & Around a Point"},"skills":["addition","subtraction","multiplication","twoDigitMultiplication","division","placevalue","doubles","fractions","decimals","decimalShift","rounding","missing","factorsDivisibility","fractionCompare","fractionAddSub","fractionWordProblems","basicPercentages","time","anglesLinePoint","measurements","perimeterArea","sequences"],"levels":[["starter","Starter — Year 4 Review"],["core","Core — Year 5"],["challenge","Challenge — Year 5+"]],"teacher":"Year 5 includes 22 targeted banks. The angle bank covers complements, straight lines, vertically opposite angles, angles around a point and exact-hour clock angles, all with mental-friendly values."};
+YEAR_CONFIGS[5] = {"title":"Year 5 Rapid Fire Mental Maths","skillLabel":"Year 5 Skill","mixed":"Mixed Year 5 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","twoDigitMultiplication":"Two-Digit × Two-Digit","division":"Division","placevalue":"×/÷ 10, 100, 1000, 0.1, 0.01 & 0.001","doubles":"Doubles & Halves","fractions":"Fractions of Quantities","decimals":"Decimal Mental Maths","decimalShift":"Decimal Multiplication & Division","rounding":"Place Value & Rounding","missing":"Missing Numbers & Inverse Operations","factorsDivisibility":"Factors, Multiples & Divisibility","fractionCompare":"Fraction Equivalence & Comparison","fractionAddSub":"Fraction Addition & Subtraction","basicPercentages":"Basic Percentages","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences","mixed":"Mixed Year 5 Skills","review":"Mistake Review","fractionWordProblems":"Fraction Addition & Subtraction Word Problems","anglesLinePoint":"Angles on Lines & Around a Point","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","remaindersPatterns":"Remainders & Repeating Patterns"},"skills":["addition","subtraction","multiplication","twoDigitMultiplication","division","placevalue","doubles","mentalStrategies","fractions","decimals","decimalShift","rounding","missing","factorsDivisibility","remaindersPatterns","fractionCompare","fractionAddSub","fractionWordProblems","basicPercentages","moneyChange","time","calendarDates","anglesLinePoint","measurements","perimeterArea","sequences"],"levels":[["starter","Starter — Year 4 Review"],["core","Core — Year 5"],["challenge","Challenge — Year 5+"]],"teacher":"Year 5 includes 26 targeted banks. New mental-strategy, money, calendar and remainder banks are designed for quick one-step or simple two-step solving with friendly numbers."};
 BASE_STORAGE_BY_YEAR[5] = {"stars":"dyaaY5RapidStars","hero":"dyaaY5RapidHero","best":"dyaaY5RapidBest","mistakes":"dyaaY5RapidMistakes"};
 
 /* ===== YEAR 5 QUESTION GENERATORS ===== */
@@ -1737,7 +1737,190 @@ function y5GenAnglesLinePoint() {
   return q('anglesLinePoint', `A full turn is split into ${first}°, ${second}°, 90° and one missing angle. The missing angle is ?°`, 360 - first - second - 90, 'Subtract all known angles from 360°.');
 }
 
+
+
+/* ===== YEAR 5 EASY MENTAL-MATH ADDITIONS ===== */
+
+function y5GenMentalStrategies() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) {
+    const n = randInt(1, 12) * 4;
+    return q('mentalStrategies', `${n} × 25 = ?`, n * 25, 'A group of four 25s makes 100.');
+  }
+  if (t === 2) {
+    const n = randInt(2, 20);
+    return q('mentalStrategies', `${n} × 50 = ?`, n * 50, 'Multiply by 100, then halve.');
+  }
+  if (t === 3) {
+    const answer = randInt(4, 30);
+    return q('mentalStrategies', `${answer * 5} ÷ 5 = ?`, answer, 'Dividing by 5 is the inverse of multiplying by 5.');
+  }
+  if (t === 4) {
+    const answer = randInt(2, 20);
+    return q('mentalStrategies', `${answer * 25} ÷ 25 = ?`, answer, 'Use groups of 25.');
+  }
+  if (t === 5) {
+    const n = randInt(4, 40);
+    return q('mentalStrategies', `${n} × 99 = ?`, n * 99, 'Multiply by 100, then subtract the number once.');
+  }
+  if (t === 6) {
+    const n = randInt(15, 85);
+    return q('mentalStrategies', `${n} + 99 = ?`, n + 99, 'Add 100, then subtract 1.');
+  }
+  if (t === 7) {
+    const n = randInt(5, 40) * 4;
+    return q('mentalStrategies', `Quarter of ${n} = ?`, n / 4, 'Divide by 2 twice.');
+  }
+  const n = randInt(30, 99);
+  return q('mentalStrategies', `${n} − 29 = ?`, n - 29, 'Subtract 30, then add 1.');
+}
+
+function y5GenMoneyChange() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) {
+    const [a, b] = pick([[225, 275], [350, 450], [475, 525], [625, 375], [740, 260], [875, 125]]);
+    return q('moneyChange', `An item costs $${fmt(a / 100)} and another costs $${fmt(b / 100)}. Total = $?`, (a + b) / 100, 'Add the two prices.');
+  }
+  if (t === 2) {
+    const pay = pick([1000, 2000, 5000]);
+    const cost = pick(pay === 1000 ? [250, 375, 450, 625, 750, 875] : pay === 2000 ? [650, 875, 1050, 1250, 1450, 1750] : [1250, 1750, 2250, 2750, 3250, 3750]);
+    return q('moneyChange', `You pay $${fmt(pay / 100)} for something costing $${fmt(cost / 100)}. Change = $?`, (pay - cost) / 100, 'Subtract the cost from the amount paid.');
+  }
+  if (t === 3) {
+    const quantity = randInt(2, 8);
+    const unit = pick([125, 150, 200, 250, 300, 350]);
+    return q('moneyChange', `${quantity} items cost $${fmt(unit / 100)} each. Total = $?`, quantity * unit / 100, 'Multiply quantity by unit price.');
+  }
+  if (t === 4) {
+    const quantity = randInt(2, 8);
+    const unit = pick([150, 200, 250, 300, 400, 500]);
+    return q('moneyChange', `${quantity} identical items cost $${fmt(quantity * unit / 100)}. Cost per item = $?`, unit / 100, 'Divide total cost by the number of items.');
+  }
+  if (t === 5) {
+    const [a, b] = pick([[240, 360], [275, 425], [350, 650], [475, 525], [625, 875]]);
+    return q('moneyChange', `How much more is $${fmt(Math.max(a, b) / 100)} than $${fmt(Math.min(a, b) / 100)}?`, Math.abs(a - b) / 100, 'Subtract the smaller price from the larger price.');
+  }
+  if (t === 6) {
+    const [a, b] = pick([[275, 225], [340, 160], [425, 575], [650, 350]]);
+    const pay = pick([1000, 2000]);
+    const total = a + b;
+    const actualPay = pay >= total ? pay : 2000;
+    return q('moneyChange', `Items cost $${fmt(a / 100)} and $${fmt(b / 100)}. You pay $${fmt(actualPay / 100)}. Change = $?`, (actualPay - total) / 100, 'Add the prices, then subtract from the amount paid.');
+  }
+  if (t === 7) {
+    const quantity = randInt(2, 5);
+    const unit = pick([150, 200, 250, 300]);
+    const extra = pick([100, 150, 200, 250]);
+    return q('moneyChange', `${quantity} notebooks cost $${fmt(unit / 100)} each and a pen costs $${fmt(extra / 100)}. Total = $?`, (quantity * unit + extra) / 100, 'Find the notebook cost, then add the pen.');
+  }
+  const people = randInt(2, 6);
+  const each = pick([250, 300, 400, 500, 600]);
+  return q('moneyChange', `A bill of $${fmt(people * each / 100)} is shared equally by ${people} people. Each pays $?`, each / 100, 'Divide the total bill equally.');
+}
+
+function y5GenCalendarDates() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) {
+    const weeks = randInt(2, 10);
+    return q('calendarDates', `${weeks} weeks = ? days`, weeks * 7, 'Multiply the number of weeks by 7.');
+  }
+  if (t === 2) {
+    const monthDays = pick([28, 30, 31]);
+    const date = randInt(8, monthDays - 4);
+    return q('calendarDates', `A month has ${monthDays} days. How many days remain after day ${date}?`, monthDays - date, 'Subtract the date from the month length.');
+  }
+  if (t === 3) {
+    const start = randInt(1, 18);
+    const gap = randInt(4, 12);
+    return q('calendarDates', `How many days are there from day ${start} to day ${start + gap}?`, gap, 'Subtract the earlier date from the later date.');
+  }
+  if (t === 4) {
+    const weeks = randInt(3, 12);
+    return q('calendarDates', `A club meets once every week for ${weeks} weeks. How many meetings are held?`, weeks, 'There is one meeting per week.');
+  }
+  if (t === 5) {
+    const startCode = randInt(1, 7);
+    const add = randInt(8, 30);
+    const answer = ((startCode - 1 + add) % 7) + 1;
+    return q('calendarDates', `Today is weekday ${startCode}. What weekday number is it ${add} days later? Use 1=Monday, ..., 7=Sunday.`, answer, 'Use the repeating 7-day cycle.');
+  }
+  if (t === 6) {
+    const [first, second] = pick([[30, 31], [31, 30], [31, 31], [28, 31]]);
+    return q('calendarDates', `Two consecutive months have ${first} days and ${second} days. Total days = ?`, first + second, 'Add the days in the two months.');
+  }
+  if (t === 7) {
+    const firstMonthDays = pick([30, 31]);
+    const start = firstMonthDays - randInt(2, 6);
+    const end = randInt(2, 8);
+    return q('calendarDates', `A trip starts after day ${start} of a ${firstMonthDays}-day month and ends on day ${end} of the next month. How many days pass?`, firstMonthDays - start + end, 'Count the remaining days in the first month, then add the days in the next month.');
+  }
+  const weeks = randInt(2, 8);
+  const extraDays = randInt(1, 6);
+  return q('calendarDates', `${weeks} weeks and ${extraDays} days = ? days`, weeks * 7 + extraDays, 'Convert weeks to days, then add the extra days.');
+}
+
+function y5GenRemaindersPatterns() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) {
+    const divisor = randInt(3, 9);
+    const quotient = randInt(4, 12);
+    const remainder = randInt(1, divisor - 1);
+    return q('remaindersPatterns', `Remainder when ${divisor * quotient + remainder} is divided by ${divisor} = ?`, remainder, 'Find the largest multiple of the divisor below the number.');
+  }
+  if (t === 2) {
+    const group = randInt(3, 8);
+    const full = randInt(4, 10);
+    const left = randInt(1, group - 1);
+    return q('remaindersPatterns', `${group * full + left} students form teams of ${group}. How many students are left over?`, left, 'Make as many full teams as possible.');
+  }
+  if (t === 3) {
+    const group = randInt(3, 9);
+    const full = randInt(4, 12);
+    const left = randInt(1, group - 1);
+    return q('remaindersPatterns', `${group * full + left} objects are packed in groups of ${group}. How many full groups are made?`, full, 'Ignore the leftover objects and count full groups.');
+  }
+  if (t === 4) {
+    const divisor = randInt(3, 10);
+    const quotient = randInt(4, 12);
+    const remainder = randInt(1, divisor - 1);
+    return q('remaindersPatterns', `Smallest number to add to ${divisor * quotient + remainder} to make it divisible by ${divisor} = ?`, divisor - remainder, 'Add enough to reach the next multiple.');
+  }
+  if (t === 5) {
+    const cycle = pick([[2, 5, 8], [1, 4, 7, 10], [3, 6, 9, 12], [2, 4, 6, 8]]);
+    const position = randInt(8, 30);
+    return q('remaindersPatterns', `The pattern ${cycle.join(', ')} repeats. Term ${position} = ?`, cycle[(position - 1) % cycle.length], 'Use the remainder after dividing the position by the cycle length.');
+  }
+  if (t === 6) {
+    const divisor = randInt(3, 10);
+    const quotient = randInt(5, 14);
+    const remainder = randInt(1, divisor - 1);
+    return q('remaindersPatterns', `Smallest number to subtract from ${divisor * quotient + remainder} to make it divisible by ${divisor} = ?`, remainder, 'Subtract the remainder.');
+  }
+  if (t === 7) {
+    const capacity = randInt(4, 9);
+    const full = randInt(4, 10);
+    const extra = randInt(1, capacity - 1);
+    return q('remaindersPatterns', `A box holds ${capacity} items. How many boxes are needed for ${capacity * full + extra} items?`, full + 1, 'The leftover items need one more box.');
+  }
+  const divisor = randInt(3, 9);
+  const target = divisor * randInt(6, 15);
+  const amount = target - randInt(1, divisor - 1);
+  return q('remaindersPatterns', `What is the next multiple of ${divisor} after ${amount}?`, target, 'Count forward to the next multiple.');
+}
+
 YEAR_BANKS[5] = {
+  "mentalStrategies": y5GenMentalStrategies,
+  "moneyChange": y5GenMoneyChange,
+  "calendarDates": y5GenCalendarDates,
+  "remaindersPatterns": y5GenRemaindersPatterns,
   "anglesLinePoint": y5GenAnglesLinePoint,
   "addition": y5GenAdd,
   "subtraction": y5GenSub,

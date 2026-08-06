@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 7 configuration and question bank. */
-YEAR_CONFIGS[7] = {"title":"Year 7 Rapid Fire Mental Maths","skillLabel":"Year 7 Skill","mixed":"Mixed Year 7 Skills","labels":{"integers":"Integers & Negative Numbers","order":"Order of Operations","powers":"Powers, Squares & Roots","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","percentages":"Percentages","ratio":"Ratio & Rates","algebra":"Algebra Expressions","writingAlgebra":"Words to Algebra: Expressions & Equations","equations":"Simple Equations","sequences":"Sequences","estimation":"Estimation & Rounding","units":"Units, Time & Speed","geometry":"Geometry","mixed":"Mixed Year 7 Skills","review":"Mistake Review","fdpConversions":"Fraction–Decimal–Percentage Conversion","percentageChange":"Percentage Change","directProportion":"Direct Proportion & Unit Rates","simplifyExpand":"Simplifying & Expanding Expressions","twoStepEquations":"Two-Step Equations","inequalities":"Basic Inequalities","coordinates":"Coordinates & Straight Lines","pythagoras":"Pythagoras","statistics":"Statistics","probability":"Probability","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations","fractionProblemSolving":"Fraction Problem Solving","angleRelationships":"Angle Relationships"},"skills":["integers","order","powers","factors","fractions","fractionProblemSolving","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","writingAlgebra","equations","sequences","estimation","units","geometry","angleRelationships","percentageChange","directProportion","simplifyExpand","twoStepEquations","inequalities","coordinates","pythagoras","statistics","probability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 7 includes 29 targeted banks. Angle Relationships adds vertically opposite, parallel-line, exterior-angle and simple algebraic angle questions designed for quick mental solving."};
+YEAR_CONFIGS[7] = {"title":"Year 7 Rapid Fire Mental Maths","skillLabel":"Year 7 Skill","mixed":"Mixed Year 7 Skills","labels":{"integers":"Integers & Negative Numbers","order":"Order of Operations","powers":"Powers, Squares & Roots","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","percentages":"Percentages","ratio":"Ratio & Rates","algebra":"Algebra Expressions","writingAlgebra":"Words to Algebra: Expressions & Equations","equations":"Simple Equations","sequences":"Sequences","estimation":"Estimation & Rounding","units":"Units, Time & Speed","geometry":"Geometry","mixed":"Mixed Year 7 Skills","review":"Mistake Review","fdpConversions":"Fraction–Decimal–Percentage Conversion","percentageChange":"Percentage Change","directProportion":"Direct Proportion & Unit Rates","simplifyExpand":"Simplifying & Expanding Expressions","twoStepEquations":"Two-Step Equations","inequalities":"Basic Inequalities","coordinates":"Coordinates & Straight Lines","pythagoras":"Pythagoras","statistics":"Statistics","probability":"Probability","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations","fractionProblemSolving":"Fraction Problem Solving","angleRelationships":"Angle Relationships","mentalStrategies":"Mental Calculation Strategies","remaindersPatterns":"Remainders & Repeating Patterns"},"skills":["integers","order","mentalStrategies","powers","factors","remaindersPatterns","fractions","fractionProblemSolving","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","writingAlgebra","equations","sequences","estimation","units","geometry","angleRelationships","percentageChange","directProportion","simplifyExpand","twoStepEquations","inequalities","coordinates","pythagoras","statistics","probability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 7 includes 31 targeted banks. Mental Calculation Strategies and Remainders & Repeating Patterns focus on short, calculator-free questions with simple percentages, decimals and cycles."};
 BASE_STORAGE_BY_YEAR[7] = {"stars":"dyaaY7Stars","hero":"dyaaY7Hero","best":"dyaaY7Best","mistakes":"dyaaY7Mistakes"};
 
 /* ===== YEAR 7 QUESTION GENERATORS ===== */
@@ -1338,7 +1338,112 @@ function y7GenAngleRelationships() {
   return q('angleRelationships', `An isosceles triangle has an exterior angle of ${exterior}° at its vertex. Each equal base angle is ?°`, (180 - vertex) / 2, 'Find the interior vertex angle, then halve the remaining triangle angle sum.');
 }
 
+
+
+/* ===== YEAR 7 EASY MENTAL-MATH ADDITIONS ===== */
+
+function y7GenMentalStrategies() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+
+  if (t === 1) {
+    const n = randInt(2, 20) * 8;
+    return q('mentalStrategies', `12.5% of ${n} = ?`, n / 8, '12.5% is one eighth.');
+  }
+  if (t === 2) {
+    const n = randInt(4, 40) * 4;
+    return q('mentalStrategies', `75% of ${n} = ?`, n * 3 / 4, '75% is three quarters.');
+  }
+  if (t === 3) {
+    const n = randInt(2, 30);
+    return q('mentalStrategies', `${n} ÷ 0.25 = ?`, n * 4, 'Dividing by one quarter multiplies by 4.');
+  }
+  if (t === 4) {
+    const n = randInt(2, 30) * 2;
+    return q('mentalStrategies', `${n} × 2.5 = ?`, n * 5 / 2, 'Multiply by 5, then halve.');
+  }
+  if (t === 5) {
+    const n = randInt(2, 20) * 8;
+    return q('mentalStrategies', `${n} × 0.125 = ?`, n / 8, '0.125 is one eighth.');
+  }
+  if (t === 6) {
+    const n = randInt(5, 60);
+    return q('mentalStrategies', `${n} × 99 = ?`, n * 99, 'Multiply by 100, then subtract the number once.');
+  }
+  if (t === 7) {
+    const n = randInt(4, 40);
+    return q('mentalStrategies', `${n} × 19 = ?`, n * 19, 'Multiply by 20, then subtract the number once.');
+  }
+  if (t === 8) {
+    const n = randInt(2, 20) * 4;
+    return q('mentalStrategies', `25% of ${n} + 50% of ${n} = ?`, n * 3 / 4, 'One quarter plus one half equals three quarters.');
+  }
+  const n = randInt(2, 20) * 8;
+  return q('mentalStrategies', `${n} ÷ 0.125 = ?`, n * 8, 'Dividing by one eighth multiplies by 8.');
+}
+
+function y7GenRemaindersPatterns() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 10);
+
+  if (t === 1) {
+    const divisor = randInt(3, 15);
+    const quotient = randInt(6, 25);
+    const remainder = randInt(1, divisor - 1);
+    return q('remaindersPatterns', `Remainder when ${divisor * quotient + remainder} is divided by ${divisor} = ?`, remainder, 'Subtract the nearest lower multiple.');
+  }
+  if (t === 2) {
+    const divisor = randInt(4, 15);
+    const remainder = randInt(1, divisor - 1);
+    const number = divisor * randInt(8, 24) + remainder;
+    return q('remaindersPatterns', `Smallest number to add to ${number} to make it divisible by ${divisor} = ?`, divisor - remainder, 'Add enough to reach the next multiple.');
+  }
+  if (t === 3) {
+    const [base, cycle] = pick([[2, [2, 4, 8, 6]], [3, [3, 9, 7, 1]], [7, [7, 9, 3, 1]], [8, [8, 4, 2, 6]]]);
+    const exponent = randInt(5, 30);
+    return q('remaindersPatterns', `Last digit of ${base}^${exponent} = ?`, cycle[(exponent - 1) % cycle.length], 'The last digits repeat in a cycle of 4.');
+  }
+  if (t === 4) {
+    const cycle = pick([[2, 5, 8], [1, 4, 7, 10], [3, 6, 9, 12, 15], [5, 10, 15, 20]]);
+    const position = randInt(20, 100);
+    return q('remaindersPatterns', `The pattern ${cycle.join(', ')} repeats. Term ${position} = ?`, cycle[(position - 1) % cycle.length], 'Use the position within the repeating cycle.');
+  }
+  if (t === 5) {
+    const startCode = randInt(1, 7);
+    const add = randInt(20, 120);
+    return q('remaindersPatterns', `Starting on weekday ${startCode}, what weekday number is it ${add} days later? Use 1=Monday, ..., 7=Sunday.`, ((startCode - 1 + add) % 7) + 1, 'Use the remainder after dividing the number of days by 7.');
+  }
+  if (t === 6) {
+    const a = pick([3, 4, 5, 6, 8]);
+    const b = pick([4, 6, 8, 10, 12]);
+    return q('remaindersPatterns', `Two events repeat every ${a} minutes and ${b} minutes. They occur together again after ? minutes`, lcm(a, b), 'Find the least common multiple.');
+  }
+  if (t === 7) {
+    const interval = pick([3, 4, 5, 6, 8]);
+    const count = randInt(5, 15);
+    return q('remaindersPatterns', `How many complete ${interval}-second intervals fit into ${interval * count} seconds?`, count, 'Divide total time by the interval length.');
+  }
+  if (t === 8) {
+    const divisor = randInt(4, 12);
+    const remainder = randInt(0, divisor - 1);
+    const add = randInt(5, 30);
+    return q('remaindersPatterns', `A number leaves remainder ${remainder} when divided by ${divisor}. What remainder does the number plus ${add} leave?`, (remainder + add) % divisor, 'Add first, then remove full groups of the divisor.');
+  }
+  if (t === 9) {
+    const capacity = randInt(6, 15);
+    const full = randInt(8, 20);
+    const extra = randInt(1, capacity - 1);
+    return q('remaindersPatterns', `A container holds ${capacity} items. Containers needed for ${capacity * full + extra} items = ?`, full + 1, 'A non-zero remainder needs one extra container.');
+  }
+  const divisor = randInt(5, 15);
+  const multiple = divisor * randInt(10, 30);
+  const number = multiple - randInt(1, divisor - 1);
+  return q('remaindersPatterns', `Next multiple of ${divisor} after ${number} = ?`, multiple, 'Count forward to the next multiple.');
+}
+
 YEAR_BANKS[7] = {
+  "mentalStrategies": y7GenMentalStrategies,
+  "remaindersPatterns": y7GenRemaindersPatterns,
   "angleRelationships": y7GenAngleRelationships,
     integers: y7GenIntegers,
     order: y7GenOrder,

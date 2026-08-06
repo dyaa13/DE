@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 4 configuration and question bank. */
-YEAR_CONFIGS[4] = {"title":"Year 4 Rapid Fire Mental Maths","skillLabel":"Year 4 Skill","mixed":"Mixed Year 4 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","division":"Division","placevalue":"Place Value","rounding":"Rounding & Estimation","missing":"Missing Numbers & Inverse Operations","doubles":"Doubles, Halves & Near Doubles","factors":"Factors, Multiples & Divisibility","fractions":"Fractions Basics","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences & Patterns","mixed":"Mixed Year 4 Skills","review":"Mistake Review","angleBasics":"Angle Basics"},"skills":["addition","subtraction","multiplication","division","placevalue","rounding","missing","doubles","factors","fractions","angleBasics","time","measurements","perimeterArea","sequences"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 4 includes 15 targeted banks. Angle Basics adds short mental questions on right angles, turns, angle types, and missing angles to 90°, 180° and 360°."};
+YEAR_CONFIGS[4] = {"title":"Year 4 Rapid Fire Mental Maths","skillLabel":"Year 4 Skill","mixed":"Mixed Year 4 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","division":"Division","placevalue":"Place Value","rounding":"Rounding & Estimation","missing":"Missing Numbers & Inverse Operations","doubles":"Doubles, Halves & Near Doubles","factors":"Factors, Multiples & Divisibility","fractions":"Fractions Basics","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences & Patterns","mixed":"Mixed Year 4 Skills","review":"Mistake Review","angleBasics":"Angle Basics","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates"},"skills":["addition","subtraction","multiplication","division","placevalue","rounding","missing","doubles","mentalStrategies","factors","fractions","angleBasics","time","moneyChange","calendarDates","measurements","perimeterArea","sequences"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 4 includes 18 targeted banks. New mental-strategy, money and calendar banks use short one-step questions with friendly whole numbers and simple dollar amounts."};
 BASE_STORAGE_BY_YEAR[4] = {"stars":"dyaaRapidStars","hero":"dyaaRapidHero","best":"dyaaRapidBest","mistakes":"dyaaRapidMistakes"};
 
 /* ===== YEAR 4 QUESTION GENERATORS ===== */
@@ -464,7 +464,130 @@ function y4GenAngleBasics() {
   return q('angleBasics', `Two equal angles and an angle of ${known}° make a full turn. Each equal angle is ?°`, (360 - known) / 2, 'Subtract the known angle from 360°, then halve the remainder.');
 }
 
+
+
+/* ===== YEAR 4 EASY MENTAL-MATH ADDITIONS ===== */
+
+function y4GenMentalStrategies() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+
+  if (t === 1) {
+    const n = randInt(12, 80);
+    return q('mentalStrategies', `${n} + 9 = ?`, n + 9, 'Add 10, then subtract 1.');
+  }
+  if (t === 2) {
+    const n = randInt(20, 99);
+    return q('mentalStrategies', `${n} − 9 = ?`, n - 9, 'Subtract 10, then add 1.');
+  }
+  if (t === 3) {
+    const n = randInt(3, 20);
+    return q('mentalStrategies', `${n} × 5 = ?`, n * 5, 'Multiply by 10, then halve.');
+  }
+  if (t === 4) {
+    const n = randInt(2, 12);
+    return q('mentalStrategies', `${n} × 9 = ?`, n * 9, 'Multiply by 10, then subtract the number once.');
+  }
+  if (t === 5) {
+    const n = randInt(5, 50) * 2;
+    return q('mentalStrategies', `Half of ${n} = ?`, n / 2, 'Halve the tens and ones.');
+  }
+  if (t === 6) {
+    const n = randInt(20, 75);
+    return q('mentalStrategies', `${n} + 19 = ?`, n + 19, 'Add 20, then subtract 1.');
+  }
+  if (t === 7) {
+    const n = randInt(30, 99);
+    return q('mentalStrategies', `${n} − 19 = ?`, n - 19, 'Subtract 20, then add 1.');
+  }
+  if (t === 8) {
+    const n = randInt(12, 88);
+    return q('mentalStrategies', `${n} + ? = 100`, 100 - n, 'Find the complement to 100.');
+  }
+  const n = randInt(6, 40);
+  return q('mentalStrategies', `${n} + ${n + 1} = ?`, 2 * n + 1, 'Double the smaller number, then add 1.');
+}
+
+function y4GenMoneyChange() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 7);
+
+  if (t === 1) {
+    const cents = pick([100, 150, 200, 250, 300, 350, 400, 450, 500]);
+    return q('moneyChange', `${cents} cents = $?`, cents / 100, '100 cents equals $1.');
+  }
+  if (t === 2) {
+    const [a, b] = pick([[120, 180], [150, 250], [240, 160], [275, 225], [320, 180], [350, 250]]);
+    return q('moneyChange', `An item costs $${fmt(a / 100)} and another costs $${fmt(b / 100)}. Total cost = $?`, (a + b) / 100, 'Add the dollars and cents.');
+  }
+  if (t === 3) {
+    const pay = pick([500, 1000, 2000]);
+    const cost = pick(pay === 500 ? [120, 180, 250, 320, 375, 420] : pay === 1000 ? [250, 350, 450, 600, 725, 850] : [650, 850, 1000, 1250, 1450, 1750]);
+    return q('moneyChange', `You pay $${fmt(pay / 100)} for an item costing $${fmt(cost / 100)}. Change = $?`, (pay - cost) / 100, 'Change = amount paid − cost.');
+  }
+  if (t === 4) {
+    const quantity = randInt(2, 6);
+    const unit = pick([100, 150, 200, 250, 300, 400]);
+    return q('moneyChange', `${quantity} identical items cost $${fmt(unit / 100)} each. Total = $?`, quantity * unit / 100, 'Multiply the price by the number of items.');
+  }
+  if (t === 5) {
+    const coin = pick([20, 50, 100]);
+    const count = randInt(3, 10);
+    return q('moneyChange', `How many ${coin}c coins make $${fmt(coin * count / 100)}?`, count, 'Divide the total number of cents by the value of one coin.');
+  }
+  if (t === 6) {
+    const quantity = randInt(2, 5);
+    const unit = pick([100, 200, 250, 300]);
+    const total = quantity * unit;
+    const pay = total <= 1000 ? 1000 : 2000;
+    return q('moneyChange', `${quantity} items cost $${fmt(unit / 100)} each. You pay $${fmt(pay / 100)}. Change = $?`, (pay - total) / 100, 'Find the total cost, then subtract it from the amount paid.');
+  }
+  const quantity = randInt(2, 6);
+  const unit = pick([100, 150, 200, 250, 300]);
+  return q('moneyChange', `${quantity} identical items cost $${fmt(quantity * unit / 100)} altogether. Cost of one item = $?`, unit / 100, 'Divide the total cost by the number of items.');
+}
+
+function y4GenCalendarDates() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 7);
+
+  if (t === 1) {
+    const weeks = randInt(2, 8);
+    return q('calendarDates', `${weeks} weeks = ? days`, weeks * 7, 'Each week has 7 days.');
+  }
+  if (t === 2) {
+    const [month, days] = pick([['April', 30], ['June', 30], ['September', 30], ['November', 30], ['January', 31], ['March', 31], ['May', 31], ['July', 31], ['August', 31], ['October', 31], ['December', 31]]);
+    return q('calendarDates', `${month} has ? days`, days, 'Recall the number of days in the month.');
+  }
+  if (t === 3) {
+    const weeks = randInt(1, 6);
+    const days = randInt(1, 6);
+    return q('calendarDates', `${weeks} weeks and ${days} days = ? days`, weeks * 7 + days, 'Convert the weeks to days, then add.');
+  }
+  if (t === 4) {
+    const monthDays = pick([28, 30, 31]);
+    const date = randInt(10, monthDays - 5);
+    return q('calendarDates', `A month has ${monthDays} days. After day ${date}, how many days remain in the month?`, monthDays - date, 'Subtract the date from the number of days in the month.');
+  }
+  if (t === 5) {
+    const start = randInt(1, 18);
+    const gap = randInt(3, 12);
+    return q('calendarDates', `An event is on day ${start} and again on day ${start + gap}. How many days apart are the dates?`, gap, 'Subtract the earlier date from the later date.');
+  }
+  if (t === 6) {
+    const startCode = randInt(1, 7);
+    const add = randInt(1, 13);
+    const answer = ((startCode - 1 + add) % 7) + 1;
+    return q('calendarDates', `Today is weekday ${startCode}. What weekday number is it ${add} days later? Use 1=Monday, 2=Tuesday, ..., 7=Sunday.`, answer, 'Move forward around a 7-day cycle.');
+  }
+  const weeks = randInt(2, 7);
+  return q('calendarDates', `A class meets once each week for ${weeks} weeks. How many meetings are there?`, weeks, 'One meeting happens each week.');
+}
+
 YEAR_BANKS[4] = {
+  "mentalStrategies": y4GenMentalStrategies,
+  "moneyChange": y4GenMoneyChange,
+  "calendarDates": y4GenCalendarDates,
   "angleBasics": y4GenAngleBasics,
   "addition": y4GenAdd,
   "subtraction": y4GenSub,
