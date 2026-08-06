@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 7 configuration and question bank. */
-YEAR_CONFIGS[7] = {"title":"Year 7 Rapid Fire Mental Maths","skillLabel":"Year 7 Skill","mixed":"Mixed Year 7 Skills","labels":{"integers":"Integers & Negative Numbers","order":"Order of Operations","powers":"Powers, Squares & Roots","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","percentages":"Percentages","ratio":"Ratio & Rates","algebra":"Algebra Expressions","writingAlgebra":"Words to Algebra: Expressions & Equations","equations":"Simple Equations","sequences":"Sequences","estimation":"Estimation & Rounding","units":"Units, Time & Speed","geometry":"Geometry","mixed":"Mixed Year 7 Skills","review":"Mistake Review","fdpConversions":"Fraction–Decimal–Percentage Conversion","percentageChange":"Percentage Change","directProportion":"Direct Proportion & Unit Rates","simplifyExpand":"Simplifying & Expanding Expressions","twoStepEquations":"Two-Step Equations","inequalities":"Basic Inequalities","coordinates":"Coordinates & Straight Lines","pythagoras":"Pythagoras","statistics":"Statistics","probability":"Probability","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations","fractionProblemSolving":"Fraction Problem Solving","angleRelationships":"Angle Relationships","mentalStrategies":"Mental Calculation Strategies","remaindersPatterns":"Remainders & Repeating Patterns"},"skills":["integers","order","mentalStrategies","powers","factors","remaindersPatterns","fractions","fractionProblemSolving","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","writingAlgebra","equations","sequences","estimation","units","geometry","angleRelationships","percentageChange","directProportion","simplifyExpand","twoStepEquations","inequalities","coordinates","pythagoras","statistics","probability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 7 includes 31 targeted banks. Mental Calculation Strategies and Remainders & Repeating Patterns focus on short, calculator-free questions with simple percentages, decimals and cycles."};
+YEAR_CONFIGS[7] = {"title":"Year 7 Rapid Fire Mental Maths","skillLabel":"Year 7 Skill","mixed":"Mixed Year 7 Skills","labels":{"integers":"Integers & Negative Numbers","order":"Order of Operations","powers":"Powers, Squares & Roots","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","percentages":"Percentages","ratio":"Ratio & Rates","algebra":"Algebra Expressions","writingAlgebra":"Words to Algebra: Expressions & Equations","equations":"Simple Equations","sequences":"Sequences","estimation":"Estimation & Rounding","units":"Units, Time & Speed","geometry":"Geometry","mixed":"Mixed Year 7 Skills","review":"Mistake Review","fdpConversions":"Fraction–Decimal–Percentage Conversion","percentageChange":"Percentage Change","directProportion":"Direct Proportion & Unit Rates","simplifyExpand":"Simplifying & Expanding Expressions","twoStepEquations":"Two-Step Equations","inequalities":"Basic Inequalities","coordinates":"Coordinates & Straight Lines","pythagoras":"Pythagoras","statistics":"Statistics","probability":"Probability","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations","fractionProblemSolving":"Fraction Problem Solving","angleRelationships":"Angle Relationships","mentalStrategies":"Mental Calculation Strategies","remaindersPatterns":"Remainders & Repeating Patterns","directionsScale":"Compass Directions & Map Scale","financialMaths":"Financial Mathematics","areaVolumeUnits":"Area & Volume Unit Relationships"},"skills":["integers","order","mentalStrategies","powers","factors","remaindersPatterns","fractions","fractionProblemSolving","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","writingAlgebra","equations","sequences","estimation","units","directionsScale","areaVolumeUnits","geometry","angleRelationships","percentageChange","financialMaths","directProportion","simplifyExpand","twoStepEquations","inequalities","coordinates","pythagoras","statistics","probability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 7 includes short, calculator-free practice across number, fractions, algebra, geometry, probability, compass directions, map scale, financial mathematics and area-volume unit relationships."};
 BASE_STORAGE_BY_YEAR[7] = {"stars":"dyaaY7Stars","hero":"dyaaY7Hero","best":"dyaaY7Best","mistakes":"dyaaY7Mistakes"};
 
 /* ===== YEAR 7 QUESTION GENERATORS ===== */
@@ -1441,7 +1441,52 @@ function y7GenRemaindersPatterns() {
   return q('remaindersPatterns', `Next multiple of ${divisor} after ${number} = ?`, multiple, 'Count forward to the next multiple.');
 }
 
+/* ===== YEAR 7 FINAL CURRICULUM ADDITIONS ===== */
+
+function y7GenDirectionsScale() {
+  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,10);
+  const dirs=['North','North-East','East','South-East','South','South-West','West','North-West'];
+  if(t<=5){const start=randInt(0,7),steps=pick([1,2,3,4,5,6,7]),clockwise=chance(.6),shift=clockwise?steps:-steps,answer=((start+shift)%8+8)%8+1;return q('directionsScale',`You face ${dirs[start]} and turn ${steps*45}° ${clockwise?'clockwise':'anticlockwise'}. Which direction do you face? Use 1=N, 2=NE, 3=E, 4=SE, 5=S, 6=SW, 7=W, 8=NW.`,answer,'Move around the eight compass directions in 45° steps.');}
+  if(t===6){const scale=pick([2,3,4,5,10]),cm=randInt(2,12);return q('directionsScale',`Map scale: 1 cm represents ${scale} km. A route is ${cm} cm. Actual distance = ? km`,scale*cm,'Multiply by the scale.');}
+  if(t===7){const scale=pick([2,4,5,10]),cm=randInt(2,10);return q('directionsScale',`Map scale: 1 cm represents ${scale} km. A real distance is ${scale*cm} km. Map distance = ? cm`,cm,'Divide by the scale.');}
+  if(t===8){const start=randInt(0,7),first=pick([1,2,3]),second=pick([1,2,3]),answer=(start+first-second+8)%8+1;return q('directionsScale',`You face ${dirs[start]}, turn ${first*45}° clockwise, then ${second*45}° anticlockwise. Which direction do you face? Use 1=N, 2=NE, 3=E, 4=SE, 5=S, 6=SW, 7=W, 8=NW.`,answer,'Combine the two turns.');}
+  if(t===9){const scale=pick([500,1000]),cm=randInt(2,10);return q('directionsScale',`On a map, 1 cm represents ${scale} m. ${cm} cm represents ? km`,cm*scale/1000,'Convert the map distance to metres, then to kilometres.');}
+  const scale=pick([2,3,4,5]),a=randInt(2,6),b=randInt(2,6);return q('directionsScale',`A map route has sections ${a} cm and ${b} cm. If 1 cm represents ${scale} km, total real distance = ? km`,(a+b)*scale,'Add the map lengths, then multiply by the scale.');
+}
+
+function y7GenFinancialMaths() {
+  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,10);
+  if(t===1){const dollars=randInt(5,40),cents=pick([1,2,3,4,6,7,8,9]);const amount=dollars+cents/100;const rounded=cents<5?dollars:(dollars+0.1);return q('financialMaths',`A New Zealand cash total is $${amount.toFixed(2)}. Amount paid after cash rounding = $?`,rounded,'Cash totals round to the nearest 10 cents.');}
+  if(t===2){const price=pick([20,30,40,50,60,80,100]),p=pick([10,20,25,50]);return q('financialMaths',`A $${price} item has ${p}% off. Sale price = $?`,price*(1-p/100),'Find the percentage remaining.');}
+  if(t===3){const qty=randInt(2,8),unit=pick([2,3,4,5,6,8,10,12]);return q('financialMaths',`${qty} items cost $${qty*unit}. Cost per item = $?`,unit,'Divide total cost by quantity.');}
+  if(t===4){const first=pick([4.5,5.5,6.5,7.5]),second=pick([2.5,3.5,4.5]),pay=20;return q('financialMaths',`Two items cost $${fmt(first)} and $${fmt(second)}. You pay $${pay}. Change = $?`,pay-first-second,'Add the costs, then subtract from the amount paid.');}
+  if(t===5){const weekly=pick([5,8,10,12,15]),weeks=pick([4,6,8,10]);return q('financialMaths',`You save $${weekly} each week for ${weeks} weeks. Total saved = $?`,weekly*weeks,'Multiply weekly saving by number of weeks.');}
+  if(t===6){const budget=pick([40,50,60,80,100]),spent=pick([15,20,25,30,40]);if(spent>=budget)return y7GenFinancialMaths();return q('financialMaths',`A budget is $${budget}. After spending $${spent}, money left = $?`,budget-spent,'Subtract spending from the budget.');}
+  if(t===7){const cost=pick([20,30,40,50,60]),profit=pick([5,10,15,20]);return q('financialMaths',`An item costs $${cost} and sells for $${cost+profit}. Profit = $?`,profit,'Profit = selling price − cost price.');}
+  if(t===8){const people=randInt(2,8),each=pick([5,6,8,10,12]);return q('financialMaths',`A $${people*each} bill is shared equally by ${people} people. Each pays $?`,each,'Divide the bill equally.');}
+  if(t===9){const price=pick([40,60,80,100,120]),p=pick([10,20,25]),pay=pick([100,150,200]);const sale=price*(1-p/100);if(pay<sale)return y7GenFinancialMaths();return q('financialMaths',`A $${price} item has ${p}% off. You pay $${pay}. Change = $?`,pay-sale,'Find the sale price, then the change.');}
+  const packs=randInt(2,6),items=pick([4,5,6,8,10]),price=pick([2,3,4,5]);return q('financialMaths',`${packs} packs contain ${items} items each. Each item costs $${price}. Total cost = $?`,packs*items*price,'Find total items, then multiply by price.');
+}
+
+function y7GenAreaVolumeUnits() {
+  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,10);
+  if(t===1){const m2=pick([1,2,3,4,5]);return q('areaVolumeUnits',`${m2} m² = ? cm²`,m2*10000,'1 m² = 10,000 cm².');}
+  if(t===2){const ml=pick([250,500,750,1000,1500,2000]);return q('areaVolumeUnits',`${ml} mL = ? cm³`,ml,'1 mL = 1 cm³.');}
+  if(t===3){const litres=pick([1,1.5,2,2.5,3,4,5]);return q('areaVolumeUnits',`${fmt(litres)} L = ? cm³`,litres*1000,'1 L = 1000 cm³.');}
+  if(t===4){const cm3=pick([500,1000,1500,2000,2500,3000]);return q('areaVolumeUnits',`${cm3} cm³ = ? L`,cm3/1000,'Divide cubic centimetres by 1000.');}
+  if(t===5){const l=randInt(2,10),w=randInt(2,8),h=randInt(2,6);return q('areaVolumeUnits',`Cuboid ${l} cm × ${w} cm × ${h} cm. Volume = ? cm³`,l*w*h,'Volume = length × width × height.');}
+  if(t===6){const l=randInt(2,10),w=randInt(2,8),h=randInt(2,6),v=l*w*h;return q('areaVolumeUnits',`A cuboid has volume ${v} cm³, length ${l} cm and width ${w} cm. Height = ? cm`,h,'Divide volume by length × width.');}
+  if(t===7){const area=pick([0.25,0.5,0.75,1.5,2.5]);return q('areaVolumeUnits',`${fmt(area)} m² = ? cm²`,area*10000,'Multiply square metres by 10,000.');}
+  if(t===8){const litres=pick([2,3,4,5]),cups=pick([4,5,8,10]);const each=litres*1000/cups;if(!Number.isInteger(each))return y7GenAreaVolumeUnits();return q('areaVolumeUnits',`${litres} L is shared equally into ${cups} containers. Each contains ? mL`,each,'Convert to millilitres, then divide.');}
+  if(t===9){const side=pick([2,3,4,5,6,10]);return q('areaVolumeUnits',`A cube has side ${side} cm. Volume = ? cm³`,side**3,'Cube volume = side³.');}
+  const base=pick([20,30,40,50]),height=pick([2,3,4,5]);return q('areaVolumeUnits',`A tank has base area ${base} cm² and height ${height} cm. Volume = ? cm³`,base*height,'Volume = base area × height.');
+}
+
 YEAR_BANKS[7] = {
+  "directionsScale": y7GenDirectionsScale,
+  "financialMaths": y7GenFinancialMaths,
+  "areaVolumeUnits": y7GenAreaVolumeUnits,
+
   "mentalStrategies": y7GenMentalStrategies,
   "remaindersPatterns": y7GenRemaindersPatterns,
   "angleRelationships": y7GenAngleRelationships,

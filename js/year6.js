@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 6 configuration and question bank. */
-YEAR_CONFIGS[6] = {"title":"Year 6 Rapid Fire Mental Maths","skillLabel":"Year 6 Skill","mixed":"Mixed Year 6 Skills","labels":{"addsub":"Addition & Subtraction","multdiv":"Multiplication & Division","order":"Order of Operations","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","decimalShift":"Decimal Multiplication & Division","percentages":"Percentages","ratio":"Ratio & Proportion","negatives":"Negative Numbers","units":"Units & Time","mixed":"Mixed Year 6 Skills","review":"Mistake Review","placeRounding":"Place Value, Rounding & Estimation","inverseOperations":"Missing Numbers & Inverse Operations","fdpConversions":"Fraction, Decimal & Percentage Conversion","mixedFractions":"Mixed Numbers & Equivalent Fractions","equationsMachines":"Simple Equations & Function Machines","sequencesPatterns":"Sequences & Number Patterns","statistics":"Mean, Median, Mode & Range","perimeterAreaVolume":"Perimeter, Area & Volume","speedDistanceTime":"Speed, Distance & Time","probability":"Basic Probability","fractionWordProblems":"Fraction Operations Word Problems","triangleQuadAngles":"Triangle & Quadrilateral Angles","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","remaindersPatterns":"Remainders & Repeating Patterns"},"skills":["addsub","multdiv","mentalStrategies","order","factors","remaindersPatterns","fractions","fractionWordProblems","decimals","decimalShift","percentages","moneyChange","ratio","negatives","units","calendarDates","placeRounding","inverseOperations","fdpConversions","mixedFractions","equationsMachines","sequencesPatterns","statistics","perimeterAreaVolume","triangleQuadAngles","speedDistanceTime","probability"],"levels":[["starter","Starter — Year 5 Review"],["core","Core — Year 6"],["challenge","Challenge — Year 6+"]],"teacher":"Year 6 includes 27 targeted banks. New mental-strategy, money, calendar and remainder banks add practical, quick questions without difficult fractions or long calculations."};
+YEAR_CONFIGS[6] = {"title":"Year 6 Rapid Fire Mental Maths","skillLabel":"Year 6 Skill","mixed":"Mixed Year 6 Skills","labels":{"addsub":"Addition & Subtraction","multdiv":"Multiplication & Division","order":"Order of Operations","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","decimalShift":"Decimal Multiplication & Division","percentages":"Percentages","ratio":"Ratio & Proportion","negatives":"Negative Numbers","units":"Units & Time","mixed":"Mixed Year 6 Skills","review":"Mistake Review","placeRounding":"Place Value, Rounding & Estimation","inverseOperations":"Missing Numbers & Inverse Operations","fdpConversions":"Fraction, Decimal & Percentage Conversion","mixedFractions":"Mixed Numbers & Equivalent Fractions","equationsMachines":"Simple Equations & Function Machines","sequencesPatterns":"Sequences & Number Patterns","statistics":"Mean, Median, Mode & Range","perimeterAreaVolume":"Perimeter, Area & Volume","speedDistanceTime":"Speed, Distance & Time","probability":"Probability & Complements","fractionWordProblems":"Fraction Operations Word Problems","triangleQuadAngles":"Triangle & Quadrilateral Angles","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","remaindersPatterns":"Remainders & Repeating Patterns","numberBalance":"Number Sentences & Balance","shapesSymmetry":"Shapes, Symmetry & 3D Objects","directionsScale":"Compass Directions & Map Scale"},"skills":["addsub","multdiv","mentalStrategies","order","factors","remaindersPatterns","fractions","fractionWordProblems","decimals","decimalShift","percentages","moneyChange","ratio","negatives","units","directionsScale","calendarDates","placeRounding","inverseOperations","numberBalance","fdpConversions","mixedFractions","equationsMachines","sequencesPatterns","statistics","perimeterAreaVolume","triangleQuadAngles","shapesSymmetry","speedDistanceTime","probability"],"levels":[["starter","Starter — Year 5 Review"],["core","Core — Year 6"],["challenge","Challenge — Year 6+"]],"teacher":"Year 6 includes mental-friendly banks across number, fraction operations and applications, probability, algebra readiness, geometry, compass directions, map scale, measurement, money and statistics."};
 BASE_STORAGE_BY_YEAR[6] = {"stars":"dyaaY6RapidStars","hero":"dyaaY6RapidHero","best":"dyaaY6RapidBest","mistakes":"dyaaY6RapidMistakes"};
 
 /* ===== YEAR 6 QUESTION GENERATORS ===== */
@@ -1055,14 +1055,14 @@ function y6GenSpeedDistanceTime(){
 
 function y6GenProbability(){
   const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,9);
-  if(t===1){const red=randInt(1,8),blue=randInt(1,8);return qFrac('probability',`A bag has ${red} red and ${blue} blue counters. P(red) = ?`,red/(red+blue),'Probability = favourable outcomes ÷ total outcomes.');}
-  if(t===2){const favourable=pick([1,2,3,4,5]);return qFrac('probability',`A fair six-sided die is rolled. P(rolling one of ${favourable} selected faces) = ?`,favourable/6,'There are 6 equally likely outcomes.');}
-  if(t===3){const p=pick([0.1,0.2,0.25,0.35,0.4,0.6,0.75,0.8]);return q('probability',`P(event) = ${fmt(p)}. P(not event) = ?`,1-p,'Complementary probabilities add to 1.');}
-  if(t===4){const shaded=randInt(1,7),total=pick([8,10,12]);return qFrac('probability',`A fair spinner has ${total} equal sections, ${shaded} shaded. P(shaded) = ?`,shaded/total,'Use shaded sections ÷ total sections.');}
-  if(t===5){return qFrac('probability','A fair coin is tossed twice. P(two heads) = ?',1/4,'Multiply 1/2 × 1/2.');}
-  if(t===6){return qFrac('probability','A fair coin is tossed twice. P(exactly one head) = ?',1/2,'The favourable outcomes are HT and TH.');}
-  if(t===7){const p1=pick([1/2,1/3,1/4]),p2=pick([1/2,1/3,1/4]);return qFrac('probability',`Two independent events have probabilities ${toFraction(p1)} and ${toFraction(p2)}. P(both) = ?`,p1*p2,'For independent events, multiply the probabilities.');}
-  if(t===8){const red=randInt(2,6),blue=randInt(2,6),total=red+blue;return qFrac('probability',`A counter is chosen from ${red} red and ${blue} blue, replaced, then chosen again. P(two red) = ?`,(red/total)**2,'Replacement keeps the probability the same.');}
+  if(t===1){const red=randInt(1,6),blue=randInt(1,6);return qFrac('probability',`A bag has ${red} red and ${blue} blue counters. P(red) = ?`,red/(red+blue),'Probability = favourable outcomes ÷ total outcomes.');}
+  if(t===2){const favourable=pick([1,2,3,4,5]);return qFrac('probability',`A fair six-sided die is rolled. ${favourable} faces are winning faces. P(winning) = ?`,favourable/6,'There are 6 equally likely outcomes.');}
+  if(t===3){const shaded=randInt(1,7),total=pick([8,10,12]);return qFrac('probability',`A fair spinner has ${total} equal sections, ${shaded} shaded. P(shaded) = ?`,shaded/total,'Use shaded sections ÷ total sections.');}
+  if(t===4){const p=pick([0.1,0.2,0.25,0.4,0.5,0.6,0.75,0.8]);return q('probability',`P(event) = ${fmt(p)}. P(not event) = ?`,1-p,'Complementary probabilities add to 1.');}
+  if(t===5){const p=pick([1/4,1/3,1/2,2/3,3/4]);return qFrac('probability',`P(A) = ${toFraction(p)}. P(not A) = ?`,1-p,'Complementary probabilities add to 1.');}
+  if(t===6){return q('probability','A fair coin is tossed twice. How many possible outcomes are there?',4,'The outcomes are HH, HT, TH and TT.');}
+  if(t===7){return qFrac('probability','A fair coin is tossed twice. P(exactly one head) = ?',1/2,'The favourable outcomes are HT and TH.');}
+  if(t===8){return qFrac('probability','A fair coin is tossed and a fair die is rolled. P(head and an even number) = ?',1/4,'Multiply 1/2 by 3/6.');}
   return qFrac('probability','A fair die is rolled twice. P(rolling a 6 both times) = ?',1/36,'Multiply 1/6 × 1/6.');
 }
 
@@ -1362,7 +1362,66 @@ function y6GenRemaindersPatterns() {
   return q('remaindersPatterns', `Weekday ${startCode} is followed by ${add} days. New weekday number (1=Monday, ..., 7=Sunday) = ?`, ((startCode - 1 + add) % 7) + 1, 'Use the remainder after dividing by 7.');
 }
 
+/* ===== YEAR 6 FINAL CURRICULUM ADDITIONS ===== */
+
+function y6GenNumberBalance() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 10);
+
+  if (t === 1) { const a=randInt(100,900), x=randInt(50,400); return q('numberBalance', `${a} + ? = ${a+x}`, x, 'Subtract the known addend.'); }
+  if (t === 2) { const a=randInt(500,2000), x=randInt(100,Math.min(900,a-100)); return q('numberBalance', `${a} − ? = ${a-x}`, x, 'Find the difference.'); }
+  if (t === 3) { const a=pick([3,4,5,6,8,9,10,12]), b=randInt(3,12), c=pick([2,3,4,5,6,8,10,12]); const total=a*b; if(total%c!==0) return y6GenNumberBalance(); return q('numberBalance', `${a} × ${b} = ${c} × ?`, total/c, 'Equal products have the same value.'); }
+  if (t === 4) { const divisor=pick([2,4,5,8,10,20,25]), answer=randInt(3,20); return q('numberBalance', `? ÷ ${divisor} = ${answer}`, divisor*answer, 'Multiply by the divisor.'); }
+  if (t === 5) { const n=pick([0.5,1.5,2.5,3.5,4.5]), add=pick([0.5,1,1.5,2]); return q('numberBalance', `${fmt(n)} + ? = ${fmt(n+add)}`, add, 'Subtract the decimal values.'); }
+  if (t === 6) { const a=randInt(20,80), b=randInt(10,50), limit=a+b+pick([-10,0,10]); return q('numberBalance', `Is ${a} + ${b} ≤ ${limit}? Enter 1 for True or 0 for False.`, a+b<=limit?1:0, 'Calculate, then compare using ≤.'); }
+  if (t === 7) { const a=pick([3,4,5,6,8]), b=randInt(10,25), c=randInt(2,b-2); return q('numberBalance', `${a} × ${b} = ${a} × ${c} + ?`, a*(b-c), 'Use the distributive property.'); }
+  if (t === 8) { const a=randInt(20,60), b=randInt(10,40), c=randInt(5,30), total=a+b-c; return q('numberBalance', `${a} + ${b} − ${c} = ?`, total, 'Work left to right for addition and subtraction.'); }
+  if (t === 9) { const a=pick([2,3,4,5]), b=randInt(3,12), c=randInt(2,10); return q('numberBalance', `${a}(${b} + ${c}) = ${a*b} + ?`, a*c, 'Multiply the second addend by the outside factor.'); }
+  const left=randInt(100,500), right=left+pick([-100,-50,50,100]); return q('numberBalance', `Which is greater? Enter 1 for ${left}, or 2 for ${right}.`, left>right?1:2, 'Compare hundreds, then tens.');
+}
+
+function y6GenShapesSymmetry() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 11);
+
+  if (t === 1) return q('shapesSymmetry', 'What is the order of rotational symmetry of a non-square rectangle?', 2, 'It matches after a half turn and a full turn.');
+  if (t === 2) return q('shapesSymmetry', 'What is the order of rotational symmetry of a square?', 4, 'It matches every quarter turn.');
+  if (t === 3) return q('shapesSymmetry', 'What is the order of rotational symmetry of an equilateral triangle?', 3, 'It matches three times in a full turn.');
+  if (t === 4) return q('shapesSymmetry', 'How many faces does a triangular prism have?', 5, 'Two triangles and three rectangles.');
+  if (t === 5) return q('shapesSymmetry', 'How many edges does a triangular prism have?', 9, 'Three on each triangular end and three joining edges.');
+  if (t === 6) return q('shapesSymmetry', 'How many vertices does a triangular prism have?', 6, 'Three vertices on each triangular end.');
+  if (t === 7) return q('shapesSymmetry', 'How many faces does a square-based pyramid have?', 5, 'One square base and four triangular faces.');
+  if (t === 8) return q('shapesSymmetry', 'How many vertices does a square-based pyramid have?', 5, 'Four base vertices and one apex.');
+  if (t === 9) return q('shapesSymmetry', 'A quadrilateral has four equal sides. Enter 1 for rhombus, 2 for trapezium, or 3 for kite.', 1, 'A rhombus has four equal sides.');
+  if (t === 10) return q('shapesSymmetry', 'A quadrilateral has exactly one pair of parallel sides. Enter 1 for parallelogram or 2 for trapezium.', 2, 'A trapezium has one pair of parallel sides.');
+  return q('shapesSymmetry', 'A prism has two identical, parallel end faces. Enter 1 for True or 0 for False.', 1, 'This is a defining feature of a prism.');
+}
+
+function y6GenDirectionsScale() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+  const dirs = ['North','East','South','West'];
+
+  if (t <= 4) {
+    const start = randInt(0,3);
+    const turns = t === 1 ? 1 : t === 2 ? 2 : t === 3 ? 3 : pick([1,2,3]);
+    const clockwise = t !== 3 || chance(.5);
+    const shift = clockwise ? turns : -turns;
+    const answer = ((start + shift) % 4 + 4) % 4 + 1;
+    return q('directionsScale', `You face ${dirs[start]} and turn ${turns*90}° ${clockwise?'clockwise':'anticlockwise'}. Which direction do you face? Use 1=North, 2=East, 3=South, 4=West.`, answer, 'Move around the four compass directions in quarter turns.');
+  }
+  if (t === 5) { const scale=pick([2,3,4,5,10]), cm=randInt(2,10); return q('directionsScale', `On a map, 1 cm represents ${scale} km. ${cm} cm represents ? km`, scale*cm, 'Multiply the map length by the scale.'); }
+  if (t === 6) { const scale=pick([2,3,4,5,10]), cm=randInt(2,10); return q('directionsScale', `On a map, 1 cm represents ${scale} km. A journey is ${scale*cm} km. Map length = ? cm`, cm, 'Divide the real distance by the scale.'); }
+  if (t === 7) { const scale=pick([100,200,500]), cm=randInt(2,10); return q('directionsScale', `On a map, 1 cm represents ${scale} m. ${cm} cm represents ? m`, scale*cm, 'Multiply by the scale in metres.'); }
+  if (t === 8) { const start=randInt(0,3), first=1, second=2; const answer=(start+first+second)%4+1; return q('directionsScale', `You face ${dirs[start]}, turn 90° clockwise, then 180° clockwise. Which direction do you face? Use 1=North, 2=East, 3=South, 4=West.`, answer, 'Combine the turns, then move around the compass.'); }
+  const scale=pick([2,4,5]), cm1=randInt(2,6), cm2=randInt(2,6); return q('directionsScale', `A map route has sections of ${cm1} cm and ${cm2} cm. If 1 cm represents ${scale} km, total real distance = ? km`, (cm1+cm2)*scale, 'Add the map lengths, then apply the scale.');
+}
+
 YEAR_BANKS[6] = {
+  "numberBalance": y6GenNumberBalance,
+  "shapesSymmetry": y6GenShapesSymmetry,
+  "directionsScale": y6GenDirectionsScale,
+
   "mentalStrategies": y6GenMentalStrategies,
   "moneyChange": y6GenMoneyChange,
   "calendarDates": y6GenCalendarDates,

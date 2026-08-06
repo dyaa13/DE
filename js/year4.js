@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 4 configuration and question bank. */
-YEAR_CONFIGS[4] = {"title":"Year 4 Rapid Fire Mental Maths","skillLabel":"Year 4 Skill","mixed":"Mixed Year 4 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","division":"Division","placevalue":"Place Value","rounding":"Rounding & Estimation","missing":"Missing Numbers & Inverse Operations","doubles":"Doubles, Halves & Near Doubles","factors":"Factors, Multiples & Divisibility","fractions":"Fractions Basics","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences & Patterns","mixed":"Mixed Year 4 Skills","review":"Mistake Review","angleBasics":"Angle Basics","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates"},"skills":["addition","subtraction","multiplication","division","placevalue","rounding","missing","doubles","mentalStrategies","factors","fractions","angleBasics","time","moneyChange","calendarDates","measurements","perimeterArea","sequences"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 4 includes 18 targeted banks. New mental-strategy, money and calendar banks use short one-step questions with friendly whole numbers and simple dollar amounts."};
+YEAR_CONFIGS[4] = {"title":"Year 4 Rapid Fire Mental Maths","skillLabel":"Year 4 Skill","mixed":"Mixed Year 4 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","division":"Division","placevalue":"Place Value","rounding":"Rounding & Estimation","missing":"Missing Numbers & Inverse Operations","doubles":"Doubles, Halves & Near Doubles","factors":"Factors, Multiples & Divisibility","fractions":"Fractions Basics","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences & Patterns","mixed":"Mixed Year 4 Skills","review":"Mistake Review","angleBasics":"Angle Basics","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","probability":"Likelihood & Simple Probability","numberBalance":"Number Sentences & Balance","shapesSymmetry":"Shapes, Symmetry & 3D Objects"},"skills":["addition","subtraction","multiplication","division","placevalue","rounding","missing","numberBalance","doubles","mentalStrategies","factors","fractions","probability","angleBasics","shapesSymmetry","time","moneyChange","calendarDates","measurements","perimeterArea","sequences"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 4 includes short, mental-friendly banks across number, fractions, money, time, measurement, angles, probability, number sentences, shapes and symmetry."};
 BASE_STORAGE_BY_YEAR[4] = {"stars":"dyaaRapidStars","hero":"dyaaRapidHero","best":"dyaaRapidBest","mistakes":"dyaaRapidMistakes"};
 
 /* ===== YEAR 4 QUESTION GENERATORS ===== */
@@ -584,7 +584,95 @@ function y4GenCalendarDates() {
   return q('calendarDates', `A class meets once each week for ${weeks} weeks. How many meetings are there?`, weeks, 'One meeting happens each week.');
 }
 
+/* ===== YEAR 4 FINAL CURRICULUM ADDITIONS ===== */
+
+function y4GenProbability() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) return qFrac('probability', 'A fair coin is tossed. P(heads) = ?', 1 / 2, 'A fair coin has two equally likely outcomes.');
+  if (t === 2) return q('probability', 'A normal six-sided die is rolled. Is rolling a 7 possible? Enter 1 for Yes or 0 for No.', 0, 'A normal die has faces numbered 1 to 6.');
+  if (t === 3) {
+    const shaded = randInt(1, 3);
+    return qFrac('probability', `A fair spinner has 4 equal sections and ${shaded} shaded section${shaded === 1 ? '' : 's'}. P(shaded) = ?`, shaded / 4, 'Use shaded sections ÷ total sections.');
+  }
+  if (t === 4) {
+    const favourable = pick([1, 2, 3]);
+    return qFrac('probability', `A bag has ${favourable} red and ${4 - favourable} blue counters. P(red) = ?`, favourable / 4, 'Use red counters ÷ total counters.');
+  }
+  if (t === 5) return qFrac('probability', 'A fair six-sided die is rolled. P(rolling an even number) = ?', 1 / 2, 'The even faces are 2, 4 and 6.');
+  if (t === 6) {
+    const favourable = pick([1, 2, 3, 4, 5]);
+    return qFrac('probability', `A fair six-sided die is rolled. ${favourable} faces are winning faces. P(winning) = ?`, favourable / 6, 'Winning faces ÷ 6 total faces.');
+  }
+  if (t === 7) {
+    const p = pick([1 / 4, 1 / 2, 3 / 4]);
+    return qFrac('probability', `P(rain) = ${toFraction(p)}. P(no rain) = ?`, 1 - p, 'Complementary probabilities add to 1.');
+  }
+  return q('probability', 'A fair coin is tossed twice. How many possible outcomes are there?', 4, 'The outcomes are HH, HT, TH and TT.');
+}
+
+function y4GenNumberBalance() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
+  if (t === 1) {
+    const a = randInt(10, 60), x = randInt(5, 30);
+    return q('numberBalance', `${a} + ? = ${a + x}`, x, 'Use subtraction to find the missing addend.');
+  }
+  if (t === 2) {
+    const a = randInt(30, 90), x = randInt(5, a - 5);
+    return q('numberBalance', `${a} − ? = ${a - x}`, x, 'Use the difference between the two numbers.');
+  }
+  if (t === 3) {
+    const a = randInt(10, 40), b = randInt(5, 25), correct = chance(0.5);
+    const shown = a + b + (correct ? 0 : pick([-1, 1, 2]));
+    return q('numberBalance', `Is ${a} + ${b} = ${shown}? Enter 1 for True or 0 for False.`, correct ? 1 : 0, 'Calculate the left side and compare.');
+  }
+  if (t === 4) {
+    const a = randInt(5, 25), b = randInt(5, 25), c = randInt(1, a + b - 1);
+    return q('numberBalance', `${a} + ${b} = ${c} + ?`, a + b - c, 'Both sides of the equals sign must have the same value.');
+  }
+  if (t === 5) {
+    const a = pick([2, 3, 4, 5, 10]), b = randInt(2, 10);
+    const total = a * b;
+    const factors = [2, 3, 4, 5, 10].filter(value => total % value === 0);
+    const c = pick(factors);
+    return q('numberBalance', `${a} × ${b} = ${c} × ?`, total / c, 'Find the value of the left side, then divide by the known factor.');
+  }
+  if (t === 6) {
+    const divisor = pick([2, 4, 5, 10]), answer = randInt(2, 12);
+    return q('numberBalance', `? ÷ ${divisor} = ${answer}`, divisor * answer, 'Use multiplication as the inverse of division.');
+  }
+  if (t === 7) {
+    const left = randInt(20, 80), right = left + pick([-10, -5, 5, 10]);
+    return q('numberBalance', `Which is greater? Enter 1 for ${left}, or 2 for ${right}.`, left > right ? 1 : 2, 'Compare the place values.');
+  }
+  const a = randInt(20, 60), b = randInt(5, 25), limit = a + b + pick([-5, 0, 5]);
+  return q('numberBalance', `Is ${a} + ${b} ≤ ${limit}? Enter 1 for True or 0 for False.`, a + b <= limit ? 1 : 0, 'Calculate, then compare using ≤.');
+}
+
+function y4GenShapesSymmetry() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 10);
+
+  if (t === 1) { const n = pick([3, 4, 5, 6, 8]); return q('shapesSymmetry', `A polygon with ${n} sides has ? vertices`, n, 'A polygon has the same number of sides and vertices.'); }
+  if (t === 2) { const [name, sides] = pick([['triangle',3],['quadrilateral',4],['pentagon',5],['hexagon',6],['octagon',8]]); return q('shapesSymmetry', `A ${name} has ? sides`, sides, 'Recall the polygon name.'); }
+  if (t === 3) return q('shapesSymmetry', 'How many lines of symmetry does a square have?', 4, 'A square can be folded along two diagonals and two midlines.');
+  if (t === 4) return q('shapesSymmetry', 'How many lines of symmetry does a non-square rectangle have?', 2, 'A rectangle has one horizontal and one vertical line of symmetry.');
+  if (t === 5) return q('shapesSymmetry', 'How many faces does a cube have?', 6, 'Count the square faces.');
+  if (t === 6) return q('shapesSymmetry', 'How many vertices does a cube have?', 8, 'A cube has four top vertices and four bottom vertices.');
+  if (t === 7) return q('shapesSymmetry', 'How many edges does a cube have?', 12, 'A cube has 4 top, 4 bottom and 4 vertical edges.');
+  if (t === 8) return q('shapesSymmetry', 'How many lines of symmetry does an equilateral triangle have?', 3, 'Each vertex can be joined to the midpoint of the opposite side.');
+  if (t === 9) return q('shapesSymmetry', 'A shape has 5 sides. Enter 1 for pentagon, 2 for hexagon, or 3 for octagon.', 1, 'A pentagon has 5 sides.');
+  return q('shapesSymmetry', 'A 3D object has 6 equal square faces. Enter 1 for cube or 2 for cylinder.', 1, 'A cube has six equal square faces.');
+}
+
 YEAR_BANKS[4] = {
+  "probability": y4GenProbability,
+  "numberBalance": y4GenNumberBalance,
+  "shapesSymmetry": y4GenShapesSymmetry,
+
   "mentalStrategies": y4GenMentalStrategies,
   "moneyChange": y4GenMoneyChange,
   "calendarDates": y4GenCalendarDates,

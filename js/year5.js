@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 5 configuration and question bank. */
-YEAR_CONFIGS[5] = {"title":"Year 5 Rapid Fire Mental Maths","skillLabel":"Year 5 Skill","mixed":"Mixed Year 5 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","twoDigitMultiplication":"Two-Digit × Two-Digit","division":"Division","placevalue":"×/÷ 10, 100, 1000, 0.1, 0.01 & 0.001","doubles":"Doubles & Halves","fractions":"Fractions of Quantities","decimals":"Decimal Mental Maths","decimalShift":"Decimal Multiplication & Division","rounding":"Place Value & Rounding","missing":"Missing Numbers & Inverse Operations","factorsDivisibility":"Factors, Multiples & Divisibility","fractionCompare":"Fraction Equivalence & Comparison","fractionAddSub":"Fraction Addition & Subtraction","basicPercentages":"Basic Percentages","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences","mixed":"Mixed Year 5 Skills","review":"Mistake Review","fractionWordProblems":"Fraction Addition & Subtraction Word Problems","anglesLinePoint":"Angles on Lines & Around a Point","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","remaindersPatterns":"Remainders & Repeating Patterns"},"skills":["addition","subtraction","multiplication","twoDigitMultiplication","division","placevalue","doubles","mentalStrategies","fractions","decimals","decimalShift","rounding","missing","factorsDivisibility","remaindersPatterns","fractionCompare","fractionAddSub","fractionWordProblems","basicPercentages","moneyChange","time","calendarDates","anglesLinePoint","measurements","perimeterArea","sequences"],"levels":[["starter","Starter — Year 4 Review"],["core","Core — Year 5"],["challenge","Challenge — Year 5+"]],"teacher":"Year 5 includes 26 targeted banks. New mental-strategy, money, calendar and remainder banks are designed for quick one-step or simple two-step solving with friendly numbers."};
+YEAR_CONFIGS[5] = {"title":"Year 5 Rapid Fire Mental Maths","skillLabel":"Year 5 Skill","mixed":"Mixed Year 5 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","twoDigitMultiplication":"Two-Digit × Two-Digit","division":"Division","placevalue":"×/÷ 10, 100, 1000, 0.1, 0.01 & 0.001","doubles":"Doubles & Halves","fractions":"Fractions of Quantities","decimals":"Decimal Mental Maths","decimalShift":"Decimal Multiplication & Division","rounding":"Place Value & Rounding","missing":"Missing Numbers & Inverse Operations","factorsDivisibility":"Factors, Multiples & Divisibility","fractionCompare":"Fraction Equivalence & Comparison","fractionAddSub":"Fraction Addition & Subtraction","basicPercentages":"Basic Percentages","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences","mixed":"Mixed Year 5 Skills","review":"Mistake Review","fractionWordProblems":"Fraction Addition & Subtraction Word Problems","anglesLinePoint":"Angles on Lines & Around a Point","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","remaindersPatterns":"Remainders & Repeating Patterns","probability":"Simple Probability","numberBalance":"Number Sentences & Balance","shapesSymmetry":"Shapes, Symmetry & 3D Objects"},"skills":["addition","subtraction","multiplication","twoDigitMultiplication","division","placevalue","doubles","mentalStrategies","fractions","decimals","decimalShift","rounding","missing","numberBalance","factorsDivisibility","remaindersPatterns","fractionCompare","fractionAddSub","fractionWordProblems","probability","basicPercentages","moneyChange","time","calendarDates","anglesLinePoint","shapesSymmetry","measurements","perimeterArea","sequences"],"levels":[["starter","Starter — Year 4 Review"],["core","Core — Year 5"],["challenge","Challenge — Year 5+"]],"teacher":"Year 5 includes short, mental-friendly banks across number, fraction operations and applications, money, time, measurement, angles, probability, number sentences, shapes and symmetry."};
 BASE_STORAGE_BY_YEAR[5] = {"stars":"dyaaY5RapidStars","hero":"dyaaY5RapidHero","best":"dyaaY5RapidBest","mistakes":"dyaaY5RapidMistakes"};
 
 /* ===== YEAR 5 QUESTION GENERATORS ===== */
@@ -1916,7 +1916,60 @@ function y5GenRemaindersPatterns() {
   return q('remaindersPatterns', `What is the next multiple of ${divisor} after ${amount}?`, target, 'Count forward to the next multiple.');
 }
 
+/* ===== YEAR 5 FINAL CURRICULUM ADDITIONS ===== */
+
+function y5GenProbability() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+
+  if (t === 1) return qFrac('probability', 'A fair coin is tossed. P(tails) = ?', 1 / 2, 'A fair coin has two equally likely outcomes.');
+  if (t === 2) { const favourable = pick([1,2,3,4,5]); return qFrac('probability', `A fair six-sided die is rolled. ${favourable} faces are marked. P(marked) = ?`, favourable / 6, 'Marked faces ÷ 6 total faces.'); }
+  if (t === 3) { const red = randInt(1,5), blue = randInt(1,5); return qFrac('probability', `A bag has ${red} red and ${blue} blue counters. P(red) = ?`, red / (red + blue), 'Use red counters ÷ total counters.'); }
+  if (t === 4) { const shaded = randInt(1,7), total = pick([8,10,12]); return qFrac('probability', `A fair spinner has ${total} equal sections and ${shaded} shaded. P(shaded) = ?`, shaded / total, 'Use shaded sections ÷ total sections.'); }
+  if (t === 5) return qFrac('probability', 'A fair six-sided die is rolled. P(rolling a number greater than 4) = ?', 1 / 3, 'The favourable faces are 5 and 6.');
+  if (t === 6) { const p = pick([1/4,1/3,1/2,2/3,3/4]); return qFrac('probability', `P(A) = ${toFraction(p)}. P(not A) = ?`, 1 - p, 'Complementary probabilities add to 1.'); }
+  if (t === 7) return q('probability', 'A fair coin is tossed twice. How many possible outcomes are there?', 4, 'The outcomes are HH, HT, TH and TT.');
+  if (t === 8) return qFrac('probability', 'A fair coin is tossed twice. P(exactly one head) = ?', 1 / 2, 'The favourable outcomes are HT and TH.');
+  return qFrac('probability', 'A fair die is rolled. P(not rolling a 6) = ?', 5 / 6, 'Five of the six faces are not 6.');
+}
+
+function y5GenNumberBalance() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+
+  if (t === 1) { const a = randInt(20,200), x = randInt(10,100); return q('numberBalance', `${a} + ? = ${a + x}`, x, 'Subtract the known addend.'); }
+  if (t === 2) { const a = randInt(100,500), x = randInt(20,Math.min(200,a-10)); return q('numberBalance', `${a} − ? = ${a - x}`, x, 'Find the difference.'); }
+  if (t === 3) { const a = randInt(2,12), b = randInt(2,12), c = pick([2,3,4,5,6]); const total = a*b; if(total%c!==0) return y5GenNumberBalance(); return q('numberBalance', `${a} × ${b} = ${c} × ?`, total/c, 'Both products must be equal.'); }
+  if (t === 4) { const divisor = pick([2,4,5,8,10]), answer = randInt(3,20); return q('numberBalance', `? ÷ ${divisor} = ${answer}`, divisor*answer, 'Multiply to undo division.'); }
+  if (t === 5) { const n = pick([60,80,100,120,160,200]), divisor = pick([2,4,5,10]); return q('numberBalance', `${n} ÷ ? = ${n/divisor}`, divisor, 'Use the related multiplication fact.'); }
+  if (t === 6) { const a=randInt(20,80), b=randInt(10,40), correct=chance(.5); const shown=a+b+(correct?0:pick([-10,-1,1,10])); return q('numberBalance', `Is ${a} + ${b} = ${shown}? Enter 1 for True or 0 for False.`, correct?1:0, 'Calculate and compare.'); }
+  if (t === 7) { const a=randInt(10,50), b=randInt(10,50), c=randInt(5,a+b-5); return q('numberBalance', `${a} + ${b} = ${c} + ?`, a+b-c, 'Keep both sides balanced.'); }
+  if (t === 8) { const a=randInt(2,9), b=randInt(2,9), left=a*b, right=left+pick([-a,a]); return q('numberBalance', `Is ${a} × ${b} > ${right}? Enter 1 for True or 0 for False.`, left>right?1:0, 'Calculate the product, then compare.'); }
+  const a=pick([3,4,5,6,8]), b=randInt(3,12), c=randInt(1,b-1); return q('numberBalance', `${a} × ${b} = ${a} × ${c} + ?`, a*(b-c), 'Split the multiplication into two parts.');
+}
+
+function y5GenShapesSymmetry() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 11);
+
+  if (t === 1) return q('shapesSymmetry', 'How many faces does a cube have?', 6, 'A cube has six square faces.');
+  if (t === 2) return q('shapesSymmetry', 'How many edges does a cube have?', 12, 'Count 4 top, 4 bottom and 4 vertical edges.');
+  if (t === 3) return q('shapesSymmetry', 'How many vertices does a cube have?', 8, 'A cube has eight corners.');
+  if (t === 4) return q('shapesSymmetry', 'How many faces does a rectangular prism (cuboid) have?', 6, 'A rectangular prism has six rectangular faces.');
+  if (t === 5) return q('shapesSymmetry', 'Lines that meet at 90° are called: enter 1 for parallel or 2 for perpendicular.', 2, 'Perpendicular lines meet at a right angle.');
+  if (t === 6) return q('shapesSymmetry', 'Lines that stay the same distance apart are called: enter 1 for parallel or 2 for perpendicular.', 1, 'Parallel lines never meet.');
+  if (t === 7) return q('shapesSymmetry', 'A polygon has all sides and all angles equal. Enter 1 for regular or 2 for irregular.', 1, 'A regular polygon has equal sides and equal angles.');
+  if (t === 8) return q('shapesSymmetry', 'How many lines of symmetry does a regular hexagon have?', 6, 'A regular hexagon has six symmetry axes.');
+  if (t === 9) return q('shapesSymmetry', 'How many faces does a triangular prism have?', 5, 'It has two triangular faces and three rectangular faces.');
+  if (t === 10) return q('shapesSymmetry', 'How many vertices does a triangular prism have?', 6, 'Each triangular end has three vertices.');
+  return q('shapesSymmetry', 'How many edges does a triangular prism have?', 9, 'There are three edges on each triangular end and three joining edges.');
+}
+
 YEAR_BANKS[5] = {
+  "probability": y5GenProbability,
+  "numberBalance": y5GenNumberBalance,
+  "shapesSymmetry": y5GenShapesSymmetry,
+
   "mentalStrategies": y5GenMentalStrategies,
   "moneyChange": y5GenMoneyChange,
   "calendarDates": y5GenCalendarDates,
