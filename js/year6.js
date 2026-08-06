@@ -29,6 +29,19 @@ function y6GenAddSub(){
 function y6GenMultDiv(){
   const L=state.level;
 
+  if(chance(.12)){
+    const divisor=L==='starter'?randInt(3,9):L==='core'?randInt(4,12):randInt(5,15);
+    const quotient=L==='starter'?randInt(5,20):L==='core'?randInt(8,30):randInt(10,45);
+    const remainder=randInt(1,divisor-1);
+    const dividend=divisor*quotient+remainder;
+
+    if(chance(.5)){
+      return q('multdiv',`${dividend} ÷ ${divisor} = ${quotient} remainder ?`,remainder,'The remainder is what is left after making all complete groups.');
+    }
+
+    return q('multdiv',`${dividend} ÷ ${divisor} = ? remainder ${remainder}`,quotient,'Find the number of complete groups.');
+  }
+
   if(chance(.18)){
     if(L==='starter'||chance(.5)){
       const count=L==='starter'?pick([4,5,6]):pick([5,6,8,10]);
@@ -113,7 +126,7 @@ function y6GenOrder(){
   if(type===1){const a=randInt(3,9),b=randInt(12,24),c=randInt(3,10),d=randInt(4,20);return{operation:'order',text:`${a} × (${b} − ${c}) + ${d} = ?`,answer:a*(b-c)+d,hint:'Brackets, multiplication, then addition.'}}
   if(type===2){const d=randInt(3,8),q=randInt(8,16),a=randInt(30,80),m=randInt(2,6),add=randInt(5,20);return{operation:'order',text:`${a} − ${d*q} ÷ ${d} × ${m} + ${add} = ?`,answer:a-q*m+add,hint:'Do division and multiplication from left to right.'}}
   if(type===3){const divisor=randInt(3,8),q=randInt(8,16),x=randInt(5,divisor*q-5),y=divisor*q-x,m=randInt(3,7),sub=randInt(4,18);return{operation:'order',text:`(${x} + ${y}) ÷ ${divisor} × ${m} − ${sub} = ?`,answer:q*m-sub,hint:'Finish the brackets before division and multiplication.'}}
-  const a=randInt(3,8),b=randInt(4,10),c=randInt(2,8),d=randInt(2,6);return{operation:'order',text:`${a} × (${b} + ${c}) ÷ ${d} = ?`,answer:a*(b+c)/d,hint:'Brackets first. The numbers are chosen to give an exact answer.'}
+  const divisor=pick([2,3,4,5,6]),factor=randInt(2,5),a=divisor*factor,b=randInt(4,10),c=randInt(2,8);return{operation:'order',text:`${a} × (${b} + ${c}) ÷ ${divisor} = ?`,answer:factor*(b+c),hint:'Brackets first, then simplify the multiplication and division.'}
 }
 
 
@@ -172,11 +185,21 @@ function y6GenFractions(){
       ]);
       const scale = randInt(3, 14);
       const whole = denominator * scale;
+      const part = numerator * scale;
+
+      if (chance(0.35)) {
+        return q(
+          'fractions',
+          `${numerator}/${denominator} of a number is ${part}. The number is ?`,
+          whole,
+          `Divide ${part} by ${numerator}, then multiply by ${denominator}.`
+        );
+      }
 
       return q(
         'fractions',
         `${numerator}/${denominator} of ${whole} = ?`,
-        numerator * scale,
+        part,
         `Divide ${whole} by ${denominator}, then multiply by ${numerator}.`
       );
     }
@@ -306,34 +329,36 @@ function y6GenFractions(){
       const type = randInt(1, 3);
 
       if (type === 1) {
-        const [numerator, denominator] = pick([
-          [1, 2], [2, 3], [3, 4], [2, 5], [3, 5], [5, 6]
+        const [numerator, denominator, divisor] = pick([
+          [1, 2, 2], [2, 3, 2], [3, 4, 3],
+          [2, 5, 2], [3, 5, 3], [5, 6, 5], [3, 8, 3]
         ]);
-        const divisor = pick([2, 3, 4]);
 
         return qFrac(
           'fractions',
           `${numerator}/${denominator} ÷ ${divisor} = ?`,
           numerator / denominator / divisor,
-          'Dividing by a whole number is the same as multiplying by its reciprocal.'
+          'Multiply by the reciprocal of the whole-number divisor.'
         );
       }
 
       if (type === 2) {
-        const whole = randInt(2, 8);
-        const denominator = pick([2, 3, 4, 5, 6]);
+        const [whole, numerator, denominator] = pick([
+          [2, 1, 2], [3, 3, 4], [4, 2, 5],
+          [5, 5, 6], [6, 3, 4], [8, 4, 5]
+        ]);
 
         return q(
           'fractions',
-          `${whole} ÷ 1/${denominator} = ?`,
-          whole * denominator,
-          `There are ${denominator} lots of 1/${denominator} in each whole.`
+          `${whole} ÷ ${numerator}/${denominator} = ?`,
+          whole / (numerator / denominator),
+          'Multiply the whole number by the reciprocal of the fraction.'
         );
       }
 
       const [a, b, c, d] = pick([
         [1, 2, 1, 4], [2, 3, 1, 3], [3, 4, 1, 2],
-        [2, 5, 4, 5], [5, 6, 5, 12], [3, 8, 1, 4]
+        [3, 5, 3, 10], [5, 6, 5, 12], [3, 8, 3, 16]
       ]);
 
       return qFrac(
@@ -344,7 +369,24 @@ function y6GenFractions(){
       );
     }
 
-    if (chance(0.5)) {
+    const finalType = randInt(1, 3);
+
+    if (finalType === 1) {
+      const [numerator, denominator, whole] = pick([
+        [1, 2, 18], [1, 3, 24], [2, 3, 27],
+        [3, 4, 32], [2, 5, 35], [5, 6, 30]
+      ]);
+      const part = whole * numerator / denominator;
+
+      return q(
+        'fractions',
+        `${numerator}/${denominator} of a number is ${part}. The number is ?`,
+        whole,
+        'Divide by the numerator, then multiply by the denominator.'
+      );
+    }
+
+    if (finalType === 2) {
       const [numerator, denominator, multiplier] = pick([
         [2, 3, 4], [3, 4, 5], [3, 5, 4], [5, 6, 3],
         [3, 8, 5], [7, 10, 4]
@@ -379,8 +421,8 @@ function y6GenFractions(){
   if (roll <= 25) {
     if (chance(0.5)) {
       const [a, b, c, d] = pick([
-        [2, 3, 3, 4], [3, 5, 5, 6], [5, 8, 2, 3],
-        [7, 10, 5, 12], [5, 6, 7, 8], [7, 12, 3, 5]
+        [2, 3, 3, 4], [3, 4, 5, 6], [5, 8, 3, 4],
+        [7, 10, 1, 5], [5, 6, 7, 12], [7, 8, 5, 8]
       ]);
 
       return qFrac(
@@ -393,7 +435,7 @@ function y6GenFractions(){
 
     const [a, b, c, d] = pick([
       [5, 6, 3, 8], [7, 8, 5, 12], [9, 10, 2, 5],
-      [11, 12, 3, 8], [7, 9, 5, 12], [13, 15, 7, 10]
+      [11, 12, 3, 8], [7, 9, 1, 3], [13, 15, 2, 5]
     ]);
 
     return qFrac(
@@ -436,8 +478,8 @@ function y6GenFractions(){
     }
 
     const [a, b, c, d] = pick([
-      [2, 3, 5, 8], [3, 5, 7, 9], [5, 6, 9, 14],
-      [7, 10, 15, 28], [4, 7, 21, 25], [5, 12, 18, 35]
+      [2, 3, 5, 8], [3, 5, 7, 9], [5, 6, 3, 5],
+      [7, 10, 15, 28], [4, 7, 7, 10], [5, 12, 18, 35]
     ]);
 
     return qFrac(
@@ -453,8 +495,8 @@ function y6GenFractions(){
 
     if (type === 1) {
       const [a, b, c, d] = pick([
-        [3, 4, 2, 3], [5, 6, 3, 5], [7, 8, 1, 2],
-        [4, 5, 2, 3], [7, 10, 14, 15], [5, 12, 10, 21]
+        [3, 4, 1, 2], [5, 6, 5, 12], [7, 8, 7, 16],
+        [4, 5, 2, 5], [2, 3, 4, 9], [3, 5, 2, 5]
       ]);
 
       return qFrac(
@@ -466,12 +508,12 @@ function y6GenFractions(){
     }
 
     if (type === 2) {
-      const whole = randInt(2, 8);
-      const [numerator, denominator] = pick([
-        [2, 3], [3, 4], [4, 5], [5, 6], [3, 8], [7, 10]
+      const [whole, numerator, denominator] = pick([
+        [3, 3, 4], [4, 2, 5], [5, 5, 6],
+        [6, 3, 4], [8, 4, 5], [9, 3, 5]
       ]);
 
-      return qFrac(
+      return q(
         'fractions',
         `${whole} ÷ ${numerator}/${denominator} = ?`,
         whole / (numerator / denominator),
@@ -479,10 +521,10 @@ function y6GenFractions(){
       );
     }
 
-    const [numerator, denominator] = pick([
-      [3, 4], [5, 6], [7, 8], [4, 5], [7, 10], [11, 12]
+    const [numerator, denominator, divisor] = pick([
+      [3, 4, 3], [2, 3, 2], [5, 6, 5],
+      [4, 5, 4], [3, 8, 3], [7, 10, 7]
     ]);
-    const divisor = pick([2, 3, 4, 5]);
 
     return qFrac(
       'fractions',
@@ -496,8 +538,8 @@ function y6GenFractions(){
 
   if (type === 1) {
     const [a, b, c, d, e, f] = pick([
-      [1, 2, 3, 4, 2, 3], [2, 3, 3, 5, 5, 6],
-      [3, 4, 2, 5, 5, 8], [5, 6, 3, 4, 2, 3]
+      [1, 2, 3, 4, 2, 3], [2, 3, 3, 5, 5, 9],
+      [3, 4, 2, 5, 5, 8], [5, 6, 1, 4, 2, 3]
     ]);
 
     return qFrac(
@@ -510,8 +552,8 @@ function y6GenFractions(){
 
   if (type === 2) {
     const [a, b, c, d, e, f] = pick([
-      [3, 4, 1, 2, 1, 3], [5, 6, 1, 3, 1, 4],
-      [7, 8, 1, 2, 2, 5], [4, 5, 2, 3, 1, 4]
+      [3, 4, 1, 2, 1, 2], [5, 6, 5, 12, 1, 2],
+      [2, 3, 1, 3, 1, 2], [3, 5, 3, 10, 1, 4]
     ]);
 
     return qFrac(
@@ -537,8 +579,8 @@ function y6GenFractions(){
   }
 
   const [a, b, c, d, e, f] = pick([
-    [2, 3, 1, 4, 1, 2], [3, 4, 1, 3, 2, 5],
-    [5, 6, 1, 2, 3, 4], [7, 8, 1, 4, 2, 3]
+    [3, 4, 1, 4, 1, 2], [5, 6, 1, 3, 1, 4],
+    [7, 8, 3, 8, 1, 3], [4, 5, 1, 5, 2, 5]
   ]);
 
   return qFrac(
@@ -554,19 +596,25 @@ function y6GenDecimals(){
     if(chance(.5)){const a=randInt(10,89)/10,b=randInt(1,30)/10;return{operation:'decimals',text:`${fmt(a)} + ${fmt(b)} = ?`,answer:round2(a+b),hint:'Line up the decimal points.'}}
     const a=randInt(35,99)/10,b=randInt(1,Math.floor(a*10)-1)/10;return{operation:'decimals',text:`${fmt(a)} − ${fmt(b)} = ?`,answer:round2(a-b),hint:'Subtract tenths from tenths.'}
   }
+
   if(state.level==='core'){
-    const type=randInt(1,4);
+    const type=randInt(1,6);
     if(type===1){const a=randInt(120,850)/100,b=randInt(15,250)/100;return{operation:'decimals',text:`${fmt(a)} + ${fmt(b)} = ?`,answer:round2(a+b),hint:'Line up the decimal points.'}}
     if(type===2){const a=randInt(400,999)/100,b=randInt(10,Math.floor(a*100)-10)/100;return{operation:'decimals',text:`${fmt(a)} − ${fmt(b)} = ?`,answer:round2(a-b),hint:'Use place value carefully.'}}
     if(type===3){const n=randInt(12,999)/100,m=pick([10,100]);return{operation:'decimals',text:`${fmt(n)} × ${m} = ?`,answer:round2(n*m),hint:'Move each digit one or two places to the left.'}}
-    const n=randInt(12,999),m=pick([10,100]);return{operation:'decimals',text:`${n} ÷ ${m} = ?`,answer:round2(n/m),hint:'Move each digit one or two places to the right.'}
+    if(type===4){const n=randInt(12,999),m=pick([10,100]);return{operation:'decimals',text:`${n} ÷ ${m} = ?`,answer:round2(n/m),hint:'Move each digit one or two places to the right.'}}
+    if(type===5){const [a,b]=pick([[1.25,.375],[.625,.125],[2.5,.375],[1.875,.125],[3.2,.625]]);return q('decimals',`${a.toFixed(3)} + ${b.toFixed(3)} = ?`,roundTo(a+b,3),'Line up thousandths, hundredths and tenths.');}
+    const [a,b]=pick([[2.5,.625],[3.2,1.375],[1.75,.875],[4.125,2.25],[5,.375]]);return q('decimals',`${a.toFixed(3)} − ${b.toFixed(3)} = ?`,roundTo(a-b,3),'Line up all three decimal places before subtracting.');
   }
-  const type=randInt(1,5);
+
+  const type=randInt(1,7);
   if(type===1){const a=randInt(150,850)/100,b=randInt(25,250)/100,c=randInt(5,90)/100;return{operation:'decimals',text:`${fmt(a)} + ${fmt(b)} − ${fmt(c)} = ?`,answer:round2(a+b-c),hint:'Work from left to right and line up decimal points.'}}
   if(type===2){const n=randInt(10,99)/100;return{operation:'decimals',text:`${fmt(n)} + □ = 1`,answer:round2(1-n),hint:'Find the complement to 1.'}}
   if(type===3){const n=randInt(101,899)/100;return{operation:'decimals',text:`${fmt(n)} + □ = 10`,answer:round2(10-n),hint:'Find the complement to 10.'}}
   if(type===4){const n=randInt(120,999)/100;return{operation:'decimals',text:`${fmt(n)} × 100 = ?`,answer:round2(n*100),hint:'Use place value, not a decimal-point shortcut.'}}
-  const a=randInt(250,950)/100,b=pick([.25,.5,.75,1.25]);return{operation:'decimals',text:`${fmt(a)} + ${fmt(b)} = ?`,answer:round2(a+b),hint:'Use quarters and halves where helpful.'}
+  if(type===5){const a=randInt(250,950)/100,b=pick([.25,.5,.75,1.25]);return{operation:'decimals',text:`${fmt(a)} + ${fmt(b)} = ?`,answer:round2(a+b),hint:'Use quarters and halves where helpful.'}}
+  if(type===6){const [a,b,c]=pick([[1.25,.375,.125],[2.5,.625,.375],[3.2,1.125,.325],[4,.875,.125]]);return q('decimals',`${a.toFixed(3)} − ${b.toFixed(3)} + ${c.toFixed(3)} = ?`,roundTo(a-b+c,3),'Work from left to right and keep three decimal places aligned.');}
+  const [a,b,answer]=pick([[.405,.45,2],[.625,.602,1],[1.075,1.07,1],[2.008,2.08,2],[.875,.807,1]]);return q('decimals',`Which is larger? Enter 1 for ${a.toFixed(3)}, or 2 for ${b.toFixed(3)}.`,answer,'Compare tenths, then hundredths, then thousandths.');
 }
 
 
@@ -733,17 +781,19 @@ function y6GenPercentages(){
     const percent=pick([10,25,50]),base=percent===25?pick([20,40,60,80,100,120]):percent===10?randInt(2,30)*10:randInt(2,30)*2;return{operation:'percentages',text:`${percent}% of ${base} = ?`,answer:base*percent/100,hint:percent===10?'Divide by 10.':percent===50?'Find one half.':'Find one quarter.'}
   }
   if(state.level==='core'){
-    const type=randInt(1,4);
+    const type=randInt(1,5);
     if(type===1){const percent=pick([10,20,25,50,75]),base=pick([40,60,80,100,120,160,200,240,300]);return{operation:'percentages',text:`${percent}% of ${base} = ?`,answer:base*percent/100,hint:'Use 10%, one quarter or one half as a building block.'}}
     if(type===2){const decimal=pick([.1,.2,.25,.4,.5,.6,.75,.8]);return{operation:'percentages',text:`${fmt(decimal)} = ?%`,answer:decimal*100,hint:'Multiply the decimal by 100.'}}
     if(type===3){const [n,d]=pick([[1,2],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5]]);return{operation:'percentages',text:`${n}/${d} = ?%`,answer:n/d*100,hint:'Convert the fraction to an equivalent fraction out of 100.'}}
-    const price=pick([40,60,80,100,120,200]),discount=pick([10,20,25]);return{operation:'percentages',text:`$${price} after ${discount}% off = $?`,answer:price*(1-discount/100),hint:'Find the discount, then subtract it from the price.'}
+    if(type===4){const price=pick([40,60,80,100,120,200]),discount=pick([10,20,25]);return{operation:'percentages',text:`$${price} after ${discount}% off = $?`,answer:price*(1-discount/100),hint:'Find the discount, then subtract it from the price.'}}
+    const [percent,whole]=pick([[10,130],[20,80],[25,72],[50,46],[75,32]]),part=whole*percent/100;return q('percentages',`${percent}% of a number is ${part}. The number is ?`,whole,'Divide the part by the percentage written as a decimal.');
   }
-  const type=randInt(1,5);
+  const type=randInt(1,6);
   if(type===1){const percent=pick([5,15,30,35,60,70]),base=pick([40,60,80,100,120,160,200,240]);return{operation:'percentages',text:`${percent}% of ${base} = ?`,answer:base*percent/100,hint:'Build the percentage from 10%, 5%, 25% or 50%.'}}
   if(type===2){const price=pick([60,80,120,160,200,240]),discount=pick([15,20,25,30]);return{operation:'percentages',text:`$${price} after ${discount}% off = $?`,answer:round2(price*(1-discount/100)),hint:'Find the percentage discount before subtracting.'}}
   if(type===3){const n=pick([40,60,80,120,160,200]),increase=pick([10,20,25]);return{operation:'percentages',text:`Increase ${n} by ${increase}%`,answer:n*(1+increase/100),hint:'Find the increase, then add it.'}}
   if(type===4){const decimal=pick([.35,.45,.65,.85,.125]);return{operation:'percentages',text:`${fmt(decimal)} = ?%`,answer:decimal*100,hint:'Multiply by 100.'}}
+  if(type===5){const [percent,whole]=pick([[10,180],[20,90],[25,84],[50,58],[75,40]]),part=whole*percent/100;return q('percentages',`${percent}% of a number is ${part}. The number is ?`,whole,'Divide by the percentage multiplier to recover the whole.');}
   const part=pick([12,15,18,20,24,25,30]),whole=pick([40,50,60,80,100,120]);if(part>=whole)return y6GenPercentages();return{operation:'percentages',text:`${part} is what % of ${whole}?`,answer:round2(part/whole*100),hint:'Divide the part by the whole, then multiply by 100.'}
 }
 
@@ -789,6 +839,52 @@ function y6GenNegatives(){
 
 function y6GenUnits(){
   const L=state.level;
+
+  if(chance(.2)){
+    const timeType=L==='starter'
+      ?pick(['to24','duration'])
+      :L==='core'
+        ?pick(['to24','duration','arrival'])
+        :pick(['to24','duration','arrival','departure']);
+
+    if(timeType==='to24'){
+      const isPm=chance(.6);
+      const hour12=randInt(1,11);
+      const minute=pick([0,5,10,15,20,25,30,35,40,45,50,55]);
+      const hour24=isPm?hour12+12:hour12;
+      return q('units',`${hour12}:${String(minute).padStart(2,'0')} ${isPm?'pm':'am'} in 24-hour time. Enter as HHMM.`,hour24*100+minute,'For pm times, add 12 to the hour. Keep am hours unchanged.');
+    }
+
+    if(timeType==='duration'){
+      const startHour=L==='starter'?pick([9,10,11,13,14]):randInt(8,18);
+      const startMinute=pick([0,10,15,20,25,30,35,40,45,50]);
+      const elapsed=L==='starter'?pick([20,30,40,45,50,60]):pick([25,35,45,50,55,65,75,85]);
+      const startTotal=startHour*60+startMinute;
+      const endTotal=startTotal+elapsed;
+      const endHour=Math.floor(endTotal/60);
+      const endMinute=endTotal%60;
+      return q('units',`A bus leaves at ${String(startHour).padStart(2,'0')}:${String(startMinute).padStart(2,'0')} and arrives at ${String(endHour).padStart(2,'0')}:${String(endMinute).padStart(2,'0')}. Journey time = ? minutes`,elapsed,'Count through the next hour, then add the remaining minutes.');
+    }
+
+    if(timeType==='arrival'){
+      const startHour=randInt(7,17);
+      const startMinute=pick([0,10,15,20,25,30,35,40,45]);
+      const duration=pick([35,45,50,55,65,75,85,95]);
+      const endTotal=startHour*60+startMinute+duration;
+      const endHour=Math.floor(endTotal/60);
+      const endMinute=endTotal%60;
+      return q('units',`A train leaves at ${String(startHour).padStart(2,'0')}:${String(startMinute).padStart(2,'0')}. The journey takes ${duration} minutes. Arrival time in HHMM = ?`,endHour*100+endMinute,'Add the journey time and regroup 60 minutes as 1 hour.');
+    }
+
+    const arrivalHour=randInt(10,20);
+    const arrivalMinute=pick([0,10,15,20,25,30,35,40,45,50]);
+    const duration=pick([35,45,50,55,65,75,85,95]);
+    const arrivalTotal=arrivalHour*60+arrivalMinute;
+    const departTotal=arrivalTotal-duration;
+    const departHour=Math.floor(departTotal/60);
+    const departMinute=departTotal%60;
+    return q('units',`A journey takes ${duration} minutes and arrives at ${String(arrivalHour).padStart(2,'0')}:${String(arrivalMinute).padStart(2,'0')}. Departure time in HHMM = ?`,departHour*100+departMinute,'Count backwards by the journey time.');
+  }
 
   if(chance(.28)){
     const newTypes=L==='starter'
@@ -984,13 +1080,16 @@ function y6GenMixedFractions(){
   if(t===4){const [n,d,m]=pick([[1,2,8],[1,3,12],[2,3,15],[3,4,20],[2,5,25]]);return q('mixedFractions',`${n}/${d} = ?/${m}`,n*m/d,'Multiply numerator and denominator by the same factor.');}
   if(t===5){const whole=randInt(1,3),[n,d]=pick([[1,2],[1,3],[2,3],[1,4],[3,4]]),[a,b]=pick([[1,2],[1,3],[1,4]]);return qFrac('mixedFractions',`${whole} ${n}/${d} + ${a}/${b} = ?`,whole+n/d+a/b,'Convert to compatible fractions, then add.');}
   if(t===6){const whole=randInt(2,5),[n,d]=pick([[1,2],[1,3],[2,3],[1,4],[3,4]]);return qFrac('mixedFractions',`${whole} − ${n}/${d} = ?`,whole-n/d,'Write the whole number as an equivalent fraction.');}
-  if(t===7){const a=randInt(1,3),[n,d]=pick([[1,2],[1,3],[2,3],[1,4],[3,4]]),b=randInt(1,a),[m,k]=pick([[1,2],[1,3],[1,4]]);return qFrac('mixedFractions',`${a} ${n}/${d} − ${b} ${m}/${k} = ?`,a+n/d-b-m/k,'Convert to improper fractions or subtract whole and fractional parts carefully.');}
+  if(t===7){const [a,n,d,b,m,k]=pick([[3,1,4,1,2,3],[4,1,5,2,3,5],[3,1,2,1,3,4],[5,1,6,2,2,3],[4,1,4,1,1,2]]);return qFrac('mixedFractions',`${a} ${n}/${d} − ${b} ${m}/${k} = ?`,a+n/d-b-m/k,'Convert to improper fractions or regroup before subtracting.');}
   if(t===8){const [n,d]=pick([[7,4],[11,5],[13,6],[17,8],[19,7]]);return q('mixedFractions',`For ${n}/${d}, what is the whole-number part?`,Math.floor(n/d),'Divide the numerator by the denominator.');}
   const whole=randInt(1,4),d=randInt(3,10),n=randInt(1,d-1);return q('mixedFractions',`${whole} ${n}/${d} as an improper fraction. Denominator = ?`,d,'The denominator stays unchanged.');
 }
 
 function y6GenEquationsMachines(){
-  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,9),x=randInt(1,20);
+  const L=state.level;
+  const t=L==='starter'?pick([1,2,5,10]):L==='core'?randInt(1,10):randInt(1,11);
+  const x=randInt(1,20);
+
   if(t===1){const a=randInt(3,20);return q('equationsMachines',`x + ${a} = ${x+a}. Find x.`,x,'Subtract the constant.');}
   if(t===2){const a=randInt(2,10);return q('equationsMachines',`${a}x = ${a*x}. Find x.`,x,'Divide both sides by the coefficient.');}
   if(t===3){const a=randInt(2,8),b=randInt(2,15);return q('equationsMachines',`${a}x + ${b} = ${a*x+b}. Find x.`,x,'Subtract, then divide.');}
@@ -999,7 +1098,9 @@ function y6GenEquationsMachines(){
   if(t===6){const input=randInt(2,20),a=randInt(2,8),b=randInt(1,12),output=input*a+b;return q('equationsMachines',`Function machine: ×${a}, then +${b}. Output ${output}. Input = ?`,input,'Reverse the machine: subtract, then divide.');}
   if(t===7){const a=randInt(2,8),b=randInt(1,10);return q('equationsMachines',`${a}(x + ${b}) = ${a*(x+b)}. Find x.`,x,'Divide first, then subtract.');}
   if(t===8){const a=randInt(2,7),b=randInt(2,12),c=randInt(1,8);return q('equationsMachines',`${a}x + ${b} = ${a*x+b}. Find ${x+c===0?'x':`x + ${c}`}.`,x+c,'Solve x first, then evaluate the requested expression.');}
-  const a=randInt(2,8),b=randInt(1,10),output=(x+b)*a;return q('equationsMachines',`A machine adds ${b}, then multiplies by ${a}. Output ${output}. Input = ?`,x,'Reverse multiplication first, then subtraction.');
+  if(t===9){const a=randInt(2,8),b=randInt(1,10),output=(x+b)*a;return q('equationsMachines',`A machine adds ${b}, then multiplies by ${a}. Output ${output}. Input = ?`,x,'Reverse multiplication first, then subtraction.');}
+  if(t===10){const a=randInt(2,5),b=randInt(0,6),inputs=[2,3,4],outputs=inputs.map(value=>a*value+b);return q('equationsMachines',`Inputs ${inputs.join(', ')} give outputs ${outputs.join(', ')}. The rule is × ? then + ${b}. Find the multiplier.`,a,'Compare how much the output changes when the input increases by 1.');}
+  const a=randInt(2,5),b=randInt(1,8),inputs=[3,5,7],outputs=inputs.map(value=>a*value+b);return q('equationsMachines',`Inputs ${inputs.join(', ')} give outputs ${outputs.join(', ')}. The rule is × ${a} then + ?. Find the amount added.`,b,'Multiply an input by the known factor, then compare with its output.');
 }
 
 function y6GenSequencesPatterns(){
@@ -1128,7 +1229,7 @@ function y6GenFractionWordProblems() {
 
 function y6GenTriangleQuadAngles() {
   const L = state.level;
-  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 10);
+  const t = L === 'starter' ? pick([1, 2, 3, 4, 11, 13]) : randInt(1, 13);
 
   if (t === 1) {
     const [a, b] = pick([[40, 60], [35, 75], [50, 65], [45, 80], [55, 70], [30, 90]]);
@@ -1174,8 +1275,23 @@ function y6GenTriangleQuadAngles() {
     return q('triangleQuadAngles', `A quadrilateral has two equal angles of ${equal}° and a third angle of ${third}°. The fourth angle is ?°`, 360 - 2 * equal - third, 'Subtract all three known angles from 360°.');
   }
 
-  const third = pick([40, 60, 80, 100, 120]);
-  return q('triangleQuadAngles', `A triangle has two equal angles and a third angle of ${third}°. Each equal angle is ?°`, (180 - third) / 2, 'Subtract the third angle, then halve the remainder.');
+  if (t === 10) {
+    const third = pick([40, 60, 80, 100, 120]);
+    return q('triangleQuadAngles', `A triangle has two equal angles and a third angle of ${third}°. Each equal angle is ?°`, (180 - third) / 2, 'Subtract the third angle, then halve the remainder.');
+  }
+
+  if (t === 11) {
+    const angle = pick([35, 45, 55, 65, 70, 75, 85, 95, 105, 115, 125, 135]);
+    return q('triangleQuadAngles', `Two angles form a straight line. One angle is ${angle}°. The other angle is ?°`, 180 - angle, 'Angles on a straight line total 180°.');
+  }
+
+  if (t === 12) {
+    const [a, b, c] = pick([[90, 110, 75], [120, 80, 90], [45, 135, 90], [60, 100, 120], [75, 85, 110]]);
+    return q('triangleQuadAngles', `Angles around a point are ${a}°, ${b}°, ${c}° and ?°. Find the missing angle.`, 360 - a - b - c, 'Angles around a point total 360°.');
+  }
+
+  const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+  return q('triangleQuadAngles', `One of two vertically opposite angles is ${angle}°. The other angle is ?°`, angle, 'Vertically opposite angles are equal.');
 }
 
 
@@ -1309,7 +1425,7 @@ function y6GenCalendarDates() {
 
 function y6GenRemaindersPatterns() {
   const L = state.level;
-  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+  const t = L === 'starter' ? pick([1, 2, 3, 4, 10]) : L === 'core' ? randInt(1, 10) : randInt(1, 11);
 
   if (t === 1) {
     const divisor = randInt(3, 12);
@@ -1357,9 +1473,25 @@ function y6GenRemaindersPatterns() {
     const number = multiple - randInt(1, divisor - 1);
     return q('remaindersPatterns', `Next multiple of ${divisor} after ${number} = ?`, multiple, 'Count forward to the next multiple.');
   }
-  const startCode = randInt(1, 7);
-  const add = randInt(20, 100);
-  return q('remaindersPatterns', `Weekday ${startCode} is followed by ${add} days. New weekday number (1=Monday, ..., 7=Sunday) = ?`, ((startCode - 1 + add) % 7) + 1, 'Use the remainder after dividing by 7.');
+  if (t === 9) {
+    const startCode = randInt(1, 7);
+    const add = randInt(20, 100);
+    return q('remaindersPatterns', `Weekday ${startCode} is followed by ${add} days. New weekday number (1=Monday, ..., 7=Sunday) = ?`, ((startCode - 1 + add) % 7) + 1, 'Use the remainder after dividing by 7.');
+  }
+
+  if (t === 10) {
+    const divisor = randInt(3, 10);
+    const quotient = randInt(4, 15);
+    const remainder = randInt(1, divisor - 1);
+    const dividend = divisor * quotient + remainder;
+    return q('remaindersPatterns', `${dividend} ÷ ${divisor} = ${quotient} ?/${divisor}. Missing numerator = ?`, remainder, 'Write the remainder over the divisor.');
+  }
+
+  const [dividend, divisor, answer] = pick([
+    [17, 4, 4.25], [23, 4, 5.75], [13, 2, 6.5],
+    [18, 5, 3.6], [27, 5, 5.4], [33, 10, 3.3]
+  ]);
+  return q('remaindersPatterns', `${dividend} ÷ ${divisor} written as a decimal = ?`, answer, 'Write the remainder as a fraction of the divisor, then convert it to a decimal.');
 }
 
 /* ===== YEAR 6 FINAL CURRICULUM ADDITIONS ===== */
