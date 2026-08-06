@@ -4,6 +4,11 @@
 YEAR_CONFIGS[8] = {"title":"Year 8 Rapid Fire Mental Maths","skillLabel":"Year 8 Skill","mixed":"Mixed Year 8 Skills","labels":{"rational":"Rational Numbers","order":"Order of Operations","powers":"Powers & Scientific Notation","factors":"Prime Factors, HCF & LCM","fractions":"Fractions","decimals":"Decimals & Rounding","percentages":"Percentages","ratio":"Ratio, Proportion & Rates","algebra":"Algebra Expressions","equations":"Linear Equations","inequalities":"Inequalities","sequences":"Sequences","coordinates":"Coordinates & Straight Lines","geometry":"Geometry & Measurement","statistics":"Statistics & Probability","mixed":"Mixed Year 8 Skills","review":"Mistake Review","reversePercentages":"Reverse Percentages","percentageChange":"Percentage Change","profitLossDiscount":"Profit, Loss & Discount","directInverseProportion":"Direct & Inverse Proportion","primeFactorisation":"Prime Factorisation","hcfLcmProblems":"HCF & LCM Problems","expandCoefficients":"Expanding Brackets & Coefficients","factorCommon":"Factorising Common Factors","bothSidesEquations":"Equations with Unknowns on Both Sides","inequalityBoundaries":"Inequality Boundary Values","gradientMidpoint":"Gradient & Midpoint","polygonAngles":"Angles & Polygons","pythagorasFocused":"Pythagoras","missingStatistics":"Missing Statistics Data","twoStepProbability":"Two-Step Probability","fdpConversions":"Fraction–Decimal–Percentage Conversion","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations","fractionProportionProblems":"Fraction & Proportion Problem Solving","directionsScale":"Compass Directions & Map Scale","financialMaths":"Financial Mathematics","areaVolumeUnits":"Area & Volume Unit Relationships"},"skills":["rational","order","powers","factors","fractions","fractionProportionProblems","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","equations","inequalities","sequences","coordinates","geometry","directionsScale","areaVolumeUnits","statistics","reversePercentages","percentageChange","profitLossDiscount","financialMaths","directInverseProportion","primeFactorisation","hcfLcmProblems","expandCoefficients","factorCommon","bothSidesEquations","inequalityBoundaries","gradientMidpoint","polygonAngles","pythagorasFocused","missingStatistics","twoStepProbability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 8 includes focused mental practice across rational number, algebra, geometry, probability, compass directions, map scale, financial mathematics and area-volume unit relationships."};
 BASE_STORAGE_BY_YEAR[8] = {"stars":"dyaaY8Stars","hero":"dyaaY8Hero","best":"dyaaY8Best","mistakes":"dyaaY8Mistakes"};
 
+function y8Superscript(value) {
+  const digits = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
+  return String(value).split('').map(ch => digits[ch] || ch).join('');
+}
+
 /* ===== YEAR 8 QUESTION GENERATORS ===== */
 
 function y8GenRational(){const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,6):randInt(1,8);
@@ -25,18 +30,27 @@ function y8GenOrder(){const L=state.level,t=L==='starter'?randInt(1,3):L==='core
   if(t===5){const d=pick([2,3,4,5]),k=randInt(5,15),a=randInt(2,d*k-2),b=d*k-a,c=randInt(2,10);return q('order',`(${a} + ${b}) ÷ ${d} + ${c} = ?`,k+c,'Brackets, division, then addition.')}
   if(t===6){const a=randInt(18,45),b=randInt(2,7),c=randInt(4,12),d=randInt(1,c-1);return q('order',`${a} − ${b} × (${c} − ${d}) = ?`,a-b*(c-d),'Brackets before multiplication.')}
   if(t===7){const a=randInt(3,8),b=randInt(2,6),c=randInt(3,9),d=randInt(1,4);return q('order',`${a}² − ${b} × (${c} − ${d}) = ?`,a*a-b*(c-d),'Powers and brackets come first.')}
-  const a=randInt(2,6),b=randInt(3,8),c=randInt(1,5),d=pick([2,4]);const top=(a+b)*(c+d);return q('order',`(${a} + ${b}) × (${c} + ${d}) ÷ ${d} = ?`,top/d,'Evaluate both brackets, then work left to right.')}
+  const d=pick([2,4]),k=randInt(2,5),sumA=d*k,a=randInt(2,sumA-2),b=sumA-a,c=randInt(1,5);
+  return q('order',`(${a} + ${b}) × (${c} + ${d}) ÷ ${d} = ?`,k*(c+d),'Evaluate both brackets, then divide the first bracket by the divisor.')
+}
 
 
-function y8GenPowers(){const L=state.level,t=L==='starter'?randInt(1,3):L==='core'?randInt(1,6):randInt(1,8);
+function y8GenPowers(){
+  const L=state.level,t=L==='starter'?randInt(1,3):L==='core'?randInt(1,9):randInt(1,12);
   if(t===1){const n=randInt(3,18);return q('powers',`${n}² = ?`,n*n,'Square the number.')}
   if(t===2){const n=pick([8,27,64,125,216,343]);return q('powers',`Cube root of ${n} = ?`,Math.round(Math.cbrt(n)),'Find the number whose cube gives the value.')}
-  if(t===3){const b=pick([2,3,5]),a=randInt(1,4),c=randInt(1,4);return q('powers',`${b}^${a} × ${b}^${c} = ${b}^?`,a+c,'Same base: add the exponents.')}
-  if(t===4){const b=pick([2,3,5,7]),a=randInt(4,8),c=randInt(1,a-1);return q('powers',`${b}^${a} ÷ ${b}^${c} = ${b}^?`,a-c,'Same base: subtract the exponents.')}
-  if(t===5){const b=pick([2,3,4,5]),a=randInt(2,4),c=randInt(2,3);return q('powers',`(${b}^${a})^${c} = ${b}^?`,a*c,'A power raised to a power multiplies exponents.')}
-  if(t===6){const b=randInt(2,20);return q('powers',`${b}^0 = ?`,1,'Any non-zero number to the power zero equals 1.')}
-  if(t===7){const coefficient=pick([1.2,2.5,3.6,4.2,5.8,7.5]),exp=randInt(2,5);return q('powers',`${fmt(coefficient)} × 10^${exp} = ?`,coefficient*10**exp,'Move the decimal point to the right by the exponent.')}
-  const a=pick([4,6,8]),b=pick([2,4]),m=randInt(3,5),n=randInt(1,m-1);return q('powers',`(${a} × 10^${m}) ÷ (${b} × 10^${n}) = ?`,a/b*10**(m-n),'Divide coefficients and subtract powers of 10.')}
+  if(t===3){const b=pick([2,3,5]),a=randInt(1,4),c=randInt(1,4);return q('powers',`${b}${y8Superscript(a)} × ${b}${y8Superscript(c)} = ${b}ⁿ. Find n.`,a+c,'Same base: add the exponents.')}
+  if(t===4){const b=pick([2,3,5,7]),a=randInt(4,8),c=randInt(1,a-1);return q('powers',`${b}${y8Superscript(a)} ÷ ${b}${y8Superscript(c)} = ${b}ⁿ. Find n.`,a-c,'Same base: subtract the exponents.')}
+  if(t===5){const b=pick([2,3,4,5]),a=randInt(2,4),c=randInt(2,3);return q('powers',`(${b}${y8Superscript(a)})${y8Superscript(c)} = ${b}ⁿ. Find n.`,a*c,'A power raised to a power multiplies exponents.')}
+  if(t===6){const b=randInt(2,20);return q('powers',`${b}⁰ = ?`,1,'Any non-zero number to the power zero equals 1.')}
+  if(t===7){const coefficient=pick([1.2,2.5,3.6,4.2,5.8,7.5]),exp=randInt(2,5);return q('powers',`${fmt(coefficient)} × 10${y8Superscript(exp)} = ?`,coefficient*10**exp,'Move the decimal point to the right by the exponent.')}
+  if(t===8){const a=pick([4,6,8]),b=pick([2,4]),m=randInt(3,5),n=randInt(1,m-1);return q('powers',`(${a} × 10${y8Superscript(m)}) ÷ (${b} × 10${y8Superscript(n)}) = ?`,a/b*10**(m-n),'Divide coefficients and subtract powers of 10.')}
+  if(t===9){const exp=pick([-1,-2,-3]);return q('powers',`10${y8Superscript(exp)} = ?`,10**exp,'A negative power of 10 moves the decimal point to the left.')}
+  if(t===10){const exp=pick([-1,-2,-3]),value=10**exp;return q('powers',`${fmt(value)} = 10ⁿ. Find n.`,exp,'Count how many places the decimal point is to the left of 1.')}
+  if(t===11){const coefficient=pick([2,3,4,5,6,8]),exp=pick([-1,-2,-3]);return q('powers',`${coefficient} × 10${y8Superscript(exp)} = ?`,coefficient*10**exp,'Move the decimal point left by the size of the negative exponent.')}
+  const [number,digit,exp]=pick([[3.61,1,-2],[4.205,5,-3],[7.42,2,-2],[8.307,7,-3]]);
+  return q('powers',`${fmt(number)} includes ${digit} × 10ⁿ. Find n.`,exp,'Use the digit position: tenths is −1, hundredths is −2, thousandths is −3.')
+}
 
 
 function y8GenFactors(){const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,6):randInt(1,8);
@@ -107,73 +121,53 @@ function y8GenAlgebra(){const L=state.level,t=L==='starter'?randInt(1,4):L==='co
 
 function y8GenEquations() {
   const L = state.level;
-  const t = L === 'starter'
-    ? randInt(1, 4)
-    : L === 'core'
-      ? randInt(1, 6)
-      : randInt(1, 8);
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 8) : randInt(1, 11);
   const x = randInt(L === 'challenge' ? -8 : 1, 15);
 
   if (t === 1) {
-    const a = randInt(2, 8);
-    const b = randInt(2, 15);
-    return q('equations', `${a}x + ${b} = ${a * x + b}Then x = ?`, x, 'Undo addition, then divide.');
+    const a = randInt(2, 8), b = randInt(2, 15);
+    return q('equations', `${a}x + ${b} = ${a * x + b}. Then x = ?`, x, 'Undo addition, then divide.');
   }
-
   if (t === 2) {
-    const a = randInt(3, 9);
-    const b = randInt(2, 14);
-    return q('equations', `${a}x − ${b} = ${a * x - b}Then x = ?`, x, 'Undo subtraction, then divide.');
+    const a = randInt(3, 9), b = randInt(2, 14);
+    return q('equations', `${a}x − ${b} = ${a * x - b}. Then x = ?`, x, 'Undo subtraction, then divide.');
   }
-
   if (t === 3) {
-    const a = randInt(2, 6);
-    const b = randInt(1, 8);
-    return q('equations', `${a}(x − ${b}) = ${a * (x - b)}Then x = ?`, x, 'Divide first, then add.');
+    const a = randInt(2, 6), b = randInt(1, 8);
+    return q('equations', `${a}(x − ${b}) = ${a * (x - b)}. Then x = ?`, x, 'Divide first, then add.');
   }
-
   if (t === 4) {
-    const divisor = randInt(2, 7);
-    const quotient = randInt(L === 'challenge' ? -8 : 1, 15);
-    const b = randInt(1, 10);
-    const dividend = divisor * quotient;
-    return q(
-      'equations',
-      `x ÷ ${divisor} + ${b} = ${quotient + b}Then x = ?`,
-      dividend,
-      'Subtract, then multiply by the divisor.'
-    );
+    const divisor = randInt(2, 7), quotient = randInt(L === 'challenge' ? -8 : 1, 15), b = randInt(1, 10);
+    return q('equations', `x ÷ ${divisor} + ${b} = ${quotient + b}. Then x = ?`, divisor * quotient, 'Subtract, then multiply by the divisor.');
   }
-
   if (t === 5) {
-    const a = randInt(3, 8);
-    const c = randInt(1, a - 1);
-    const b = randInt(1, 12);
-    const d = a * x + b - c * x;
-    return q('equations', `${a}x + ${b} = ${c}x + ${d}Then x = ?`, x, 'Collect x terms on one side and constants on the other.');
+    const a = randInt(3, 8), c = randInt(1, a - 1), b = randInt(1, 12), d = a * x + b - c * x;
+    return q('equations', `${a}x + ${b} = ${c}x + ${d}. Then x = ?`, x, 'Collect x terms on one side and constants on the other.');
   }
-
   if (t === 6) {
-    const a = pick([0.5, 1.5, 2.5]);
-    const b = randInt(2, 12);
-    const rhs = a * x + b;
-    return q('equations', `${fmt(a)}x + ${b} = ${fmt(rhs)}Then x = ?`, x, 'Undo the constant, then divide by the decimal coefficient.');
+    const a = pick([0.5, 1.5, 2.5]), b = randInt(2, 12), rhs = a * x + b;
+    return q('equations', `${fmt(a)}x + ${b} = ${fmt(rhs)}. Then x = ?`, x, 'Undo the constant, then divide by the decimal coefficient.');
   }
-
   if (t === 7) {
-    const a = randInt(2, 6);
-    const b = randInt(1, 7);
-    const c = randInt(1, 7);
-    const rhs = a * (x - b) + c;
-    return q('equations', `${a}(x − ${b}) + ${c} = ${rhs}Then x = ?`, x, 'Undo the outside constant, divide, then add.');
+    const l=randInt(3,12),w=randInt(2,10),area=l*w;
+    return q('equations', `A = lw. A = ${area} and l = ${l}. Find w.`,w,'Divide the area by the length.');
   }
-
-  const a = randInt(2, 6);
-  const b = randInt(1, 10);
-  const c = randInt(1, a - 1);
-  const d = a * x - b - c * x;
-  return q('equations', `${a}x − ${b} = ${c}x + ${d}Then x = ?`, x, 'Move x terms together, then solve.');
+  if (t === 8) {
+    const speed=pick([30,40,50,60,75,80,90]),time=pick([2,3,4,5]),distance=speed*time;
+    return q('equations', `d = st. d = ${distance} and s = ${speed}. Find t.`,time,'Divide distance by speed.');
+  }
+  if (t === 9) {
+    const a = randInt(2, 6), b = randInt(1, 7), c = randInt(1, 7), rhs = a * (x - b) + c;
+    return q('equations', `${a}(x − ${b}) + ${c} = ${rhs}. Then x = ?`, x, 'Undo the outside constant, divide, then add.');
+  }
+  if (t === 10) {
+    const l=randInt(4,12),w=randInt(2,9),perimeter=2*(l+w);
+    return q('equations', `P = 2(l + w). P = ${perimeter} and l = ${l}. Find w.`,w,'Halve the perimeter, then subtract the length.');
+  }
+  const l=randInt(3,10),w=randInt(2,8),h=randInt(2,7),volume=l*w*h;
+  return q('equations', `V = lwh. V = ${volume}, l = ${l}, and w = ${w}. Find h.`,h,'Divide the volume by length × width.');
 }
+
 
 function y8GenInequalities(){const L=state.level,t=L==='starter'?randInt(1,3):L==='core'?randInt(1,6):randInt(1,8);
   if(t===1){const a=randInt(2,12),boundary=randInt(-5,15);return q('inequalities',`x + ${a} > ${boundary+a}. Boundary value = ?`,boundary,'Subtract the constant from both sides.')}
@@ -186,40 +180,59 @@ function y8GenInequalities(){const L=state.level,t=L==='starter'?randInt(1,3):L=
   const a=randInt(2,6),boundary=randInt(-8,5);return q('inequalities',`-${a}x ≥ ${-a*boundary}. Greatest integer solution = ?`,boundary,'Reverse the sign when dividing by the negative coefficient.')}
 
 
-function y8GenSequences(){const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,6):randInt(1,8);
+function y8GenSequences(){
+  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,9):randInt(1,11);
   if(t===1){const a=randInt(-10,20),d=randInt(2,10);return q('sequences',`${a}, ${a+d}, ${a+2*d}, ${a+3*d}, ... next = ?`,a+4*d,'Add the common difference.')}
   if(t===2){const a=randInt(1,10),d=randInt(2,9),n=randInt(6,15);return q('sequences',`Sequence starts ${a} and increases by ${d}. Term ${n} = ?`,a+(n-1)*d,'Use first term + (n−1) × difference.')}
   if(t===3){const a=randInt(1,8),d=randInt(2,8),n=randInt(5,12),term=a+(n-1)*d;return q('sequences',`In ${a}, ${a+d}, ${a+2*d}, ... which term equals ${term}?`,n,'Solve a + (n−1)d = the given term.')}
   if(t===4){const a=randInt(1,5),r=pick([2,3,-2]);return q('sequences',`${a}, ${a*r}, ${a*r*r}, ${a*r*r*r}, ... next = ?`,a*r**4,'Multiply by the common ratio.')}
   if(t===5){const n=randInt(4,12),a=randInt(2,7),b=randInt(-6,9);return q('sequences',`Tₙ = ${a}n ${b>=0?'+':'−'} ${Math.abs(b)}. T${n} = ?`,a*n+b,'Substitute the term number.')}
   if(t===6){const a=randInt(-12,5),d=randInt(3,9);return q('sequences',`${a}, ${a+d}, □, ${a+3*d}. Missing term = ?`,a+2*d,'The difference stays constant.')}
-  if(t===7){return q('sequences','2, 6, 12, 20, ... next = ?',30,'First differences increase by 2.')}
-  const a=randInt(1,4),b=randInt(0,5),n=randInt(4,9);return q('sequences',`Tₙ = ${a}n² ${b?`+ ${b}`:''}. T${n} = ?`,a*n*n+b,'Square n first, then multiply and add.')}
+  if(t===7){const n=randInt(5,12);return q('sequences',`The ${n}th square number = ?`,n*n,'The nth square number is n².')}
+  if(t===8){const n=randInt(5,10);return q('sequences',`The ${n}th triangular number = ?`,n*(n+1)/2,'Add the whole numbers from 1 to n.')}
+  if(t===9){const n=randInt(3,6);return q('sequences',`${n**3}, ${(n+1)**3}, ${(n+2)**3}, ... next = ?`,(n+3)**3,'These are consecutive cube numbers.')}
+  if(t===10){return q('sequences','2, 6, 12, 20, ... next = ?',30,'The terms follow n(n + 1).')}
+  const a=randInt(1,4),b=randInt(0,5),n=randInt(4,9);return q('sequences',`Tₙ = ${a}n² ${b?`+ ${b}`:''}. T${n} = ?`,a*n*n+b,'Square n first, then multiply and add.')
+}
 
 
-function y8GenCoordinates(){const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,6):randInt(1,8);
+function y8GenCoordinates(){
+  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,9):randInt(1,11);
   if(t===1){const x=pick([-6,-5,-4,-3,3,4,5,6]),y=pick([-7,-5,-3,3,5,7]);const quadrant=x>0&&y>0?1:x<0&&y>0?2:x<0&&y<0?3:4;return q('coordinates',`Point (${x}, ${y}) is in which quadrant? Enter 1, 2, 3 or 4.`,quadrant,'Use the signs of x and y.')}
   if(t===2){const horizontal=chance(.5),a=randInt(-8,4),b=randInt(a+2,10),fixed=randInt(-6,6);return q('coordinates',horizontal?`Distance between (${a}, ${fixed}) and (${b}, ${fixed}) = ?`:`Distance between (${fixed}, ${a}) and (${fixed}, ${b}) = ?`,b-a,'Subtract the matching coordinates.')}
   if(t===3){const x1=randInt(-8,4),x2=x1+2*randInt(1,6),y1=randInt(-8,4),y2=y1+2*randInt(1,6);const askX=chance(.5);return q('coordinates',`Midpoint of (${x1}, ${y1}) and (${x2}, ${y2}). ${askX?'x':'y'}-coordinate = ?`,askX?(x1+x2)/2:(y1+y2)/2,'Average the matching coordinates.')}
   if(t===4){const m=pick([-3,-2,-1,1,2,3,4]),x1=randInt(-4,4),y1=randInt(-5,5),dx=pick([1,2,3]),x2=x1+dx,y2=y1+m*dx;return q('coordinates',`Slope through (${x1}, ${y1}) and (${x2}, ${y2}) = ?`,m,'Slope = change in y ÷ change in x.')}
   if(t===5){const m=pick([-4,-3,-2,2,3,4]),c=randInt(-8,8),x=randInt(-5,7);return q('coordinates',`For y = ${m}x ${c>=0?'+':'−'} ${Math.abs(c)}, find y when x=${x}.`,m*x+c,'Substitute the x-coordinate.')}
   if(t===6){const m=pick([-5,-3,-2,2,3,5]),c=randInt(-12,12);return q('coordinates',`y = ${m}x ${c>=0?'+':'−'} ${Math.abs(c)}. y-intercept = ?`,c,'The y-intercept is the constant term.')}
-  if(t===7){const m=pick([2,3,4,5]),c=randInt(-8,8),x=randInt(-4,8),y=m*x+c;return q('coordinates',`On y = ${m}x ${c>=0?'+':'−'} ${Math.abs(c)}, y=${y}Then x = ?`,x,'Subtract the intercept, then divide by the slope.')}
-  const x=randInt(-8,8),y=randInt(-8,8),dx=randInt(-5,5),dy=randInt(-5,5),askX=chance(.5);return q('coordinates',`Translate (${x}, ${y}) by (${dx}, ${dy}). New ${askX?'x':'y'}-coordinate = ?`,askX?x+dx:y+dy,'Add the translation vector to the point.')}
+  if(t===7){const m=pick([2,3,4,5]),c=randInt(-8,8),x=randInt(-4,8),y=m*x+c;return q('coordinates',`On y = ${m}x ${c>=0?'+':'−'} ${Math.abs(c)}, y=${y}. Then x = ?`,x,'Subtract the intercept, then divide by the slope.')}
+  if(t===8){const x=randInt(-8,8),y=randInt(-8,8),dx=randInt(-5,5),dy=randInt(-5,5),askX=chance(.5);return q('coordinates',`Translate (${x}, ${y}) by (${dx}, ${dy}). New ${askX?'x':'y'}-coordinate = ?`,askX?x+dx:y+dy,'Add the translation vector to the point.')}
+  if(t===9){const x=randInt(-8,8),y=randInt(-8,8),acrossX=chance(.5);return q('coordinates',`Reflect (${x}, ${y}) across the ${acrossX?'x':'y'}-axis. New ${acrossX?'y':'x'}-coordinate = ?`,acrossX?-y:-x,'A reflection changes the sign of the coordinate perpendicular to the mirror axis.')}
+  if(t===10){const x=randInt(-7,7),y=randInt(-7,7),turn=pick(['180°','90° clockwise','90° anticlockwise']),askX=chance(.5);let nx,ny;if(turn==='180°'){nx=-x;ny=-y}else if(turn==='90° clockwise'){nx=y;ny=-x}else{nx=-y;ny=x}return q('coordinates',`Rotate (${x}, ${y}) ${turn} about the origin. New ${askX?'x':'y'}-coordinate = ?`,askX?nx:ny,'Apply the coordinate rule for the stated rotation.')}
+  const x=randInt(-6,6),y=randInt(-6,6),scale=pick([2,3]),askX=chance(.5);return q('coordinates',`Enlarge (${x}, ${y}) by scale factor ${scale} about the origin. New ${askX?'x':'y'}-coordinate = ?`,askX?x*scale:y*scale,'Multiply both coordinates by the scale factor.')
+}
 
 
-function y8GenGeometry(){const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,6):randInt(1,8);
+function y8GenGeometry(){
+  const L=state.level,t=L==='starter'?randInt(1,6):L==='core'?randInt(1,11):randInt(1,14);
   if(t===1){const a=randInt(25,85),b=randInt(25,Math.min(95,170-a));return q('geometry',`Triangle angles are ${a}° and ${b}°. Third angle = ?°`,180-a-b,'Angles in a triangle total 180°.')}
   if(t===2){const sides=pick([5,6,7,8,9,10]);return q('geometry',`Interior angle sum of a ${sides}-sided polygon = ?°`,(sides-2)*180,'Use (n−2) × 180°.')}
   if(t===3){const b=randInt(5,20),h=randInt(4,16),kind=chance(.5);return q('geometry',`${kind?'Parallelogram':'Triangle'} base ${b} cm, height ${h} cm. Area = ? cm²`,kind?b*h:b*h/2,kind?'Area = base × height.':'Area = 1/2 × base × height.')}
   if(t===4){const l=randInt(3,12),w=randInt(3,10),h=randInt(2,8);return q('geometry',`Cuboid ${l} cm × ${w} cm × ${h} cm. Volume = ? cm³`,l*w*h,'Volume = length × width × height.')}
-  if(t===5){const triple=pick([[3,4,5],[5,12,13],[6,8,10],[8,15,17],[7,24,25]]);return q('geometry',`Right triangle legs ${triple[0]} cm and ${triple[1]} cm. Hypotenuse = ? cm`,triple[2],'Use a² + b² = c².')}
-  if(t===6){const r=pick([2,3,4,5,10]);return q('geometry',`Circle radius ${r} cm. Circumference = ?π cm. Enter the coefficient of π.`,2*r,'Circumference = 2πr, so enter 2r.')}
-  if(t===7){const r=pick([2,3,4,5,10]);return q('geometry',`Circle radius ${r} cm. Area = ?π cm². Enter the coefficient of π.`,r*r,'Area = πr², so enter r².')}
-  const area=randInt(12,60),scale=pick([2,3,4]);return q('geometry',`A shape has area ${area} cm² and is enlarged by scale factor ${scale}. New area = ? cm²`,area*scale*scale,'Area is multiplied by the square of the scale factor.')}
+  if(t===5){const r=pick([2,3,4,5,6,8,10]);return q('geometry',`A circle has radius ${r} cm. Diameter = ? cm`,2*r,'Diameter is twice the radius.')}
+  if(t===6){const d=pick([6,8,10,12,14,16,20]);return q('geometry',`A circle has diameter ${d} cm. Radius = ? cm`,d/2,'Radius is half the diameter.')}
+  if(t===7){const r=pick([2,3,4,5,10]);return q('geometry',`Circle radius ${r} cm. Circumference = ?π cm. Enter the coefficient of π.`,2*r,'Circumference = 2πr, so enter 2r.')}
+  if(t===8){const r=pick([2,3,4,5,10]);return q('geometry',`Circle radius ${r} cm. Area = ?π cm². Enter the coefficient of π.`,r*r,'Area = πr², so enter r².')}
+  if(t===9){const triple=pick([[3,4,5],[5,12,13],[6,8,10],[8,15,17],[7,24,25]]);return q('geometry',`Right triangle legs ${triple[0]} cm and ${triple[1]} cm. Hypotenuse = ? cm`,triple[2],'Use a² + b² = c².')}
+  if(t===10){const area=randInt(12,60),scale=pick([2,3,4]);return q('geometry',`A shape has area ${area} cm² and is enlarged by scale factor ${scale}. New area = ? cm²`,area*scale*scale,'Area is multiplied by the square of the scale factor.')}
+  if(t===11){const a=pick([4,6,8,10]),b=pick([8,10,12,14]),h=pick([3,4,5,6]);return q('geometry',`A trapezium has parallel sides ${a} cm and ${b} cm, and height ${h} cm. Area = ? cm²`,(a+b)*h/2,'Area = 1/2 × sum of parallel sides × height.')}
+  if(t===12){const b=pick([4,6,8,10]),h=pick([3,4,5,6]),length=pick([3,4,5,6]);return q('geometry',`A triangular prism has triangle base ${b} cm, triangle height ${h} cm, and length ${length} cm. Volume = ? cm³`,b*h/2*length,'Find the triangle area, then multiply by prism length.')}
+  if(t===13){const startH=randInt(8,16),startM=pick([0,10,15,20,25,30,35,40,45,50]),duration=pick([35,45,55,65,75,85,95]);const total=startH*60+startM+duration,endH=Math.floor(total/60),endM=total%60;return q('geometry',`A train leaves at ${String(startH).padStart(2,'0')}:${String(startM).padStart(2,'0')} and arrives at ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}. Journey time = ? minutes`,duration,'Subtract the departure time from the arrival time.')}
+  const startH=randInt(8,16),startM=pick([0,10,15,20,25,30,35,40,45,50]),duration=pick([40,50,60,70,80,90,100,110]);const total=startH*60+startM+duration,endH=Math.floor(total/60),endM=total%60,hhmm=endH*100+endM;return q('geometry',`A bus leaves at ${String(startH).padStart(2,'0')}:${String(startM).padStart(2,'0')}. The journey takes ${duration} minutes. Arrival time in HHMM = ?`,hhmm,'Add the journey time and write the result in 24-hour HHMM form.')
+}
 
 
-function y8GenStatistics(){const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,6):randInt(1,8);
+function y8GenStatistics(){
+  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,13):randInt(1,14);
   if(t===1){const values=[randInt(3,12),randInt(3,12),randInt(3,12),randInt(3,12),randInt(3,12)];const sum=values.reduce((a,b)=>a+b,0),rem=sum%5;if(rem)values[4]+=5-rem;return q('statistics',`Mean of ${values.join(', ')} = ?`,values.reduce((a,b)=>a+b,0)/5,'Add the values and divide by 5.')}
   if(t===2){const values=[randInt(1,15),randInt(1,15),randInt(1,15),randInt(1,15),randInt(1,15)];return q('statistics',`Median of ${values.join(', ')} = ?`,median(values),'Order the values and choose the middle one.')}
   if(t===3){const mode=randInt(3,12),others=[mode+1,mode+2,mode+4];const values=[mode,mode,...others];return q('statistics',`Mode of ${values.join(', ')} = ?`,mode,'Find the value that appears most often.')}
@@ -227,9 +240,15 @@ function y8GenStatistics(){const L=state.level,t=L==='starter'?randInt(1,4):L===
   if(t===5){const count=pick([4,5,6]),mean=randInt(6,15);let known,missing;do{known=Array.from({length:count-1},()=>randInt(2,18));missing=mean*count-known.reduce((a,b)=>a+b,0)}while(missing<0||missing>25);return q('statistics',`${count} numbers have mean ${mean}. Known values: ${known.join(', ')}. Missing value = ?`,missing,'Total = mean × number of values.')}
   if(t===6){const red=randInt(2,8),blue=randInt(2,8);return qFrac('statistics',`Bag: ${red} red and ${blue} blue. P(red) = ?`,red/(red+blue),'Probability = favourable outcomes ÷ total outcomes.')}
   if(t===7){const p=pick([0.15,0.25,0.35,0.4,0.65,0.8]);return q('statistics',`P(event) = ${p}. P(not event) = ?`,1-p,'Complementary probabilities add to 1.')}
-  return qFrac('statistics','A fair coin is tossed twice. P(two heads) = ?',1/4,'There are four equally likely outcomes: HH, HT, TH, TT.')}
+  if(t===8){return qFrac('statistics','A fair coin is tossed twice. P(two heads) = ?',1/4,'There are four equally likely outcomes: HH, HT, TH, TT.')}
+  if(t===9){const item=pick([['Number of pets owned',2],['Type of transport used',1],['Height of students',3],['Number of books read',2],['Favourite fruit',1],['Time taken to run 100 m',3]]);return q('statistics',`${item[0]} is: 1 = categorical, 2 = discrete numerical, 3 = continuous numerical.`,item[1],'Identify whether the variable is a category, a count, or a measurement.')}
+  if(t===10){const centre=randInt(8,20),outlier=centre+pick([30,40,50]),values=[centre-2,centre-1,centre,centre,centre+1,outlier];return q('statistics',`Data: ${values.join(', ')}. Outlier = ?`,outlier,'The outlier is far from the rest of the values.')}
+  if(t===11){return q('statistics','Which measure is less affected by an outlier? Enter 1 for mean or 2 for median.',2,'The median depends on position and is less affected by an extreme value.')}
+  if(t===12){return q('statistics','A graph has no labelled vertical axis. Can its values be interpreted accurately? Enter 1 for Yes or 0 for No.',0,'A missing axis label or scale prevents accurate interpretation.')}
+  if(t===13){const trials=pick([40,50,80,100,120]),successes=pick(trials===40?[10,20,30]:trials===50?[10,20,25,30,40]:trials===80?[20,40,60]:trials===100?[20,25,40,50,75]:[30,40,60,90]);return q('statistics',`An event occurred ${successes} times in ${trials} trials. Experimental probability as a decimal = ?`,successes/trials,'Divide the number of successes by the number of trials.')}
+  const p=pick([1/4,1/2,3/4,1/5,2/5]),trials=pick([40,60,80,100,120]);if(!Number.isInteger(p*trials))return y8GenStatistics();return q('statistics',`The theoretical probability is ${p}. In ${trials} trials, expected successes = ?`,p*trials,'Multiply probability by the number of trials.')
+}
 
-/* ===== ADDED FOCUSED YEAR 8 QUESTION GENERATORS ===== */
 
 function y8GenReversePercentages() {
   const L = state.level;
@@ -434,7 +453,7 @@ function y8GenPrimeFactorisation() {
     const p = pick([...new Set(factors)]);
     const exponent = factors.filter(value => value === p).length;
     const otherProduct = factors.filter(value => value !== p).reduce((a, b) => a * b, 1);
-    return q('primeFactorisation', `${n} = ${p}^? × ${otherProduct}. Find ?.`, exponent, 'The exponent counts repeated copies of the prime.');
+    return q('primeFactorisation', `${n} = ${p}ⁿ × ${otherProduct}. Find n.`, exponent, 'The exponent counts repeated copies of the prime.');
   }
 
   return q('primeFactorisation', `Number of different prime factors of ${n} = ?`, new Set(factors).size, 'Count distinct primes only.');
@@ -476,38 +495,17 @@ function y8GenHcfLcmProblems() {
 function y8GenExpandCoefficients() {
   const L = state.level;
   const t = L === 'starter' ? randInt(1, 2) : L === 'core' ? randInt(1, 4) : randInt(1, 6);
-  const a = randInt(2, 7);
-  const b = randInt(2, 8);
-  const c = randInt(1, 6);
+  const a = randInt(2, 7), b = randInt(2, 8), c = randInt(1, 6);
 
-  if (t === 1) {
-    return q('expandCoefficients', `In ${a}(${b}x + ${c}), the coefficient of x after expanding is ?`, a * b, 'Multiply the outside number by the x coefficient.');
-  }
-
-  if (t === 2) {
-    return q('expandCoefficients', `In ${a}(x + ${b}), the constant term after expanding is ?`, a * b, 'Multiply the outside number by the constant.');
-  }
-
-  if (t === 3) {
-    const d = randInt(1, 8);
-    return q('expandCoefficients', `After simplifying ${a}(${b}x + ${c}) + ${d}x, coefficient of x = ?`, a * b + d, 'Expand, then combine like terms.');
-  }
-
-  if (t === 4) {
-    const d = randInt(1, 6);
-    return q('expandCoefficients', `After simplifying ${a}(${b}x − ${c}) − ${d}x, coefficient of x = ?`, a * b - d, 'Expand both x terms and combine them.');
-  }
-
-  if (t === 5) {
-    const d = randInt(1, 6);
-    const e = randInt(1, 7);
-    return q('expandCoefficients', `In (${a}x + ${b})(${d}x + ${e}), coefficient of x = ?`, a * e + b * d, 'The x terms come from the outer and inner products.');
-  }
-
-  const d = randInt(1, 6);
-  const e = randInt(1, 7);
-  return q('expandCoefficients', `In (${a}x − ${b})(${d}x + ${e}), coefficient of x = ?`, a * e - b * d, 'Combine the two products that contain one x.');
+  if (t === 1) return q('expandCoefficients', `In ${a}(${b}x + ${c}), the coefficient of x after expanding is ?`, a * b, 'Multiply the outside number by the x coefficient.');
+  if (t === 2) return q('expandCoefficients', `In ${a}(x + ${b}), the constant term after expanding is ?`, a * b, 'Multiply the outside number by the constant.');
+  if (t === 3) {const d=randInt(1,8);return q('expandCoefficients', `After simplifying ${a}(${b}x + ${c}) + ${d}x, coefficient of x = ?`, a*b+d, 'Expand, then combine like terms.');}
+  if (t === 4) {const d=randInt(1,6);return q('expandCoefficients', `After simplifying ${a}(${b}x − ${c}) − ${d}x, coefficient of x = ?`, a*b-d, 'Expand, then combine the x terms.');}
+  if (t === 5) {const d=randInt(2,6),e=randInt(1,7),f=randInt(1,7);return q('expandCoefficients', `After simplifying ${a}(${b}x + ${c}) + ${d}(x − ${e}), coefficient of x = ?`, a*b+d, 'Expand each single bracket, then combine like terms.');}
+  const d=randInt(2,6),e=randInt(2,5),f=randInt(1,7);
+  return q('expandCoefficients', `After simplifying ${a}(${b}x − ${c}) − ${d}(${e}x + ${f}), coefficient of x = ?`, a*b-d*e, 'Expand each single bracket, then combine the x terms.');
 }
+
 
 function y8GenFactorCommon() {
   const L = state.level;
@@ -531,16 +529,16 @@ function y8GenFactorCommon() {
   if (t === 4) {
     const p = randInt(2, 4);
     const qPower = randInt(1, p);
-    return q('factorCommon', `Highest common power of x in ${g * a}x^${p} + ${g * b}x^${qPower} is x^?.`, Math.min(p, qPower), 'Use the smaller exponent shared by both terms.');
+    return q('factorCommon', `Highest common power of x in ${g * a}x${y8Superscript(p)} + ${g * b}x${y8Superscript(qPower)} is xⁿ. Find n.`, Math.min(p, qPower), 'Use the smaller exponent shared by both terms.');
   }
 
   if (t === 5) {
     const c = randInt(2, 8);
-    return q('factorCommon', `After factorising ${g * a}x^2 + ${g * b}x, the coefficient of x inside the bracket is ?`, a, `Factor out ${g}x.`);
+    return q('factorCommon', `After factorising ${g * a}x² + ${g * b}x, the coefficient of x inside the bracket is ?`, a, `Factor out ${g}x.`);
   }
 
   const c = randInt(2, 6);
-  return q('factorCommon', `Greatest numerical common factor of ${g * a}x^2, ${g * b}x and ${g * c} = ?`, gcd(g * a, gcd(g * b, g * c)), 'Find the HCF of all three coefficients.');
+  return q('factorCommon', `Greatest numerical common factor of ${g * a}x², ${g * b}x and ${g * c} = ?`, gcd(g * a, gcd(g * b, g * c)), 'Find the HCF of all three coefficients.');
 }
 
 function y8GenBothSidesEquations() {
@@ -862,7 +860,7 @@ function y8GenTwoStepProbability() {
 
   if (t === 6) {
     const face = randInt(1, 6);
-    return qFrac('twoStepProbability', `A fair dice is rolled twice. Probability of getting ${face} both times = ?`, 1 / 36, 'Multiply 1/6 by 1/6.');
+    return qFrac('twoStepProbability', `A fair six-sided die is rolled twice. Probability of getting ${face} both times = ?`, 1 / 36, 'Multiply 1/6 by 1/6.');
   }
 
   const failNumerator = pick([1, 2, 3]);
@@ -948,23 +946,25 @@ function y8GenDirectionsScale() {
 }
 
 function y8GenFinancialMaths() {
-  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,10);
+  const L=state.level,t=L==='starter'?randInt(1,5):L==='core'?randInt(1,9):randInt(1,12);
   if(t===1){const weekly=pick([8,10,12,15]),monthly=pick([35,40,45,50,55,60]);const fourWeeks=weekly*4;return q('financialMaths',`Plan A costs $${weekly} per week. Plan B costs $${monthly} per 4-week month. Difference between the plans = $?`,Math.abs(fourWeeks-monthly),'Convert Plan A to four weeks, then compare.');}
   if(t===2){const qty=pick([4,5,6,8,10]),unit=pick([1.5,2,2.5,3,4]);return q('financialMaths',`${qty} items cost $${fmt(qty*unit)}. Cost per item = $?`,unit,'Divide total cost by quantity.');}
   if(t===3){const price=pick([40,60,80,100,120,160,200]),p=pick([10,20,25,50]);return q('financialMaths',`A $${price} item is reduced by ${p}%. Sale price = $?`,price*(1-p/100),'Multiply by the percentage remaining.');}
   if(t===4){const budget=pick([60,80,100,120,150,200]),a=pick([15,20,25,30,40]),b=pick([10,15,20,25,30]);if(a+b>=budget)return y8GenFinancialMaths();return q('financialMaths',`A budget is $${budget}. After spending $${a} and $${b}, money left = $?`,budget-a-b,'Add the spending, then subtract from the budget.');}
-  if(t===5){const cost=pick([40,50,60,80,100]),p=pick([10,20,25]);return q('financialMaths',`An item costs $${cost} and is sold for ${p}% profit. Selling price = $?`,cost*(1+p/100),'Add the percentage profit to the cost.');}
-  if(t===6){const grams=pick([250,500,750]),perKg=pick([4,6,8,10,12]);return q('financialMaths',`Food costs $${perKg} per kg. Cost of ${grams} g = $?`,perKg*grams/1000,'Convert the mass to a fraction of a kilogram.');}
-  if(t===7){const people=randInt(3,8),each=pick([6,8,10,12,15]);return q('financialMaths',`A group of ${people} people each pays $${each}. Total collected = $?`,people*each,'Multiply people by amount per person.');}
-  if(t===8){const old=pick([40,50,60,80,100]),p=pick([10,20,25]),newPrice=old*(1+p/100);return q('financialMaths',`A price increases from $${old} to $${newPrice}. Increase = $?`,newPrice-old,'Subtract the original price.');}
-  if(t===9){const weeks=pick([4,6,8,10,12]),income=pick([20,25,30,40,50]),spend=pick([5,10,15,20]);if(spend>=income)return y8GenFinancialMaths();return q('financialMaths',`Each week, income is $${income} and spending is $${spend}. Savings after ${weeks} weeks = $?`,(income-spend)*weeks,'Find weekly saving, then multiply.');}
-  const [packA,priceA,packB,priceB] = pick([[4,8,8,12],[5,10,10,15],[6,12,12,18],[8,16,16,24],[4,10,8,16]]);
-  const unitA=priceA/packA,unitB=priceB/packB;
+  if(t===5){const dollars=randInt(5,40),cents=pick([1,2,3,4,6,7,8,9]),total=dollars+cents/100,rounded=Math.round(total*10)/10;return q('financialMaths',`A cash total is $${total.toFixed(2)}. Amount paid after New Zealand cash rounding = $?`,rounded,'Round the total to the nearest 10 cents.');}
+  if(t===6){const cost=pick([40,50,60,80,100]),p=pick([10,20,25]);return q('financialMaths',`An item costs $${cost} and is sold for ${p}% profit. Selling price = $?`,cost*(1+p/100),'Add the percentage profit to the cost.');}
+  if(t===7){const grams=pick([250,500,750]),perKg=pick([4,6,8,10,12]);return q('financialMaths',`Food costs $${perKg} per kg. Cost of ${grams} g = $?`,perKg*grams/1000,'Convert the mass to a fraction of a kilogram.');}
+  if(t===8){const monthly=pick([8,10,12,15,20]),yearly=pick([90,100,120,150,180,200]);return q('financialMaths',`Plan A costs $${monthly} per month. Plan B costs $${yearly} per year. Difference in annual cost = $?`,Math.abs(monthly*12-yearly),'Multiply the monthly cost by 12, then compare.');}
+  if(t===9){const people=randInt(3,8),each=pick([6,8,10,12,15]);return q('financialMaths',`A group of ${people} people each pays $${each}. Total collected = $?`,people*each,'Multiply people by amount per person.');}
+  if(t===10){const old=pick([40,50,60,80,100]),p=pick([10,20,25]),newPrice=old*(1+p/100);return q('financialMaths',`A price increases from $${old} to $${newPrice}. Increase = $?`,newPrice-old,'Subtract the original price.');}
+  if(t===11){const weeks=pick([4,6,8,10,12]),income=pick([20,25,30,40,50]),spend=pick([5,10,15,20]);if(spend>=income)return y8GenFinancialMaths();return q('financialMaths',`Each week, income is $${income} and spending is $${spend}. Savings after ${weeks} weeks = $?`,(income-spend)*weeks,'Find weekly saving, then multiply.');}
+  const [packA,priceA,packB,priceB] = pick([[4,8,8,12],[5,10,10,15],[6,12,12,18],[8,16,16,24],[4,10,8,16]]),unitA=priceA/packA,unitB=priceB/packB;
   return q('financialMaths',`Pack A: ${packA} items for $${priceA}. Pack B: ${packB} items for $${priceB}. Enter the cheaper cost per item.`,Math.min(unitA,unitB),'Calculate each unit price and choose the smaller one.');
 }
 
+
 function y8GenAreaVolumeUnits() {
-  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,10);
+  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,10):randInt(1,14);
   if(t===1){const m3=pick([1,2,3,4,5]);return q('areaVolumeUnits',`${m3} m³ = ? L`,m3*1000,'1 m³ = 1000 L.');}
   if(t===2){const litres=pick([500,1000,1500,2000,2500,3000]);return q('areaVolumeUnits',`${litres} L = ? m³`,litres/1000,'Divide litres by 1000.');}
   if(t===3){const litres=pick([1,1.5,2,2.5,3,4,5]);return q('areaVolumeUnits',`${fmt(litres)} L = ? cm³`,litres*1000,'1 L = 1000 cm³.');}
@@ -974,8 +974,13 @@ function y8GenAreaVolumeUnits() {
   if(t===7){const m2=pick([0.25,0.5,0.75,1,1.5,2]);return q('areaVolumeUnits',`${fmt(m2)} m² = ? cm²`,m2*10000,'1 m² = 10,000 cm².');}
   if(t===8){const base=pick([20,30,40,50,60]),height=pick([2,3,4,5,6]);return q('areaVolumeUnits',`A prism has base area ${base} cm² and length ${height} cm. Volume = ? cm³`,base*height,'Volume = base area × length.');}
   if(t===9){const capacity=pick([2,3,4,5]),containers=pick([4,5,8,10]);const each=capacity*1000/containers;if(!Number.isInteger(each))return y8GenAreaVolumeUnits();return q('areaVolumeUnits',`${capacity} L is divided equally among ${containers} containers. Each contains ? mL`,each,'Convert to millilitres, then divide.');}
-  const side=pick([2,3,4,5,6,8,10]);return q('areaVolumeUnits',`A cube has volume ${side**3} cm³. Side length = ? cm`,side,'Take the cube root.');
+  if(t===10){const side=pick([2,3,4,5,6,8,10]);return q('areaVolumeUnits',`A cube has volume ${side**3} cm³. Side length = ? cm`,side,'Take the cube root.');}
+  if(t===11){const a=pick([4,6,8,10]),b=pick([8,10,12,14]),h=pick([3,4,5,6]);return q('areaVolumeUnits',`A trapezium has parallel sides ${a} cm and ${b} cm, and height ${h} cm. Area = ? cm²`,(a+b)*h/2,'Area = 1/2 × sum of parallel sides × height.');}
+  if(t===12){const b=pick([4,6,8,10]),h=pick([3,4,5,6]),length=pick([3,4,5,6]);return q('areaVolumeUnits',`A triangular prism has triangle base ${b} cm, triangle height ${h} cm, and prism length ${length} cm. Volume = ? cm³`,b*h/2*length,'Find the triangular cross-section area, then multiply by prism length.');}
+  if(t===13){const l1=randInt(2,8),w1=randInt(2,6),h1=randInt(2,5),l2=randInt(2,7),w2=randInt(2,6),h2=randInt(2,5);return q('areaVolumeUnits',`Two cuboids have dimensions ${l1} × ${w1} × ${h1} cm and ${l2} × ${w2} × ${h2} cm. Combined volume = ? cm³`,l1*w1*h1+l2*w2*h2,'Find each volume, then add them.');}
+  const base=pick([6,8,10,12,14]),height=pick([3,4,5,6,8]),area=base*height/2;return q('areaVolumeUnits',`A triangle has area ${area} cm² and height ${height} cm. Base = ? cm`,base,'Use base = 2 × area ÷ height.');
 }
+
 
 YEAR_BANKS[8] = {
   "directionsScale": y8GenDirectionsScale,
