@@ -6,6 +6,12 @@ BASE_STORAGE_BY_YEAR[7] = {"stars":"dyaaY7Stars","hero":"dyaaY7Hero","best":"dya
 
 /* ===== YEAR 7 QUESTION GENERATORS ===== */
 
+function y7Superscript(value) {
+  const digits = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
+  return String(value).split('').map(ch => digits[ch] || ch).join('');
+}
+
+
 function y7GenIntegers() {
   const L = state.level;
   const t = L === 'starter' ? randInt(1, 3): L === 'core' ? randInt(1, 5): randInt(1, 7);
@@ -47,252 +53,228 @@ function y7GenIntegers() {
 
 
 function y7GenOrder() {
-  const L = state.level,
-  t = L === 'starter' ? randInt(1, 3): L === 'core' ? randInt(1, 5): randInt(1, 7);
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 3) : L === 'core' ? randInt(1, 5) : randInt(1, 7);
+
   if (t === 1) {
-    const a = randInt(8, 30),
-    b = randInt(2, 9),
-    c = randInt(2, 9);
-    return q('order', `${a} + ${b} × ${c} = ?`, a + b * c, 'Multiply before adding.')
+    const a = randInt(8, 30), b = randInt(2, 9), c = randInt(2, 9);
+    return q('order', `${a} + ${b} × ${c} = ?`, a + b * c, 'Multiply before adding.');
   }
   if (t === 2) {
-    const a = randInt(2, 8),
-    b = randInt(8, 18),
-    c = randInt(2, 7);
-    return q('order', `${a} × (${b} − ${c}) = ?`, a * (b - c), 'Brackets first.')
+    const a = randInt(2, 8), b = randInt(8, 18), c = randInt(2, 7);
+    return q('order', `${a} × (${b} − ${c}) = ?`, a * (b - c), 'Brackets first.');
   }
   if (t === 3) {
-    const d = randInt(2, 8),
-    ans = randInt(4, 14),
-    add = randInt(4, 20);
-    return q('order', `${d*ans} ÷ ${d} + ${add} = ?`, ans + add, 'Division before addition.')
+    const d = randInt(2, 8), ans = randInt(4, 14), add = randInt(4, 20);
+    return q('order', `${d * ans} ÷ ${d} + ${add} = ?`, ans + add, 'Division before addition.');
   }
   if (t === 4) {
-    const a = randInt( - 8, 12),
-    b = randInt(2, 7),
-    c = randInt( - 5, 8);
-    return q('order', `${a} + ${b} × (${c}) = ?`, a + b * c, 'Multiply first, including the sign.')
+    const a = randInt(-8, 12), b = randInt(2, 7), c = randInt(-5, 8);
+    return q('order', `${a} + ${b} × (${c}) = ?`, a + b * c, 'Multiply first, including the sign.');
   }
   if (t === 5) {
-    const a = randInt(3, 8),
-    b = randInt(4, 10),
-    c = randInt(2, 8),
-    d = pick([2, 4]);
-    const top = a * (b + c);
-    return q('order', `${a} × (${b} + ${c}) ÷ ${d} = ?`, top / d, 'Brackets, then multiply and divide left to right.')
+    const [a, d] = pick([[2, 2], [4, 2], [6, 2], [4, 4], [8, 4]]);
+    const b = randInt(4, 10), c = randInt(2, 8);
+    return q('order', `${a} × (${b} + ${c}) ÷ ${d} = ?`, a * (b + c) / d, 'Brackets, then multiply and divide left to right.');
   }
   if (t === 6) {
-    const a = randInt(20, 50),
-    b = randInt( - 6, - 2),
-    c = randInt(2, 7);
-    return q('order', `${a} − (${b}) × ${c} = ?`, a - b * c, 'Multiply first; subtracting a negative product adds.')
+    const a = randInt(20, 50), b = randInt(-6, -2), c = randInt(2, 7);
+    return q('order', `${a} − (${b}) × ${c} = ?`, a - b * c, 'Multiply first; subtracting a negative product adds.');
   }
-  const a = randInt(2, 6),
-  b = randInt(4, 9),
-  c = randInt(2, 5),
-  d = randInt(1, 8);
-  return q('order', `${a} × (${b} + ${c}) − ${d}² = ?`, a * (b + c) - d * d, 'Brackets and powers before other operations.')
+  const a = randInt(2, 6), b = randInt(4, 9), c = randInt(2, 5), d = randInt(1, 8);
+  return q('order', `${a} × (${b} + ${c}) − ${d}² = ?`, a * (b + c) - d * d, 'Brackets and powers before other operations.');
 }
 
-
 function y7GenPowers() {
-  const L = state.level,
-  t = L === 'starter' ? randInt(1, 4): L === 'core' ? randInt(1, 6): randInt(1, 8);
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 10);
+
   if (t === 1) {
-    const n = randInt(2, L === 'challenge' ? 18: 14);
-    return q('powers', `${n}² = ?`, n * n, 'Square means multiply the number by itself.')
+    const n = randInt(2, L === 'challenge' ? 18 : 14);
+    return q('powers', `${n}² = ?`, n * n, 'Square means multiply the number by itself.');
   }
   if (t === 2) {
-    const n = randInt(2, L === 'starter' ? 5: 8);
-    return q('powers', `${n}³ = ?`, n * n * n, 'Cube means multiply three equal factors.')
+    const n = randInt(2, L === 'starter' ? 5 : 8);
+    return q('powers', `${n}³ = ?`, n * n * n, 'Cube means multiply three equal factors.');
   }
   if (t === 3) {
     const n = pick([4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144]);
-    return q('powers', `√${n} = ?`, Math.sqrt(n), 'Find the positive square root.')
+    return q('powers', `√${n} = ?`, Math.sqrt(n), 'Find the positive square root.');
   }
   if (t === 4) {
-    const b = pick([2, 3, 4, 5]),
-    e = randInt(2, L === 'challenge' ? 5: 4);
-    return q('powers', `${b}^${e} = ?`, b ** e, 'Write the power as repeated multiplication.')
+    const b = pick([2, 3, 4, 5]), e = randInt(2, L === 'challenge' ? 5 : 4);
+    return q('powers', `${b}${y7Superscript(e)} = ?`, b ** e, 'Write the power as repeated multiplication.');
   }
   if (t === 5) {
-    const a = randInt(2, 8),
-    b = randInt(2, 8);
-    return q('powers', `${a}² + ${b}² = ?`, a * a + b * b, 'Calculate each square first.')
+    const a = randInt(2, 8), b = randInt(2, 8);
+    return q('powers', `${a}² + ${b}² = ?`, a * a + b * b, 'Calculate each square first.');
   }
   if (t === 6) {
-    const b = pick([2, 3, 5]),
-    a = randInt(1, 3),
-    c = randInt(1, 3);
-    return q('powers', `${b}^${a} × ${b}^${c} = ?`, b ** (a + c), 'Same base: add the exponents.')
+    const b = pick([2, 3, 5]), a = randInt(1, 3), c = randInt(1, 3);
+    return q('powers', `${b}${y7Superscript(a)} × ${b}${y7Superscript(c)} = ?`, b ** (a + c), 'Same base: add the exponents.');
   }
   if (t === 7) {
     const n = randInt(3, 9);
-    return q('powers', `${n}³ − ${n}² = ?`, n ** 3 - n ** 2, 'Calculate powers first.')
+    return q('powers', `${n}³ − ${n}² = ?`, n ** 3 - n ** 2, 'Calculate powers first.');
   }
-  const n = pick([8, 27, 64, 125, 216]);
-  return q('powers', `Cube root of ${n} = ?`, Math.round(Math.cbrt(n)), 'Find the number whose cube is the given value.')
+  if (t === 8) {
+    const n = pick([8, 27, 64, 125, 216]);
+    return q('powers', `Cube root of ${n} = ?`, Math.round(Math.cbrt(n)), 'Find the number whose cube is the given value.');
+  }
+  if (t === 9) {
+    const [number, value] = pick([[3704218, 700000], [6405281, 5000], [9052146, 2000], [4827035, 7000]]);
+    const digit = String(value)[0];
+    return q('powers', `Value of the ${digit} in ${number.toLocaleString('en-NZ')} = ?`, value, 'Use the digit’s place value.');
+  }
+  const [a, p, b, qv, c, r] = pick([[6, 5, 3, 3, 4, 2], [4, 6, 5, 3, 2, 1], [7, 5, 2, 4, 6, 2]]);
+  const answer = a * 10 ** p + b * 10 ** qv + c * 10 ** r;
+  return q('powers', `${a} × 10${y7Superscript(p)} + ${b} × 10${y7Superscript(qv)} + ${c} × 10${y7Superscript(r)} = ?`, answer, 'Evaluate each place-value term, then add.');
 }
 
-
 function y7GenFactors() {
-  const L = state.level,
-  t = L === 'starter' ? randInt(1, 4): L === 'core' ? randInt(1, 6): randInt(1, 8);
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 6) : L === 'core' ? randInt(1, 9) : randInt(1, 10);
+
   if (t === 1) {
-    const a = pick([12, 18, 24, 30, 36, 42, 48]),
-    b = pick([16, 20, 24, 28, 32, 40, 54]);
-    return q('factors', `HCF of ${a} and ${b} = ?`, gcd(a, b), 'Find the greatest common factor.')
+    const a = pick([12, 18, 24, 30, 36, 42, 48]), b = pick([16, 20, 24, 28, 32, 40, 54]);
+    return q('factors', `HCF of ${a} and ${b} = ?`, gcd(a, b), 'Find the greatest common factor.');
   }
   if (t === 2) {
-    const a = pick([3, 4, 5, 6, 8, 9, 10, 12]),
-    b = pick([4, 5, 6, 8, 10, 12, 15]);
-    return q('factors', `LCM of ${a} and ${b} = ?`, lcm(a, b), 'Find the first common multiple.')
+    const a = pick([3, 4, 5, 6, 8, 9, 10, 12]), b = pick([4, 5, 6, 8, 10, 12, 15]);
+    return q('factors', `LCM of ${a} and ${b} = ?`, lcm(a, b), 'Find the first common multiple.');
   }
   if (t === 3) {
     const n = pick([19, 23, 29, 31, 37, 41, 43, 47, 53]);
-    return q('factors', `Next prime after ${n} = ?`, nextPrime(n), 'Test each next number for divisibility.')
+    return q('factors', `Next prime after ${n} = ?`, nextPrime(n), 'Test each next number for divisibility.');
   }
   if (t === 4) {
     const n = pick([18, 20, 24, 28, 30, 36, 40, 42]);
-    return q('factors', `How many factors does ${n} have?`, countFactors(n), 'List factor pairs.')
+    return q('factors', `How many factors does ${n} have?`, countFactors(n), 'List factor pairs.');
   }
   if (t === 5) {
+    const divisor = pick([2, 3, 4, 5, 6, 8, 9, 10]);
+    const yes = chance(0.5);
+    let n;
+    if (yes) {
+      n = divisor * randInt(12, 120);
+    } else {
+      const remainder = randInt(1, divisor - 1);
+      n = divisor * randInt(12, 120) + remainder;
+    }
+    return q('factors', `Is ${n.toLocaleString('en-NZ')} divisible by ${divisor}? Enter 1 for Yes, 0 for No.`, yes ? 1 : 0, 'Use the divisibility rule or divide mentally.');
+  }
+  if (t === 6) {
     const n = pick([42, 54, 66, 70, 78, 84, 90, 98]);
     let sp = 2;
     while (n % sp !== 0) sp++;
-    return q('factors', `Smallest prime factor of ${n} = ?`, sp, 'Test 2, then 3, then 5, then 7.')
-  }
-  if (t === 6) {
-    const n = pick([12, 18, 20, 24, 27, 30, 36, 45]);
-    const primes = [];
-    let x = n,
-    p = 2;
-    while (x > 1) {
-      while (x % p === 0) {
-        primes.push(p);
-        x /= p
-      }
-      p++
-    }
-    return q('factors', `How many prime factors (with repeats) are in ${n}?`, primes.length, 'Use a factor tree and count the prime leaves.')
+    return q('factors', `Smallest prime factor of ${n} = ?`, sp, 'Test 2, then 3, then 5, then 7.');
   }
   if (t === 7) {
-    const a = pick([2, 3, 5, 7]),
-    b = pick([2, 3, 5]),
-    n = a * a * b;
-    return q('factors', `Largest prime factor of ${n} = ?`, Math.max(a, b), 'Use prime factorisation.')
+    const n = pick([12, 18, 20, 24, 27, 30, 36, 45]);
+    const primes = primeFactors(n);
+    return q('factors', `How many prime factors, including repeats, are in ${n}?`, primes.length, 'Use a factor tree and count the prime leaves.');
   }
-  const n = pick([60, 72, 84, 90, 96]);
-  return q('factors', `How many distinct prime factors does ${n} have?`, new Set(primeFactors(n)).size, 'Count different primes, not repeats.')
+  if (t === 8) {
+    const a = pick([2, 3, 5, 7]), b = pick([2, 3, 5]), n = a * a * b;
+    return q('factors', `Largest prime factor of ${n} = ?`, Math.max(a, b), 'Use prime factorisation.');
+  }
+  if (t === 9) {
+    const n = pick([60, 72, 84, 90, 96]);
+    return q('factors', `How many distinct prime factors does ${n} have?`, new Set(primeFactors(n)).size, 'Count different primes, not repeats.');
+  }
+  let a, b, missing;
+  do {
+    a = randInt(1, 9);
+    b = randInt(0, 9);
+    missing = (9 - ((a + b) % 9)) % 9;
+  } while (missing === 0 || missing === 9);
+  return q('factors', `Which digit makes ${a}${b}? divisible by 9?`, missing, 'The sum of the digits must be divisible by 9.');
 }
-
 
 function y7GenFractions() {
-  const L = state.level,
-  t = L === 'starter' ? randInt(1, 4): L === 'core' ? randInt(1, 6): randInt(1, 8);
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
+
   if (t === 1) {
-    const [a,
-    b,
-    c,
-    d] = pick([[1, 2, 1, 4], [2, 3, 1, 6], [3, 4, 1, 8], [2, 5, 1, 10]]),
-    v = a / b + c / d;
-    return qFrac('fractions', `${a}/${b} + ${c}/${d} = ?`, v, 'Find a common denominator.')
+    const [a, b, c, d] = pick([[1, 2, 1, 4], [2, 3, 1, 6], [3, 4, 1, 8], [2, 5, 1, 10]]);
+    return qFrac('fractions', `${a}/${b} + ${c}/${d} = ?`, a / b + c / d, 'Find a common denominator.');
   }
   if (t === 2) {
-    const [a,
-    b,
-    c,
-    d] = pick([[5, 6, 1, 3], [7, 8, 1, 4], [4, 5, 3, 10], [3, 4, 1, 6]]),
-    v = a / b - c / d;
-    return qFrac('fractions', `${a}/${b} − ${c}/${d} = ?`, v, 'Find a common denominator before subtracting.')
+    const [a, b, c, d] = pick([[5, 6, 1, 3], [7, 8, 1, 4], [4, 5, 3, 10], [3, 4, 1, 6]]);
+    return qFrac('fractions', `${a}/${b} − ${c}/${d} = ?`, a / b - c / d, 'Find a common denominator before subtracting.');
   }
   if (t === 3) {
-    const [a,
-    b,
-    c,
-    d] = pick([[2, 3, 3, 4], [3, 5, 5, 6], [4, 7, 7, 8], [3, 4, 2, 5]]),
-    v = a / b * c / d;
-    return qFrac('fractions', `${a}/${b} × ${c}/${d} = ?`, v, 'Multiply numerators and denominators, then simplify.')
+    const [a, b, c, d] = pick([[2, 3, 3, 4], [3, 5, 5, 6], [4, 7, 7, 8], [3, 4, 2, 5]]);
+    return qFrac('fractions', `${a}/${b} × ${c}/${d} = ?`, a / b * c / d, 'Multiply numerators and denominators, then simplify.');
   }
   if (t === 4) {
-    const [n,
-    d] = pick([[3, 4], [2, 5], [5, 6], [3, 8], [7, 10]]),
-    k = randInt(3, 12),
-    whole = d * k;
-    return q('fractions', `${n}/${d} of ${whole} = ?`, n * k, 'Divide by the denominator, then multiply by the numerator.')
+    const [n, d] = pick([[3, 4], [2, 5], [5, 6], [3, 8], [7, 10]]), k = randInt(3, 12), whole = d * k;
+    return q('fractions', `${n}/${d} of ${whole} = ?`, n * k, 'Divide by the denominator, then multiply by the numerator.');
   }
   if (t === 5) {
-    const whole = randInt(1, 3),
-    [n,
-    d] = pick([[1, 2], [1, 3], [2, 3], [3, 4], [5, 6]]),
-    v = whole + n / d;
-    return qFrac('fractions', `${whole} + ${n}/${d} = ?`, v, 'Write the result as an improper fraction.')
+    const whole = randInt(1, 3), [n, d] = pick([[1, 2], [1, 3], [2, 3], [3, 4], [5, 6]]);
+    return qFrac('fractions', `${whole} + ${n}/${d} = ?`, whole + n / d, 'Write the result as an improper fraction.');
   }
   if (t === 6) {
-    const [n,
-    d] = pick([[12, 18], [15, 25], [21, 28], [24, 36], [35, 49]]),
-    g = gcd(n, d);
-    return qFrac('fractions', `Simplify ${n}/${d}`, n / d, 'Divide numerator and denominator by their HCF.')
+    const [n, d] = pick([[12, 18], [15, 25], [21, 28], [24, 36], [35, 49]]);
+    return qFrac('fractions', `Simplify ${n}/${d}`, n / d, 'Divide numerator and denominator by their HCF.');
   }
   if (t === 7) {
-    const [a,
-    b,
-    c,
-    d] = pick([[3, 4, 2, 3], [5, 6, 3, 5], [7, 8, 1, 2]]),
-    v = (a / b) / (c / d);
-    return qFrac('fractions', `${a}/${b} ÷ ${c}/${d} = ?`, v, 'Multiply by the reciprocal.')
+    const [a, b, c, d] = pick([[3, 4, 1, 2], [5, 6, 5, 12], [2, 3, 4, 9], [3, 5, 3, 10], [3, 4, 3, 8], [4, 5, 2, 5]]);
+    return qFrac('fractions', `${a}/${b} ÷ ${c}/${d} = ?`, (a / b) / (c / d), 'Multiply by the reciprocal.');
   }
-  const [a,
-  b,
-  c,
-  d] = pick([[1, 2, 3, 4], [2, 3, 5, 6], [3, 5, 7, 10]]);
-  return q('fractions', `Which is larger? Enter 1 for ${a}/${b}, or 2 for ${c}/${d}.`, a / b > c / d ? 1: 2, 'Compare using a common denominator or decimals.')
+  const [a, b, c, d] = pick([[1, 2, 3, 4], [2, 3, 5, 6], [3, 5, 7, 10]]);
+  return q('fractions', `Which is larger? Enter 1 for ${a}/${b}, or 2 for ${c}/${d}.`, a / b > c / d ? 1 : 2, 'Compare using a common denominator or decimals.');
 }
 
-
 function y7GenDecimals() {
-  const L = state.level,
-  t = L === 'starter' ? randInt(1, 4): L === 'core' ? randInt(1, 6): randInt(1, 8);
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 9) : randInt(1, 11);
+
   if (t === 1) {
-    const a = randInt(120, 850) / 100,
-    b = randInt(15, 250) / 100;
-    return q('decimals', `${fmt(a)} + ${fmt(b)} = ?`, roundTo(a + b), 'Line up decimal place values.')
+    const a = randInt(120, 850) / 100, b = randInt(15, 250) / 100;
+    return q('decimals', `${fmt(a)} + ${fmt(b)} = ?`, roundTo(a + b), 'Line up decimal place values.');
   }
   if (t === 2) {
-    const a = randInt(450, 999) / 100,
-    b = randInt(10, Math.floor(a * 100) - 10) / 100;
-    return q('decimals', `${fmt(a)} − ${fmt(b)} = ?`, roundTo(a - b), 'Subtract using place value.')
+    const a = randInt(450, 999) / 100, b = randInt(10, Math.floor(a * 100) - 10) / 100;
+    return q('decimals', `${fmt(a)} − ${fmt(b)} = ?`, roundTo(a - b), 'Subtract using place value.');
   }
   if (t === 3) {
-    const a = randInt(12, 99) / 10,
-    b = randInt(2, 9);
-    return q('decimals', `${fmt(a)} × ${b} = ?`, roundTo(a * b), 'Multiply the whole-number facts, then use place value.')
+    const a = randInt(12, 99) / 10, b = randInt(2, 9);
+    return q('decimals', `${fmt(a)} × ${b} = ?`, roundTo(a * b), 'Multiply the whole-number facts, then use place value.');
   }
   if (t === 4) {
-    const b = pick([2, 4, 5, 8]),
-    ans = randInt(5, 50) / 10,
-    a = roundTo(ans * b);
-    return q('decimals', `${fmt(a)} ÷ ${b} = ?`, ans, 'Use a related multiplication fact.')
+    const b = pick([2, 4, 5, 8]), ans = randInt(5, 50) / 10, a = roundTo(ans * b);
+    return q('decimals', `${fmt(a)} ÷ ${b} = ?`, ans, 'Use a related multiplication fact.');
   }
   if (t === 5) {
-    const n = randInt(12, 999) / 100,
-    m = pick([10, 100, 1000]);
-    return q('decimals', `${fmt(n)} × ${m} = ?`, roundTo(n * m), 'Use place value.')
+    const n = randInt(12, 999) / 100, m = pick([10, 100, 1000]);
+    return q('decimals', `${fmt(n)} × ${m} = ?`, roundTo(n * m), 'Use place value.');
   }
   if (t === 6) {
-    const n = randInt(12, 9999),
-    m = pick([10, 100, 1000]);
-    return q('decimals', `${n} ÷ ${m} = ?`, roundTo(n / m), 'Use place value.')
+    const n = randInt(12, 9999), m = pick([10, 100, 1000]);
+    return q('decimals', `${n} ÷ ${m} = ?`, roundTo(n / m), 'Use place value.');
   }
   if (t === 7) {
     const a = randInt(10, 90) / 100;
-    return q('decimals', `${fmt(a)} + □ = 1`, roundTo(1 - a), 'Find the complement to 1.')
+    return q('decimals', `${fmt(a)} + □ = 1`, roundTo(1 - a), 'Find the complement to 1.');
   }
-  const a = pick([3.6, 4.8, 7.2, 8.4]),
-  b = pick([.5, .25, .2, .1]);
-  return q('decimals', `${fmt(a)} × ${fmt(b)} = ?`, roundTo(a * b), 'Use half, quarter, fifth or tenth.')
+  if (t === 8) {
+    const a = pick([3.6, 4.8, 7.2, 8.4]), b = pick([0.5, 0.25, 0.2, 0.1]);
+    return q('decimals', `${fmt(a)} × ${fmt(b)} = ?`, roundTo(a * b), 'Use half, quarter, fifth or tenth.');
+  }
+  if (t === 9) {
+    const [a, b, operation] = pick([[1.250, 0.375, '+'], [2.500, 0.625, '−'], [3.600, 1.825, '−'], [0.875, 0.125, '+'], [4.250, 1.375, '+']]);
+    const answer = operation === '+' ? a + b : a - b;
+    return q('decimals', `${a.toFixed(3)} ${operation} ${b.toFixed(3)} = ?`, roundTo(answer, 3), 'Line up thousandths, hundredths and tenths.');
+  }
+  if (t === 10) {
+    const [a, b, answer] = pick([[0.405, 0.450, 2], [0.720, 0.702, 1], [1.205, 1.250, 2], [3.080, 3.008, 1]]);
+    return q('decimals', `Which is larger? Enter 1 for ${a.toFixed(3)}, or 2 for ${b.toFixed(3)}.`, answer, 'Compare digits from left to right by place value.');
+  }
+  const [dividend, divisor, answer] = pick([[168, 12, 14], [156, 12, 13], [225, 15, 15], [144, 16, 9], [7, 20, 0.35], [9, 20, 0.45]]);
+  return q('decimals', `${dividend} ÷ ${divisor} = ?`, answer, 'Use a known multiplication fact or convert the fraction to a decimal.');
 }
-
 
 function y7GenPercentages() {
   const L = state.level,
@@ -504,7 +486,7 @@ function y7GenWritingAlgebra() {
     return multipleChoice(
       `A square has perimeter ${perimeter} cm. If each side is x cm, which equation is correct?`,
       `4x = ${perimeter}`,
-      [`x + 4 = ${perimeter}`, `x^2 = ${perimeter}`, `x ÷ 4 = ${perimeter}`],
+      [`x + 4 = ${perimeter}`, `x² = ${perimeter}`, `x ÷ 4 = ${perimeter}`],
       'A square has four equal sides, so its perimeter is 4x.'
     );
   }
@@ -668,110 +650,93 @@ function y7GenWritingAlgebra() {
 
 function y7GenEquations() {
   const L = state.level;
-  const t = L === 'starter'
-    ? randInt(1, 4)
-    : L === 'core'
-      ? randInt(1, 6)
-      : randInt(1, 8);
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 8) : randInt(1, 10);
   const x = randInt(L === 'challenge' ? -8 : 1, 15);
 
   if (t === 1) {
     const b = randInt(3, 20);
-    return q('equations', `x + ${b} = ${x + b}Then x = ?`, x, 'Undo addition by subtracting.');
+    return q('equations', `x + ${b} = ${x + b}. Then x = ?`, x, 'Undo addition by subtracting.');
   }
-
   if (t === 2) {
     const b = randInt(3, 20);
-    return q('equations', `x − ${b} = ${x - b}Then x = ?`, x, 'Undo subtraction by adding.');
+    return q('equations', `x − ${b} = ${x - b}. Then x = ?`, x, 'Undo subtraction by adding.');
   }
-
   if (t === 3) {
     const a = randInt(2, 9);
-    return q('equations', `${a}x = ${a * x}Then x = ?`, x, 'Divide both sides by the coefficient.');
+    return q('equations', `${a}x = ${a * x}. Then x = ?`, x, 'Divide both sides by the coefficient.');
   }
-
   if (t === 4) {
-    const divisor = randInt(2, 9);
-    const quotient = randInt(L === 'challenge' ? -8 : 1, 15);
-    const dividend = divisor * quotient;
-    return q(
-      'equations',
-      `x ÷ ${divisor} = ${quotient}Then x = ?`,
-      dividend,
-      'Multiply both sides by the divisor.'
-    );
+    const divisor = randInt(2, 9), quotient = randInt(L === 'challenge' ? -8 : 1, 15), dividend = divisor * quotient;
+    return q('equations', `x ÷ ${divisor} = ${quotient}. Then x = ?`, dividend, 'Multiply both sides by the divisor.');
   }
-
   if (t === 5) {
-    const a = randInt(2, 7);
-    const b = randInt(2, 15);
-    return q('equations', `${a}x + ${b} = ${a * x + b}Then x = ?`, x, 'Undo addition, then divide.');
+    const a = randInt(2, 7), b = randInt(2, 15);
+    return q('equations', `${a}x + ${b} = ${a * x + b}. Then x = ?`, x, 'Undo addition, then divide.');
   }
-
   if (t === 6) {
-    const a = randInt(2, 7);
-    const b = randInt(2, 15);
-    return q('equations', `${a}x − ${b} = ${a * x - b}Then x = ?`, x, 'Undo subtraction, then divide.');
+    const a = randInt(2, 7), b = randInt(2, 15);
+    return q('equations', `${a}x − ${b} = ${a * x - b}. Then x = ?`, x, 'Undo subtraction, then divide.');
   }
-
   if (t === 7) {
-    const a = randInt(2, 6);
-    const b = randInt(1, 8);
-    return q('equations', `${a}(x − ${b}) = ${a * (x - b)}Then x = ?`, x, 'Divide first, then add.');
+    const a = randInt(2, 6), b = randInt(1, 8);
+    return q('equations', `${a}(x − ${b}) = ${a * (x - b)}. Then x = ?`, x, 'Divide first, then add.');
   }
-
-  const a = randInt(2, 6);
-  const b = randInt(2, 9);
-  const c = randInt(-8, 8);
-  return q(
-    'equations',
-    `${a}x + ${b} = ${a * x + b}. Find ${a}x ${c >= 0 ? '+' : '−'} ${Math.abs(c)}.`,
-    a * x + c,
-    'Solve x, then evaluate the requested expression.'
-  );
+  if (t === 8) {
+    const a = randInt(2, 6), b = randInt(2, 9), c = randInt(-8, 8);
+    return q('equations', `${a}x + ${b} = ${a * x + b}. Find ${a}x ${c >= 0 ? '+' : '−'} ${Math.abs(c)}.`, a * x + c, 'Solve x, then evaluate the requested expression.');
+  }
+  if (t === 9) {
+    const length = randInt(4, 12), width = randInt(3, 10), area = length * width;
+    return q('equations', `A = l × w. A = ${area} and l = ${length}. Find w.`, width, 'Divide the area by the known length.');
+  }
+  const type = pick(['speed', 'volume']);
+  if (type === 'speed') {
+    const speed = pick([30, 40, 50, 60, 75]), time = pick([2, 3, 4, 5]), distance = speed * time;
+    return q('equations', `d = s × t. d = ${distance} and s = ${speed}. Find t.`, time, 'Divide distance by speed.');
+  }
+  const l = randInt(3, 8), w = randInt(2, 6), h = randInt(2, 5), volume = l * w * h;
+  return q('equations', `V = l × w × h. V = ${volume}, l = ${l}, w = ${w}. Find h.`, h, 'Divide volume by length × width.');
 }
 
 function y7GenSequences() {
-  const L = state.level,
-  t = L === 'starter' ? randInt(1, 3): L === 'core' ? randInt(1, 5): randInt(1, 7);
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 8) : randInt(1, 9);
+
   if (t === 1) {
-    const a = randInt( - 10, 20),
-    d = randInt(2, 9);
-    return q('sequences', `${a}, ${a+d}, ${a+2*d}, ${a+3*d}, ... next = ?`, a + 4 * d, 'Add the common difference.')
+    const a = randInt(-10, 20), d = randInt(2, 9);
+    return q('sequences', `${a}, ${a + d}, ${a + 2 * d}, ${a + 3 * d}, ... next = ?`, a + 4 * d, 'Add the common difference.');
   }
   if (t === 2) {
-    const a = randInt(1, 6),
-    r = pick([2, 3, 4]);
-    return q('sequences', `${a}, ${a*r}, ${a*r*r}, ${a*r*r*r}, ... next = ?`, a * r ** 4, 'Multiply by the common ratio.')
+    const a = randInt(1, 6), r = pick([2, 3, 4]);
+    return q('sequences', `${a}, ${a * r}, ${a * r * r}, ${a * r * r * r}, ... next = ?`, a * r ** 4, 'Multiply by the common ratio.');
   }
   if (t === 3) {
-    const a = randInt(1, 10),
-    d = randInt(2, 8),
-    n = randInt(5, 12);
-    return q('sequences', `Sequence starts ${a} and increases by ${d}. Term ${n} = ?`, a + (n - 1) * d, 'Use first term + (n−1) × difference.')
+    const a = randInt(1, 10), d = randInt(2, 8), n = randInt(5, 12);
+    return q('sequences', `Sequence starts ${a} and increases by ${d}. Term ${n} = ?`, a + (n - 1) * d, 'Use first term + (n−1) × difference.');
   }
   if (t === 4) {
-    const n = randInt(3, 10),
-    a = randInt(2, 6),
-    b = randInt( - 5, 8);
-    return q('sequences', `Tₙ = ${a}n ${b>=0?'+':'−'} ${Math.abs(b)}. T${n} = ?`, a * n + b, 'Substitute the term number.')
+    const n = randInt(3, 10), a = randInt(2, 6), b = randInt(-5, 8);
+    return q('sequences', `Tₙ = ${a}n ${b >= 0 ? '+' : '−'} ${Math.abs(b)}. T${n} = ?`, a * n + b, 'Substitute the term number.');
   }
   if (t === 5) {
-    const a = randInt( - 15, 5),
-    d = randInt(3, 9);
-    return q('sequences', `${a}, ${a+d}, □, ${a+3*d}. Missing term = ?`, a + 2 * d, 'The difference is constant.')
+    const a = randInt(-15, 5), d = randInt(3, 9);
+    return q('sequences', `${a}, ${a + d}, □, ${a + 3 * d}. Missing term = ?`, a + 2 * d, 'The difference is constant.');
   }
   if (t === 6) {
-    const a = randInt(2, 6),
-    r = pick([ - 2, - 3, 2, 3]);
-    return q('sequences', `${a}, ${a*r}, ${a*r*r}, ${a*r*r*r}, ... next = ?`, a * r ** 4, 'Multiply by the same number, including its sign.')
+    const a = randInt(2, 6), r = pick([-2, -3, 2, 3]);
+    return q('sequences', `${a}, ${a * r}, ${a * r * r}, ${a * r * r * r}, ... next = ?`, a * r ** 4, 'Multiply by the same number, including its sign.');
   }
-  const a = randInt(1, 8),
-  d = randInt(2, 7),
-  term = a + randInt(4, 10) * d;
-  return q('sequences', `In ${a}, ${a+d}, ${a+2*d}, ... which term equals ${term}?`, (term - a) / d + 1, 'Solve a + (n−1)d = given term.')
+  if (t === 7) {
+    const a = randInt(1, 8), d = randInt(2, 7), index = randInt(5, 11), term = a + (index - 1) * d;
+    return q('sequences', `In ${a}, ${a + d}, ${a + 2 * d}, ... which term equals ${term}?`, index, 'Solve a + (n−1)d = given term.');
+  }
+  if (t === 8) {
+    const multiplier = randInt(2, 5), add = randInt(1, 8), inputs = [2, 3, 4], outputs = inputs.map(v => multiplier * v + add);
+    return q('sequences', `Input: ${inputs.join(', ')}. Output: ${outputs.join(', ')}. The rule is multiply by ? then add ${add}.`, multiplier, 'Compare how the output changes when the input increases by 1.');
+  }
+  const multiplier = pick([2, 3, 4]), add = randInt(1, 9), inputs = [3, 5, 7], outputs = inputs.map(v => multiplier * v + add);
+  return q('sequences', `Input: ${inputs.join(', ')}. Output: ${outputs.join(', ')}. The rule is multiply by ${multiplier} then add ?.`, add, 'Multiply each input first, then compare with its output.');
 }
-
 
 function y7GenEstimation() {
   const L = state.level,
@@ -814,216 +779,159 @@ function y7GenEstimation() {
 
 
 function y7GenUnits() {
-  const L = state.level,
-  t = L === 'starter' ? randInt(1, 4): L === 'core' ? randInt(1, 6): randInt(1, 8);
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 6) : L === 'core' ? randInt(1, 10) : randInt(1, 12);
+  const toHHMM = totalMinutes => Math.floor(totalMinutes / 60) * 100 + totalMinutes % 60;
+
   if (t === 1) {
     const km = randInt(12, 89) / 10;
-    return q('units', `${fmt(km)} km = ? m`, km * 1000, 'Multiply kilometres by 1000.')
+    return q('units', `${fmt(km)} km = ? m`, km * 1000, 'Multiply kilometres by 1000.');
   }
   if (t === 2) {
     const g = randInt(1200, 9500);
-    return q('units', `${g} g = ? kg`, g / 1000, 'Divide grams by 1000.')
+    return q('units', `${g} g = ? kg`, g / 1000, 'Divide grams by 1000.');
   }
   if (t === 3) {
     const l = randInt(12, 89) / 10;
-    return q('units', `${fmt(l)} L = ? mL`, l * 1000, 'Multiply litres by 1000.')
+    return q('units', `${fmt(l)} L = ? mL`, l * 1000, 'Multiply litres by 1000.');
   }
   if (t === 4) {
-    const startH = randInt(1, 4),
-    startM = pick([0, 10, 15, 20, 25, 30, 35, 40, 45]),
-    mins = pick([35, 45, 50, 65, 75, 85]);
-    const total = startH * 60 + startM + mins,
-    endH = Math.floor(total / 60),
-    endM = total % 60;
-    return q('units', `${startH}:${String(startM).padStart(2,'0')} plus ${mins} min. Enter as HHMM without a colon (for example 0730); a colon is also accepted.`, endH * 100 + endM, 'Add minutes and regroup 60 minutes as 1 hour.')
+    const startH = randInt(1, 4), startM = pick([0, 10, 15, 20, 25, 30, 35, 40, 45]), mins = pick([35, 45, 50, 65, 75, 85]);
+    const total = startH * 60 + startM + mins;
+    return q('units', `${startH}:${String(startM).padStart(2, '0')} plus ${mins} min. Enter the answer as HHMM.`, toHHMM(total), 'Add minutes and regroup 60 minutes as 1 hour.');
   }
   if (t === 5) {
-    const speed = pick([40, 50, 60, 70, 80, 90]),
-    time = pick([1.5, 2, 2.5, 3]);
-    return q('units', `${speed} km/h for ${time} h = ? km`, speed * time, 'Distance = speed × time.')
+    const speed = pick([40, 50, 60, 70, 80, 90]), time = pick([1.5, 2, 2.5, 3]);
+    return q('units', `${speed} km/h for ${time} h = ? km`, speed * time, 'Distance = speed × time.');
   }
   if (t === 6) {
-    const distance = pick([120, 150, 180, 210, 240, 300]),
-    time = pick([2, 3, 4, 5]);
-    return q('units', `${distance} km in ${time} h. Speed = ? km/h`, distance / time, 'Speed = distance ÷ time.')
+    const hour = randInt(1, 11), minute = pick([0, 5, 10, 15, 20, 25, 30, 40, 45, 50, 55]), pm = chance(0.5);
+    const hour24 = pm ? hour + 12 : hour;
+    return q('units', `${hour}:${String(minute).padStart(2, '0')} ${pm ? 'pm' : 'am'} in 24-hour time = ? Enter as HHMM.`, hour24 * 100 + minute, 'Add 12 to the hour for pm times after noon.');
   }
   if (t === 7) {
+    const distance = pick([120, 150, 180, 210, 240, 300]), time = pick([2, 3, 4, 5]);
+    return q('units', `${distance} km in ${time} h. Speed = ? km/h`, distance / time, 'Speed = distance ÷ time.');
+  }
+  if (t === 8) {
     const m = randInt(120, 950) / 100;
-    return q('units', `${fmt(m)} m = ? cm`, m * 100, 'Multiply metres by 100.')
+    return q('units', `${fmt(m)} m = ? cm`, m * 100, 'Multiply metres by 100.');
+  }
+  if (t === 9) {
+    const start = pick([8 * 60 + 20, 9 * 60 + 35, 11 * 60 + 10, 13 * 60 + 25, 15 * 60 + 40]);
+    const duration = pick([35, 45, 55, 70, 85]);
+    const end = start + duration;
+    return q('units', `A bus leaves at ${String(toHHMM(start)).padStart(4, '0')} and arrives at ${String(toHHMM(end)).padStart(4, '0')}. Journey time = ? minutes`, duration, 'Subtract the departure time from the arrival time.');
+  }
+  if (t === 10) {
+    const start = pick([8 * 60 + 15, 9 * 60 + 40, 12 * 60 + 20, 14 * 60 + 35, 16 * 60 + 10]);
+    const duration = pick([40, 55, 65, 75, 85]);
+    return q('units', `A train leaves at ${String(toHHMM(start)).padStart(4, '0')}. The journey takes ${duration} minutes. Arrival time = ? Enter as HHMM.`, toHHMM(start + duration), 'Add the journey time to the departure time.');
+  }
+  if (t === 11) {
+    const duration = pick([35, 45, 60, 75, 90]), start = pick([8 * 60 + 20, 10 * 60 + 15, 13 * 60 + 30, 15 * 60 + 10]);
+    const arrival = start + duration;
+    return q('units', `A journey ends at ${String(toHHMM(arrival)).padStart(4, '0')} and takes ${duration} minutes. Departure time = ? Enter as HHMM.`, toHHMM(start), 'Subtract the journey time from the arrival time.');
   }
   const area = pick([1.5, 2.4, 3.2, 4.5]);
-  return q('units', `${fmt(area)} m² = ? cm²`, area * 10000, 'Square-unit conversion: 1 m² = 10,000 cm².')
+  return q('units', `${fmt(area)} m² = ? cm²`, area * 10000, 'Square-unit conversion: 1 m² = 10,000 cm².');
 }
-
 
 function y7GenGeometry() {
   const L = state.level;
-
-  // Added word-problem scenario:
-  // A square's perimeter is known; find the length of one side.
-  // This appears in about 25% of Geometry questions.
-    if (L === 'challenge' && chance(0.9)) {
-    const width = randInt(6, 30);
-    const length = randInt(width + 3, width + 25);
-    const perimeter = 2 * (length + width);
-
-    const questionText = pick([
-      `A rectangular garden has a perimeter of ${perimeter} m and a length of ${length} m. What is its width?`,
-      `A rectangular playground is ${length} m long. Its perimeter is ${perimeter} m. How wide is it?`,
-      `A rectangular picture frame has a perimeter of ${perimeter} cm and a length of ${length} cm. Find its width.`,
-      `A rectangular noticeboard is ${length} cm long. Its perimeter is ${perimeter} cm. What is its width?`
-    ]);
-
-    return q(
-      'geometry',
-      questionText,
-      width,
-      'Width = perimeter ÷ 2 − length.'
-    );
-  }
-  if (chance(0.25)) {
-    const side =
-      L === 'starter'
-        ? randInt(2, 12)
-        : L === 'core'
-          ? randInt(4, 25)
-          : randInt(6, 40);
-
-    const perimeter = side * 4;
-
-    const questionText = pick([
-      `A square garden has a perimeter of ${perimeter} m. What is the length of one side?`,
-      `A square playground has a perimeter of ${perimeter} m. Find the length of one side.`,
-      `A square picture frame has a perimeter of ${perimeter} cm. What is its side length?`,
-      `A square tile has a perimeter of ${perimeter} cm. How long is each side?`,
-      `A farmer builds a square fence with a total length of ${perimeter} m. How long is each side?`
-    ]);
-
-    return q(
-      'geometry',
-      questionText,
-      side,
-      'A square has 4 equal sides, so side length = perimeter ÷ 4.'
-    );
-  }
-
-  const t =
-    L === 'starter'
-      ? randInt(1, 4)
-      : L === 'core'
-        ? randInt(1, 6)
-        : randInt(1, 8);
+  const t = L === 'starter' ? randInt(1, 8) : L === 'core' ? randInt(1, 10) : randInt(1, 12);
 
   if (t === 1) {
-    const l = randInt(5, 20);
-    const w = randInt(3, 15);
-
-    return q(
-      'geometry',
-      `Rectangle ${l} cm by ${w} cm. Perimeter = ? cm`,
-      2 * (l + w),
-      'Perimeter = 2(length + width).'
-    );
+    const l = randInt(5, 20), w = randInt(3, 15);
+    return q('geometry', `Rectangle ${l} cm by ${w} cm. Perimeter = ? cm`, 2 * (l + w), 'Perimeter = 2(length + width).');
   }
-
   if (t === 2) {
-    const l = randInt(5, 20);
-    const w = randInt(3, 15);
-
-    return q(
-      'geometry',
-      `Rectangle ${l} cm by ${w} cm. Area = ? cm²`,
-      l * w,
-      'Area = length × width.'
-    );
+    const l = randInt(5, 20), w = randInt(3, 15);
+    return q('geometry', `Rectangle ${l} cm by ${w} cm. Area = ? cm²`, l * w, 'Area = length × width.');
   }
-
   if (t === 3) {
-    const b = randInt(4, 20);
-    const h = randInt(3, 16);
-
-    return q(
-      'geometry',
-      `Triangle base ${b} cm, height ${h} cm. Area = ? cm²`,
-      (b * h) / 2,
-      'Area = 1/2 × base × height.'
-    );
+    let b = randInt(4, 20), h = randInt(3, 16);
+    if ((b * h) % 2 !== 0) b += 1;
+    return q('geometry', `Triangle base ${b} cm, height ${h} cm. Area = ? cm²`, b * h / 2, 'Area = 1/2 × base × height.');
   }
-
   if (t === 4) {
-    const a = randInt(20, 85);
-    const b = randInt(20, Math.min(85, 159 - a));
-
-    return q(
-      'geometry',
-      `Triangle angles ${a}° and ${b}°. Third angle = ?°`,
-      180 - a - b,
-      'Angles in a triangle sum to 180°.'
-    );
+    const [a, b] = pick([[35, 65], [40, 75], [45, 80], [50, 60], [55, 70]]);
+    return q('geometry', `Triangle angles ${a}° and ${b}°. Third angle = ?°`, 180 - a - b, 'Angles in a triangle sum to 180°.');
   }
-
   if (t === 5) {
     const a = randInt(20, 160);
-
-    return q(
-      'geometry',
-      `Supplement of ${a}° = ?°`,
-      180 - a,
-      'Angles on a straight line sum to 180°.'
-    );
+    return q('geometry', `Supplement of ${a}° = ?°`, 180 - a, 'Angles on a straight line sum to 180°.');
   }
-
   if (t === 6) {
     const a = randInt(5, 85);
-
-    return q(
-      'geometry',
-      `Complement of ${a}° = ?°`,
-      90 - a,
-      'Complementary angles sum to 90°.'
-    );
+    return q('geometry', `Complement of ${a}° = ?°`, 90 - a, 'Complementary angles sum to 90°.');
   }
-
   if (t === 7) {
     const side = randInt(3, 18);
-
-    return q(
-      'geometry',
-      `Square area ${side * side} cm². Side length = ? cm`,
-      side,
-      'Find the square root of the area.'
-    );
+    return q('geometry', `Square area ${side * side} cm². Side length = ? cm`, side, 'Find the square root of the area.');
   }
-
-  const l = randInt(6, 20);
-  const w = randInt(3, 15);
-  const scale = pick([2, 3]);
-
-  return q(
-    'geometry',
-    `A ${l}×${w} rectangle is enlarged by scale factor ${scale}. New area = ?`,
-    l * w * scale * scale,
-    'Area scales by the square of the scale factor.'
-  );
+  if (t === 8) {
+    const [sides, answer] = pick([[[6, 6, 6], 1], [[6, 6, 9], 2], [[5, 7, 9], 3], [[8, 10, 8], 2]]);
+    return q('geometry', `A triangle has sides ${sides.join(', ')}. Enter 1 for equilateral, 2 for isosceles, or 3 for scalene.`, answer, 'Classify by the number of equal sides.');
+  }
+  if (t === 9) {
+    const [angles, answer] = pick([[[60, 60, 60], 1], [[90, 35, 55], 2], [[110, 30, 40], 3], [[70, 50, 60], 1]]);
+    return q('geometry', `A triangle has angles ${angles.join('°, ')}°. Enter 1 for acute, 2 for right, or 3 for obtuse.`, answer, 'Classify by the largest angle.');
+  }
+  if (t === 10) {
+    const side = randInt(4, 25), perimeter = 4 * side;
+    return q('geometry', `A square has perimeter ${perimeter} cm. Side length = ? cm`, side, 'Divide the perimeter by 4.');
+  }
+  if (t === 11) {
+    const width = randInt(6, 25), length = randInt(width + 3, width + 20), perimeter = 2 * (length + width);
+    return q('geometry', `A rectangle has perimeter ${perimeter} cm and length ${length} cm. Width = ? cm`, width, 'Width = perimeter ÷ 2 − length.');
+  }
+  const l = randInt(6, 20), w = randInt(3, 15), scale = pick([2, 3]);
+  return q('geometry', `A ${l} × ${w} rectangle is enlarged by scale factor ${scale}. New area = ?`, l * w * scale * scale, 'Area scales by the square of the scale factor.');
 }
 
+function y7GenFDPConversions() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 10);
 
-
-
-
-/* ===== YEAR 7 ADDED FOCUSED QUESTION GENERATORS ===== */
-
-function y7GenFDPConversions(){
-  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,9);
-  if(t===1){const [n,d]=pick([[1,2],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,8],[3,8],[5,8],[7,8]]);return q('fdpConversions',`${n}/${d} as a decimal = ?`,n/d,'Divide numerator by denominator.');}
-  if(t===2){const [n,d]=pick([[1,2],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,8],[3,8],[5,8],[7,8]]);return q('fdpConversions',`${n}/${d} as a percentage = ?%`,n/d*100,'Convert to decimal, then multiply by 100.');}
-  if(t===3){const v=pick([0.125,0.2,0.25,0.3,0.375,0.4,0.5,0.625,0.75,0.8,0.875]);return qFrac('fdpConversions',`${fmt(v)} as a simplest fraction = ?`,v,'Write over 10, 100 or 1000 and simplify.');}
-  if(t===4){const p=pick([12.5,20,25,30,37.5,40,50,62.5,75,80,87.5]);return q('fdpConversions',`${fmt(p)}% as a decimal = ?`,p/100,'Divide by 100.');}
-  if(t===5){const p=pick([12.5,20,25,30,37.5,40,50,62.5,75,80,87.5]);return qFrac('fdpConversions',`${fmt(p)}% as a simplest fraction = ?`,p/100,'Write over 100 and simplify.');}
-  if(t===6){const a=pick([0.35,0.45,0.55,0.65,0.72,0.85]),[n,d]=pick([[1,3],[2,5],[1,2],[3,5],[2,3],[3,4]]);return q('fdpConversions',`Which is larger? Enter 1 for ${fmt(a)}, or 2 for ${n}/${d}.`,a>n/d?1:2,'Convert both to decimals.');}
-  if(t===7){const vals=pick([[0.375,40],[0.625,60],[0.72,75],[0.48,50],[0.85,80]]);return q('fdpConversions',`Which is larger? Enter 1 for ${fmt(vals[0])}, or 2 for ${vals[1]}%.`,vals[0]>vals[1]/100?1:2,'Convert the percentage to a decimal.');}
-  if(t===8){const a=pick([0.25,0.4,0.6,0.75]),b=pick([20,35,50,65,80]);return q('fdpConversions',`${fmt(a)} + ${b}% = ?`,a+b/100,'Convert the percentage to a decimal before adding.');}
-  const [n,d]=pick([[7,20],[9,20],[11,20],[13,20],[17,20],[19,20]]);return q('fdpConversions',`${n}/${d} as a percentage = ?%`,n/d*100,'Convert the denominator to 100.');
+  if (t === 1) {
+    const [n, d] = pick([[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 8], [3, 8], [5, 8], [7, 8]]);
+    return q('fdpConversions', `${n}/${d} as a decimal = ?`, n / d, 'Divide numerator by denominator.');
+  }
+  if (t === 2) {
+    const [n, d] = pick([[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 8], [3, 8], [5, 8], [7, 8]]);
+    return q('fdpConversions', `${n}/${d} as a percentage = ?%`, n / d * 100, 'Convert to a decimal, then multiply by 100.');
+  }
+  if (t === 3) {
+    const v = pick([0.125, 0.2, 0.25, 0.3, 0.375, 0.4, 0.5, 0.625, 0.75, 0.8, 0.875]);
+    return qFrac('fdpConversions', `${fmt(v)} as a simplest fraction = ?`, v, 'Write over 10, 100 or 1000 and simplify.');
+  }
+  if (t === 4) {
+    const p = pick([12.5, 20, 25, 30, 37.5, 40, 50, 62.5, 75, 80, 87.5]);
+    return q('fdpConversions', `${fmt(p)}% as a decimal = ?`, p / 100, 'Divide by 100.');
+  }
+  if (t === 5) {
+    const [n, d, answer] = pick([[1, 2, 1], [1, 4, 1], [1, 5, 1], [1, 8, 1], [3, 20, 1], [1, 3, 2], [1, 6, 2], [2, 9, 2], [5, 6, 2]]);
+    return q('fdpConversions', `${n}/${d} gives which type of decimal? Enter 1 for terminating or 2 for recurring.`, answer, 'In simplest form, denominators with only factors 2 and 5 terminate.');
+  }
+  if (t === 6) {
+    const p = pick([12.5, 20, 25, 30, 37.5, 40, 50, 62.5, 75, 80, 87.5]);
+    return qFrac('fdpConversions', `${fmt(p)}% as a simplest fraction = ?`, p / 100, 'Write over 100 and simplify.');
+  }
+  if (t === 7) {
+    const a = pick([0.35, 0.45, 0.55, 0.65, 0.72, 0.85]), [n, d] = pick([[1, 3], [2, 5], [1, 2], [3, 5], [2, 3], [3, 4]]);
+    return q('fdpConversions', `Which is larger? Enter 1 for ${fmt(a)}, or 2 for ${n}/${d}.`, a > n / d ? 1 : 2, 'Convert both to decimals.');
+  }
+  if (t === 8) {
+    const vals = pick([[0.375, 40], [0.625, 60], [0.72, 75], [0.48, 50], [0.85, 80]]);
+    return q('fdpConversions', `Which is larger? Enter 1 for ${fmt(vals[0])}, or 2 for ${vals[1]}%.`, vals[0] > vals[1] / 100 ? 1 : 2, 'Convert the percentage to a decimal.');
+  }
+  if (t === 9) {
+    const a = pick([0.25, 0.4, 0.6, 0.75]), b = pick([20, 35, 50, 65, 80]);
+    return q('fdpConversions', `${fmt(a)} + ${b}% = ?`, a + b / 100, 'Convert the percentage to a decimal before adding.');
+  }
+  const [n, d] = pick([[7, 20], [9, 20], [11, 20], [13, 20], [17, 20], [19, 20]]);
+  return q('fdpConversions', `${n}/${d} as a percentage = ?%`, n / d * 100, 'Convert the denominator to 100.');
 }
 
 function y7GenPercentageChange(){
@@ -1158,17 +1066,57 @@ function y7GenInequalities(){
   const low=randInt(-8,2),high=randInt(low+3,10);return q('inequalities',`How many integers satisfy ${low} < x < ${high}?`,high-low-1,'Count the integers strictly between the endpoints.');
 }
 
-function y7GenCoordinates(){
-  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,9);
-  if(t===1){const x=pick([-6,-5,-4,-3,3,4,5,6]),y=pick([-7,-5,-3,3,5,7]),quad=x>0&&y>0?1:x<0&&y>0?2:x<0&&y<0?3:4;return q('coordinates',`Point (${x}, ${y}) is in which quadrant? Enter 1, 2, 3 or 4.`,quad,'Use the signs of x and y.');}
-  if(t===2){const horizontal=chance(.5),a=randInt(-8,4),b=randInt(a+2,10),fixed=randInt(-6,6);return q('coordinates',horizontal?`Distance between (${a}, ${fixed}) and (${b}, ${fixed}) = ?`:`Distance between (${fixed}, ${a}) and (${fixed}, ${b}) = ?`,b-a,'Subtract the changing coordinates.');}
-  if(t===3){const x1=randInt(-8,4),x2=x1+2*randInt(1,6),y1=randInt(-8,4),y2=y1+2*randInt(1,6),ask=chance(.5);return q('coordinates',`Midpoint of (${x1}, ${y1}) and (${x2}, ${y2}). ${ask?'x':'y'}-coordinate = ?`,ask?(x1+x2)/2:(y1+y2)/2,'Average the matching coordinates.');}
-  if(t===4){const m=pick([-3,-2,-1,1,2,3,4]),x1=randInt(-4,4),y1=randInt(-5,5),dx=pick([1,2,3]),x2=x1+dx,y2=y1+m*dx;return q('coordinates',`Slope through (${x1}, ${y1}) and (${x2}, ${y2}) = ?`,m,'Slope = change in y ÷ change in x.');}
-  if(t===5){const m=pick([-4,-3,-2,2,3,4]),c=randInt(-8,8),x=randInt(-5,7);return q('coordinates',`For y = ${m}x ${c>=0?'+':'−'} ${Math.abs(c)}, find y when x=${x}.`,m*x+c,'Substitute x.');}
-  if(t===6){const m=pick([-5,-3,-2,2,3,5]),c=randInt(-12,12);return q('coordinates',`y = ${m}x ${c>=0?'+':'−'} ${Math.abs(c)}. y-intercept = ?`,c,'The y-intercept is the constant term.');}
-  if(t===7){const x=randInt(-8,8),y=randInt(-8,8),dx=randInt(-5,5),dy=randInt(-5,5),ask=chance(.5);return q('coordinates',`Translate (${x}, ${y}) by (${dx}, ${dy}). New ${ask?'x':'y'}-coordinate = ?`,ask?x+dx:y+dy,'Add the translation vector.');}
-  if(t===8){const m=pick([2,3,4,5]),c=randInt(-8,8),x=randInt(-4,8),y=m*x+c;return q('coordinates',`On y = ${m}x ${c>=0?'+':'−'} ${Math.abs(c)}, y=${y}. Find x.`,x,'Subtract the intercept, then divide by the slope.');}
-  const m=pick([-4,-3,-2,-1,1,2,3,4]);return q('coordinates',`A line is parallel to a line with slope ${m}. Its slope = ?`,m,'Parallel lines have equal slopes.');
+function y7GenCoordinates() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 6) : L === 'core' ? randInt(1, 10) : randInt(1, 12);
+
+  if (t === 1) {
+    const x = pick([-6, -5, -4, -3, 3, 4, 5, 6]), y = pick([-7, -5, -3, 3, 5, 7]);
+    const quad = x > 0 && y > 0 ? 1 : x < 0 && y > 0 ? 2 : x < 0 && y < 0 ? 3 : 4;
+    return q('coordinates', `Point (${x}, ${y}) is in which quadrant? Enter 1, 2, 3 or 4.`, quad, 'Use the signs of x and y.');
+  }
+  if (t === 2) {
+    const horizontal = chance(0.5), a = randInt(-8, 4), b = randInt(a + 2, 10), fixed = randInt(-6, 6);
+    return q('coordinates', horizontal ? `Distance between (${a}, ${fixed}) and (${b}, ${fixed}) = ?` : `Distance between (${fixed}, ${a}) and (${fixed}, ${b}) = ?`, b - a, 'Subtract the changing coordinates.');
+  }
+  if (t === 3) {
+    const x1 = randInt(-8, 4), x2 = x1 + 2 * randInt(1, 6), y1 = randInt(-8, 4), y2 = y1 + 2 * randInt(1, 6), ask = chance(0.5);
+    return q('coordinates', `Midpoint of (${x1}, ${y1}) and (${x2}, ${y2}). ${ask ? 'x' : 'y'}-coordinate = ?`, ask ? (x1 + x2) / 2 : (y1 + y2) / 2, 'Average the matching coordinates.');
+  }
+  if (t === 4) {
+    const x = randInt(-8, 8), y = randInt(-8, 8), dx = randInt(-5, 5), dy = randInt(-5, 5), ask = chance(0.5);
+    return q('coordinates', `Translate (${x}, ${y}) by (${dx}, ${dy}). New ${ask ? 'x' : 'y'}-coordinate = ?`, ask ? x + dx : y + dy, 'Add the translation vector.');
+  }
+  if (t === 5) {
+    const x = randInt(-8, 8), y = randInt(-8, 8);
+    return q('coordinates', `Reflect (${x}, ${y}) across the x-axis. New y-coordinate = ?`, -y, 'Reflection across the x-axis changes the sign of y.');
+  }
+  if (t === 6) {
+    const x = randInt(-8, 8), y = randInt(-8, 8);
+    return q('coordinates', `Reflect (${x}, ${y}) across the y-axis. New x-coordinate = ?`, -x, 'Reflection across the y-axis changes the sign of x.');
+  }
+  if (t === 7) {
+    const m = pick([-3, -2, -1, 1, 2, 3, 4]), x1 = randInt(-4, 4), y1 = randInt(-5, 5), dx = pick([1, 2, 3]), x2 = x1 + dx, y2 = y1 + m * dx;
+    return q('coordinates', `Slope through (${x1}, ${y1}) and (${x2}, ${y2}) = ?`, m, 'Slope = change in y ÷ change in x.');
+  }
+  if (t === 8) {
+    const m = pick([-4, -3, -2, 2, 3, 4]), c = randInt(-8, 8), x = randInt(-5, 7);
+    return q('coordinates', `For y = ${m}x ${c >= 0 ? '+' : '−'} ${Math.abs(c)}, find y when x = ${x}.`, m * x + c, 'Substitute x.');
+  }
+  if (t === 9) {
+    const m = pick([-5, -3, -2, 2, 3, 5]), c = randInt(-12, 12);
+    return q('coordinates', `y = ${m}x ${c >= 0 ? '+' : '−'} ${Math.abs(c)}. y-intercept = ?`, c, 'The y-intercept is the constant term.');
+  }
+  if (t === 10) {
+    const x = randInt(-8, 8), y = randInt(-8, 8), ask = chance(0.5);
+    return q('coordinates', `Rotate (${x}, ${y}) by 180° about the origin. New ${ask ? 'x' : 'y'}-coordinate = ?`, ask ? -x : -y, 'A 180° rotation maps (x, y) to (−x, −y).');
+  }
+  if (t === 11) {
+    const x = randInt(-8, 8), y = randInt(-8, 8), ask = chance(0.5);
+    return q('coordinates', `Rotate (${x}, ${y}) by 90° anticlockwise about the origin. New ${ask ? 'x' : 'y'}-coordinate = ?`, ask ? -y : x, 'A 90° anticlockwise rotation maps (x, y) to (−y, x).');
+  }
+  const m = pick([-4, -3, -2, -1, 1, 2, 3, 4]);
+  return q('coordinates', `A line is parallel to a line with slope ${m}. Its slope = ?`, m, 'Parallel lines have equal slopes.');
 }
 
 function y7GenPythagoras(){
@@ -1183,30 +1131,113 @@ function y7GenPythagoras(){
   const a=pick([1,2,3,4]),b=pick([1,2,3,4]);return q('pythagoras',`A right triangle has legs ${a*3} and ${a*4}. Its hypotenuse = ?`,a*5,'Recognise a scaled 3–4–5 triangle.');
 }
 
-function y7GenStatistics(){
-  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,9);
-  if(t===1){const count=pick([4,5,6]),mean=randInt(6,18),vals=Array(count).fill(mean),change=randInt(1,Math.min(4,mean-1));vals[0]-=change;vals[1]+=change;return q('statistics',`Mean of ${vals.join(', ')} = ?`,mean,'Add and divide by the count.');}
-  if(t===2){const vals=Array.from({length:7},()=>randInt(1,30));return q('statistics',`Median of ${vals.join(', ')} = ?`,median(vals),'Order the values and select the middle one.');}
-  if(t===3){const mode=randInt(3,15),vals=[mode,mode,mode,mode+1,mode+3,mode+5,mode+7];for(let i=vals.length-1;i>0;i--){const j=randInt(0,i);[vals[i],vals[j]]=[vals[j],vals[i]];}return q('statistics',`Mode of ${vals.join(', ')} = ?`,mode,'Find the most frequent value.');}
-  if(t===4){const low=randInt(1,15),high=randInt(low+8,low+30),vals=[low,randInt(low,high),randInt(low,high),randInt(low,high),high];return q('statistics',`Range of ${vals.join(', ')} = ?`,high-low,'Maximum − minimum.');}
-  if(t===5){const count=pick([4,5,6]),mean=randInt(7,20),missing=randInt(3,25),total=count*mean;let known=[randInt(3,15),randInt(3,15)];while(known.length<count-1){known.push(randInt(3,15));}let adjust=total-missing-known.reduce((a,b)=>a+b,0);known[known.length-1]+=adjust;if(known[known.length-1]<0)return y7GenStatistics();return q('statistics',`${count} values have mean ${mean}. Known values: ${known.join(', ')}. Missing value = ?`,missing,'Total = mean × count, then subtract known values.');}
-  if(t===6){const q1=randInt(3,10),med=randInt(q1+2,q1+8),q3=randInt(med+2,med+10);const vals=[q1-2,q1,q1+1,med,q3-1,q3,q3+2];return q('statistics',`For the ordered data ${vals.join(', ')}, interquartile range = ?`,q3-q1,'IQR = Q3 − Q1.');}
-  if(t===7){const oldMean=randInt(6,16),count=randInt(4,8),add=randInt(1,8);return q('statistics',`Every value in a data set is increased by ${add}. The mean increases by ?`,add,'Adding the same amount to every value shifts the mean equally.');}
-  if(t===8){const oldMean=randInt(6,16),count=randInt(4,8),factor=randInt(2,4);return q('statistics',`Every value in a data set is multiplied by ${factor}. If the old mean is ${oldMean}, new mean = ?`,oldMean*factor,'Multiplying every value multiplies the mean.');}
-  const a=randInt(4,10),b=randInt(11,16),c=randInt(17,22),d=randInt(23,28),vals=[a,b,c,d];return q('statistics',`Median of the ordered values ${vals.join(', ')} = ?`,(b+c)/2,'Average the two middle values.');
+function y7GenStatistics() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 9) : randInt(1, 12);
+
+  if (t === 1) {
+    const count = pick([4, 5, 6]), meanValue = randInt(6, 18), vals = Array(count).fill(meanValue), change = randInt(1, Math.min(4, meanValue - 1));
+    vals[0] -= change;
+    vals[1] += change;
+    return q('statistics', `Mean of ${vals.join(', ')} = ?`, meanValue, 'Add and divide by the count.');
+  }
+  if (t === 2) {
+    const vals = Array.from({length: 7}, () => randInt(1, 30));
+    return q('statistics', `Median of ${vals.join(', ')} = ?`, median(vals), 'Order the values and select the middle one.');
+  }
+  if (t === 3) {
+    const mode = randInt(3, 15), vals = [mode, mode, mode, mode + 1, mode + 3, mode + 5, mode + 7];
+    for (let i = vals.length - 1; i > 0; i--) {
+      const j = randInt(0, i);
+      [vals[i], vals[j]] = [vals[j], vals[i]];
+    }
+    return q('statistics', `Mode of ${vals.join(', ')} = ?`, mode, 'Find the most frequent value.');
+  }
+  if (t === 4) {
+    const low = randInt(1, 15), high = randInt(low + 8, low + 30), vals = [low, randInt(low, high), randInt(low, high), randInt(low, high), high];
+    return q('statistics', `Range of ${vals.join(', ')} = ?`, high - low, 'Maximum − minimum.');
+  }
+  if (t === 5) {
+    const meanValue = randInt(8, 20), deviations = pick([[-4, -2, 0, 2, 4], [-3, -1, 0, 1, 3], [-4, -1, 0, 2, 3]]), values = deviations.map(d => meanValue + d);
+    const missingIndex = randInt(0, values.length - 1), missing = values[missingIndex], known = values.filter((_, i) => i !== missingIndex);
+    return q('statistics', `Five values have mean ${meanValue}. Known values: ${known.join(', ')}. Missing value = ?`, missing, 'Total = mean × 5, then subtract the known values.');
+  }
+  if (t === 6) {
+    const q1 = randInt(3, 10), med = randInt(q1 + 2, q1 + 8), q3 = randInt(med + 2, med + 10), vals = [q1 - 2, q1, q1 + 1, med, q3 - 1, q3, q3 + 2];
+    return q('statistics', `For the ordered data ${vals.join(', ')}, interquartile range = ?`, q3 - q1, 'IQR = Q3 − Q1.');
+  }
+  if (t === 7) {
+    const add = randInt(1, 8);
+    return q('statistics', `Every value in a data set is increased by ${add}. The mean increases by ?`, add, 'Adding the same amount to every value shifts the mean equally.');
+  }
+  if (t === 8) {
+    const oldMean = randInt(6, 16), factor = randInt(2, 4);
+    return q('statistics', `Every value in a data set is multiplied by ${factor}. If the old mean is ${oldMean}, new mean = ?`, oldMean * factor, 'Multiplying every value multiplies the mean.');
+  }
+  if (t === 9) {
+    const a = randInt(4, 10), b = randInt(11, 16), c = randInt(17, 22), d = randInt(23, 28), vals = [a, b, c, d];
+    return q('statistics', `Median of the ordered values ${vals.join(', ')} = ?`, (b + c) / 2, 'Average the two middle values.');
+  }
+  if (t === 10) {
+    const centre = randInt(8, 20), outlier = centre + pick([25, 30, 35]), vals = [centre - 2, centre - 1, centre, centre, centre + 1, outlier];
+    return q('statistics', `Data: ${vals.join(', ')}. Outlier = ?`, outlier, 'The outlier is far from the other values.');
+  }
+  if (t === 11) {
+    return q('statistics', 'Which average is usually less affected by one very large outlier? Enter 1 for mean or 2 for median.', 2, 'The median depends on position rather than the size of the extreme value.');
+  }
+  const [values, suspicious] = pick([[[12, 13, 14, 140, 15], 140], [[28, 29, 30, 31, 300], 300], [[7, 8, 9, 90, 10], 90]]);
+  return q('statistics', `Recorded data: ${values.join(', ')}. Which value should be checked?`, suspicious, 'Look for a value that may contain an extra zero or recording error.');
 }
 
-function y7GenProbability(){
-  const L=state.level,t=L==='starter'?randInt(1,4):L==='core'?randInt(1,7):randInt(1,9);
-  if(t===1){const red=randInt(1,8),blue=randInt(1,8),green=randInt(1,6);return qFrac('probability',`A bag has ${red} red, ${blue} blue and ${green} green counters. P(red) = ?`,red/(red+blue+green),'Favourable outcomes ÷ total outcomes.');}
-  if(t===2){const p=pick([0.15,0.2,0.25,0.35,0.4,0.6,0.65,0.75,0.8]);return q('probability',`P(A) = ${fmt(p)}. P(not A) = ?`,1-p,'Complementary probabilities add to 1.');}
-  if(t===3){return qFrac('probability','A fair coin is tossed twice. P(exactly one head) = ?',1/2,'Outcomes HT and TH are favourable.');}
-  if(t===4){return qFrac('probability','A fair dice is rolled twice. P(two sixes) = ?',1/36,'Multiply 1/6 × 1/6.');}
-  if(t===5){const p1=pick([1/2,1/3,1/4,2/3]),p2=pick([1/2,1/3,1/4,3/4]);return qFrac('probability',`Independent events have probabilities ${toFraction(p1)} and ${toFraction(p2)}. P(both) = ?`,p1*p2,'Multiply independent probabilities.');}
-  if(t===6){const red=randInt(2,6),blue=randInt(2,6),total=red+blue;return qFrac('probability',`Choose from ${red} red and ${blue} blue counters, replace it, then choose again. P(two blue) = ?`,(blue/total)**2,'With replacement, multiply the same probability twice.');}
-  if(t===7){const red=randInt(2,6),blue=randInt(2,6),total=red+blue;return qFrac('probability',`Choose from ${red} red and ${blue} blue counters without replacement. P(red then blue) = ?`,red/total*blue/(total-1),'The total decreases after the first choice.');}
-  if(t===8){return qFrac('probability','A fair coin is tossed and a fair dice is rolled. P(head and an even number) = ?',1/4,'Multiply 1/2 by 3/6.');}
-  return qFrac('probability','Two fair dice are rolled. P(both results are even) = ?',1/4,'Each dice has probability 3/6 of being even.');
+function y7GenProbability() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 9) : randInt(1, 12);
+
+  if (t === 1) {
+    const red = randInt(1, 8), blue = randInt(1, 8), green = randInt(1, 6);
+    return qFrac('probability', `A bag has ${red} red, ${blue} blue and ${green} green counters. P(red) = ?`, red / (red + blue + green), 'Favourable outcomes ÷ total outcomes.');
+  }
+  if (t === 2) {
+    const p = pick([0.15, 0.2, 0.25, 0.35, 0.4, 0.6, 0.65, 0.75, 0.8]);
+    return q('probability', `P(A) = ${fmt(p)}. P(not A) = ?`, roundTo(1 - p), 'Complementary probabilities add to 1.');
+  }
+  if (t === 3) {
+    return qFrac('probability', 'A fair coin is tossed twice. P(exactly one head) = ?', 1 / 2, 'Outcomes HT and TH are favourable.');
+  }
+  if (t === 4) {
+    return qFrac('probability', 'A fair six-sided die is rolled twice. P(two sixes) = ?', 1 / 36, 'Multiply 1/6 × 1/6.');
+  }
+  if (t === 5) {
+    const p1 = pick([1 / 2, 1 / 3, 1 / 4, 2 / 3]), p2 = pick([1 / 2, 1 / 3, 1 / 4, 3 / 4]);
+    return qFrac('probability', `Independent events have probabilities ${toFraction(p1)} and ${toFraction(p2)}. P(both) = ?`, p1 * p2, 'Multiply independent probabilities.');
+  }
+  if (t === 6) {
+    const red = randInt(2, 6), blue = randInt(2, 6), total = red + blue;
+    return qFrac('probability', `Choose from ${red} red and ${blue} blue counters, replace it, then choose again. P(two blue) = ?`, (blue / total) ** 2, 'With replacement, multiply the same probability twice.');
+  }
+  if (t === 7) {
+    const total = pick([20, 30, 40, 50]), successes = pick([5, 10, 15, 20]);
+    if (successes >= total) return y7GenProbability();
+    return qFrac('probability', `A coin landed heads ${successes} times in ${total} tosses. Experimental probability of heads = ?`, successes / total, 'Experimental probability = successes ÷ number of trials.');
+  }
+  if (t === 8) {
+    const total = pick([40, 50, 80, 100]), percent = pick([10, 20, 25, 30, 40, 50]), successes = total * percent / 100;
+    if (!Number.isInteger(successes)) return y7GenProbability();
+    return q('probability', `A result occurred ${successes} times in ${total} trials. Relative frequency = ?%`, percent, 'Divide successes by trials, then multiply by 100.');
+  }
+  if (t === 9) {
+    const [n, d] = pick([[1, 2], [1, 4], [1, 5], [3, 4]]), trials = pick([40, 60, 80, 100]);
+    if ((trials * n) % d !== 0) return y7GenProbability();
+    return q('probability', `The theoretical probability is ${n}/${d}. In ${trials} trials, expected successes = ?`, trials * n / d, 'Multiply the number of trials by the probability.');
+  }
+  if (t === 10) {
+    const red = randInt(2, 6), blue = randInt(2, 6), total = red + blue;
+    return qFrac('probability', `Choose from ${red} red and ${blue} blue counters without replacement. P(red then blue) = ?`, red / total * blue / (total - 1), 'The total decreases after the first choice.');
+  }
+  if (t === 11) {
+    return qFrac('probability', 'A fair coin is tossed and a fair six-sided die is rolled. P(head and an even number) = ?', 1 / 4, 'Multiply 1/2 by 3/6.');
+  }
+  return qFrac('probability', 'Two fair six-sided dice are rolled. P(both results are even) = ?', 1 / 4, 'Each die has probability 3/6 of being even.');
 }
 
 function y7GenFractionProblemSolving() {
@@ -1401,7 +1432,7 @@ function y7GenRemaindersPatterns() {
   if (t === 3) {
     const [base, cycle] = pick([[2, [2, 4, 8, 6]], [3, [3, 9, 7, 1]], [7, [7, 9, 3, 1]], [8, [8, 4, 2, 6]]]);
     const exponent = randInt(5, 30);
-    return q('remaindersPatterns', `Last digit of ${base}^${exponent} = ?`, cycle[(exponent - 1) % cycle.length], 'The last digits repeat in a cycle of 4.');
+    return q('remaindersPatterns', `Last digit of ${base}${y7Superscript(exponent)} = ?`, cycle[(exponent - 1) % cycle.length], 'The last digits repeat in a cycle of 4.');
   }
   if (t === 4) {
     const cycle = pick([[2, 5, 8], [1, 4, 7, 10], [3, 6, 9, 12, 15], [5, 10, 15, 20]]);
@@ -1506,7 +1537,7 @@ YEAR_BANKS[7] = {
     estimation: y7GenEstimation,
     units: y7GenUnits,
     geometry: y7GenGeometry,
-    fdpConversions: sharedGenFDPConversions,
+    fdpConversions: y7GenFDPConversions,
     fdpComparison: sharedGenFDPComparison,
     fdpOperations: sharedGenFDPOperations,
     percentageChange: y7GenPercentageChange,
