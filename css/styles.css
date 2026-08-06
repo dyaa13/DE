@@ -196,3 +196,40 @@
       line-height: 0;
       vertical-align: super;
     }
+
+
+    .mixed-number {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.12em;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .mixed-whole {
+      line-height: 1;
+    }
+
+    .mixed-fraction {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.05em;
+      font-size: 0.72em;
+      line-height: 1;
+      vertical-align: middle;
+    }
+
+    .mixed-numerator {
+      width: 100%;
+      padding: 0 0.12em 0.07em;
+      border-bottom: 0.075em solid currentColor;
+      text-align: center;
+    }
+
+    .mixed-denominator {
+      width: 100%;
+      padding: 0.07em 0.12em 0;
+      text-align: center;
+    }

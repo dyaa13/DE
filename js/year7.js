@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 7 configuration and question bank. */
-YEAR_CONFIGS[7] = {"title":"Year 7 Rapid Fire Mental Maths","skillLabel":"Year 7 Skill","mixed":"Mixed Year 7 Skills","labels":{"integers":"Integers & Negative Numbers","order":"Order of Operations","powers":"Powers, Squares & Roots","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","percentages":"Percentages","ratio":"Ratio & Rates","algebra":"Algebra Expressions","writingAlgebra":"Words to Algebra: Expressions & Equations","equations":"Simple Equations","sequences":"Sequences","estimation":"Estimation & Rounding","units":"Units, Time & Speed","geometry":"Geometry","mixed":"Mixed Year 7 Skills","review":"Mistake Review","fdpConversions":"Fraction–Decimal–Percentage Conversion","percentageChange":"Percentage Change","directProportion":"Direct Proportion & Unit Rates","simplifyExpand":"Simplifying & Expanding Expressions","twoStepEquations":"Two-Step Equations","inequalities":"Basic Inequalities","coordinates":"Coordinates & Straight Lines","pythagoras":"Pythagoras","statistics":"Statistics","probability":"Probability","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations"},"skills":["integers","order","powers","factors","fractions","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","writingAlgebra","equations","sequences","estimation","units","geometry","percentageChange","directProportion","simplifyExpand","twoStepEquations","inequalities","coordinates","pythagoras","statistics","probability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 7 includes 27 targeted banks. The Words to Algebra bank practises turning written situations into algebraic expressions and equations. Fraction–decimal–percentage conversion, comparison and mixed operations remain available as separate focused banks alongside the existing number, algebra, geometry, statistics and probability work."};
+YEAR_CONFIGS[7] = {"title":"Year 7 Rapid Fire Mental Maths","skillLabel":"Year 7 Skill","mixed":"Mixed Year 7 Skills","labels":{"integers":"Integers & Negative Numbers","order":"Order of Operations","powers":"Powers, Squares & Roots","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","percentages":"Percentages","ratio":"Ratio & Rates","algebra":"Algebra Expressions","writingAlgebra":"Words to Algebra: Expressions & Equations","equations":"Simple Equations","sequences":"Sequences","estimation":"Estimation & Rounding","units":"Units, Time & Speed","geometry":"Geometry","mixed":"Mixed Year 7 Skills","review":"Mistake Review","fdpConversions":"Fraction–Decimal–Percentage Conversion","percentageChange":"Percentage Change","directProportion":"Direct Proportion & Unit Rates","simplifyExpand":"Simplifying & Expanding Expressions","twoStepEquations":"Two-Step Equations","inequalities":"Basic Inequalities","coordinates":"Coordinates & Straight Lines","pythagoras":"Pythagoras","statistics":"Statistics","probability":"Probability","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations","fractionProblemSolving":"Fraction Problem Solving","angleRelationships":"Angle Relationships"},"skills":["integers","order","powers","factors","fractions","fractionProblemSolving","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","writingAlgebra","equations","sequences","estimation","units","geometry","angleRelationships","percentageChange","directProportion","simplifyExpand","twoStepEquations","inequalities","coordinates","pythagoras","statistics","probability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 7 includes 29 targeted banks. Angle Relationships adds vertically opposite, parallel-line, exterior-angle and simple algebraic angle questions designed for quick mental solving."};
 BASE_STORAGE_BY_YEAR[7] = {"stars":"dyaaY7Stars","hero":"dyaaY7Hero","best":"dyaaY7Best","mistakes":"dyaaY7Mistakes"};
 
 /* ===== YEAR 7 QUESTION GENERATORS ===== */
@@ -1209,12 +1209,143 @@ function y7GenProbability(){
   return qFrac('probability','Two fair dice are rolled. P(both results are even) = ?',1/4,'Each dice has probability 3/6 of being even.');
 }
 
+function y7GenFractionProblemSolving() {
+  const L = state.level;
+  const type = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 11);
+
+  if (type === 1) {
+    const [part, n, d] = pick([[18, 3, 5], [21, 3, 4], [24, 2, 3], [30, 5, 6], [32, 4, 5]]);
+    return q('fractionProblemSolving', `${n}/${d} of a group is ${part} students. How many students are in the whole group?`, part / (n / d), 'Divide the known part by its fraction of the whole.');
+  }
+
+  if (type === 2) {
+    const [remaining, usedN, usedD] = pick([[18, 1, 4], [24, 1, 3], [30, 2, 5], [30, 3, 8]]);
+    return q('fractionProblemSolving', `After ${usedN}/${usedD} of a roll was used, ${remaining} m remained. How long was the roll originally?`, remaining / (1 - usedN / usedD), 'The remaining length is the fraction not used.');
+  }
+
+  if (type === 3) {
+    const [used1N, used1D, used2N, used2D] = pick([[1, 3, 1, 4], [1, 2, 1, 3], [1, 4, 1, 2], [2, 5, 1, 3]]);
+    return qFrac('fractionProblemSolving', `A container was full. ${used1N}/${used1D} was used, then ${used2N}/${used2D} of the remainder was used. What fraction of the original amount remained?`, (1 - used1N / used1D) * (1 - used2N / used2D), 'Find the first remainder, then keep the stated fraction of that remainder.');
+  }
+
+  if (type === 4) {
+    const [a, b, c, d] = pick([[3, 5, 7, 10], [5, 8, 3, 4], [2, 3, 3, 4], [7, 10, 4, 5]]);
+    return qFrac('fractionProblemSolving', `Mia completed ${a}/${b} of a task and Noah completed ${c}/${d}. What fraction more did the person who completed more finish?`, Math.abs(a / b - c / d), 'Subtract the smaller fraction from the larger fraction.');
+  }
+
+  if (type === 5) {
+    const [rateN, rateD, hoursPer, totalHours] = pick([[1, 3, 2, 6], [1, 2, 3, 6], [3, 4, 3, 6], [2, 5, 2, 10]]);
+    return qFrac('fractionProblemSolving', `A machine uses ${rateN}/${rateD} L of oil every ${hoursPer} hours. At the same rate, how much oil does it use in ${totalHours} hours?`, rateN / rateD * (totalHours / hoursPer), 'Find how many equal time blocks there are, then multiply.');
+  }
+
+  if (type === 6) {
+    const [whole, n, d] = pick([[3, 1, 2], [6, 3, 4], [5, 1, 4], [6, 2, 3]]);
+    return q('fractionProblemSolving', `A plank is ${whole} m long. Pieces of length ${n}/${d} m are cut from it. How many complete pieces are made?`, whole / (n / d), 'Divide the whole length by the length of one piece.');
+  }
+
+  if (type === 7) {
+    const [total, n, d, extra] = pick([[120, 2, 5, 18], [90, 1, 3, 15], [80, 3, 8, 10], [150, 2, 5, 30]]);
+    return q('fractionProblemSolving', `A library displayed ${total} books. ${n}/${d} were borrowed, then ${extra} more were borrowed. How many books remained?`, total - total * n / d - extra, 'Find the fraction borrowed, subtract it, then subtract the extra books.');
+  }
+
+  if (type === 8) {
+    const [left, spentN, spentD, later] = pick([[24, 1, 3, 6], [30, 2, 5, 6], [36, 1, 4, 9], [40, 1, 5, 8]]);
+    return q('fractionProblemSolving', `Lily spent ${spentN}/${spentD} of her money, then spent another $${later}. She had $${left} left. How much money did she have at the beginning?`, (left + later) / (1 - spentN / spentD), 'Add back the fixed amount, then use the remaining fraction to find the original amount.');
+  }
+
+  if (type === 9) {
+    const [total, firstN, firstD, secondN, secondD] = pick([[60, 1, 3, 1, 4], [80, 1, 4, 1, 3], [90, 2, 5, 1, 3], [120, 1, 2, 1, 4]]);
+    const afterFirst = total * (1 - firstN / firstD);
+    return q('fractionProblemSolving', `A shop had ${total} items. ${firstN}/${firstD} were sold in the morning, then ${secondN}/${secondD} of the remainder were sold. How many items remained?`, afterFirst * (1 - secondN / secondD), 'Work with the remainder after the first sale.');
+  }
+
+  if (type === 10) {
+    const [part, n, d, extra] = pick([[24, 2, 3, 6], [30, 3, 5, 8], [35, 5, 7, 5], [32, 4, 5, 4]]);
+    return q('fractionProblemSolving', `${n}/${d} of a collection is ${part} items. After ${extra} more items are added, how many items are in the collection?`, part / (n / d) + extra, 'Find the original whole, then add the extra items.');
+  }
+
+  const [total, usedN, usedD, pieceN, pieceD] = pick([[24, 1, 4, 1, 2], [30, 1, 5, 2, 3], [36, 1, 3, 3, 4], [40, 1, 4, 1, 2]]);
+  const remaining = total * (1 - usedN / usedD);
+  return q('fractionProblemSolving', `A roll was ${total} m long. ${usedN}/${usedD} was used. The remainder was cut into pieces of ${pieceN}/${pieceD} m. How many pieces were made?`, remaining / (pieceN / pieceD), 'Find the remaining length, then divide by the piece length.');
+}
+
+
+function y7GenAngleRelationships() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 12);
+
+  if (t === 1) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 105, 115, 125, 135, 145]);
+    return q('angleRelationships', `One of two vertically opposite angles is ${angle}°. The opposite angle is ?°`, angle, 'Vertically opposite angles are equal.');
+  }
+
+  if (t === 2) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleRelationships', `One angle on a straight line is ${angle}°. The adjacent angle is ?°`, 180 - angle, 'Angles on a straight line total 180°.');
+  }
+
+  if (t === 3) {
+    const [a, b] = pick([[35, 65], [40, 75], [45, 80], [50, 60], [55, 70]]);
+    return q('angleRelationships', `Two angles of a triangle are ${a}° and ${b}°. The third angle is ?°`, 180 - a - b, 'Angles in a triangle total 180°.');
+  }
+
+  if (t === 4) {
+    const vertex = pick([40, 60, 80, 100, 120]);
+    return q('angleRelationships', `An isosceles triangle has a vertex angle of ${vertex}°. Each base angle is ?°`, (180 - vertex) / 2, 'The two base angles are equal.');
+  }
+
+  if (t === 5) {
+    const angle = pick([40, 50, 60, 70, 80, 100, 110, 120, 130, 140]);
+    return q('angleRelationships', `Two parallel lines are cut by a transversal. A corresponding angle is ${angle}°. The matching corresponding angle is ?°`, angle, 'Corresponding angles are equal.');
+  }
+
+  if (t === 6) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleRelationships', `Two parallel lines are cut by a transversal. An alternate interior angle is ${angle}°. The matching alternate angle is ?°`, angle, 'Alternate interior angles are equal.');
+  }
+
+  if (t === 7) {
+    const angle = pick([40, 50, 60, 70, 80, 100, 110, 120, 130, 140]);
+    return q('angleRelationships', `Two co-interior angles lie between parallel lines. One is ${angle}°. The other is ?°`, 180 - angle, 'Co-interior angles total 180°.');
+  }
+
+  if (t === 8) {
+    const [exterior, interior] = pick([[110, 45], [120, 50], [125, 55], [130, 60], [140, 65], [150, 70]]);
+    return q('angleRelationships', `A triangle has an exterior angle of ${exterior}°. One opposite interior angle is ${interior}°. The other opposite interior angle is ?°`, exterior - interior, 'An exterior angle equals the sum of the two opposite interior angles.');
+  }
+
+  if (t === 9) {
+    const multiplier = pick([2, 3, 4, 5]);
+    const x = pick([10, 12, 15, 18, 20, 24, 25, 30]);
+    return q('angleRelationships', `Vertically opposite angles are ${multiplier}x° and ${multiplier * x}°. Find x.`, x, 'Vertically opposite angles are equal.');
+  }
+
+  if (t === 10) {
+    const multiplier = pick([2, 3, 4, 5]);
+    const x = pick([10, 15, 20, 25, 30, 35, 40]);
+    const fixed = 180 - multiplier * x;
+    if (fixed <= 0) return y7GenAngleRelationships();
+    return q('angleRelationships', `Angles ${multiplier}x° and ${fixed}° form a straight line. Find x.`, x, 'Their sum is 180°.');
+  }
+
+  if (t === 11) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleRelationships', `A corresponding angle between parallel lines is ${angle}°. The angle next to its matching angle on a straight line is ?°`, 180 - angle, 'First use corresponding angles, then subtract from 180°.');
+  }
+
+  const exterior = pick([80, 100, 120, 140]);
+  const vertex = 180 - exterior;
+  return q('angleRelationships', `An isosceles triangle has an exterior angle of ${exterior}° at its vertex. Each equal base angle is ?°`, (180 - vertex) / 2, 'Find the interior vertex angle, then halve the remaining triangle angle sum.');
+}
+
 YEAR_BANKS[7] = {
+  "angleRelationships": y7GenAngleRelationships,
     integers: y7GenIntegers,
     order: y7GenOrder,
     powers: y7GenPowers,
     factors: y7GenFactors,
     fractions: y7GenFractions,
+    fractionProblemSolving: y7GenFractionProblemSolving,
     decimals: y7GenDecimals,
     percentages: y7GenPercentages,
     ratio: y7GenRatio,

@@ -335,7 +335,6 @@ function runQuestionTest() {
 
 
 function buildPrintableQuestionHtml(question, number) {
-  const label = currentLabels()[question.skill] || question.skill;
   const hasChoices = Array.isArray(question.choiceOptions)
     && question.choiceOptions.length > 0;
 
@@ -356,7 +355,6 @@ function buildPrintableQuestionHtml(question, number) {
     <article class="print-question-card">
       <div class="print-question-number">${number}.</div>
       <div class="print-question-content">
-        <div class="print-skill">${escapeHtml(label)}</div>
         ${body}
         <div class="print-working-line"></div>
       </div>
@@ -485,12 +483,9 @@ function exportSelectedQuestionsToPdf() {
   try {
     const questions = generatePrintableQuestionSet(50);
     const config = currentConfig();
-    const labels = currentLabels();
-    const activeSkills = getActiveSkills();
     const selectedLevel = levelSelect.options[levelSelect.selectedIndex]
       ? levelSelect.options[levelSelect.selectedIndex].textContent
       : state.level;
-    const skillNames = activeSkills.map(skill => labels[skill] || skill);
     const studentText = normaliseStudentName(STUDENT_NAME);
     const safeStudent = studentText ? escapeHtml(studentText) : '&nbsp;';
     const generatedDate = new Date().toLocaleDateString('en-NZ', {
@@ -568,10 +563,6 @@ function exportSelectedQuestionsToPdf() {
             line-height: 1.35;
           }
 
-          .print-meta-wide {
-            grid-column: 1 / -1;
-          }
-
           .print-name-line {
             display: inline-block;
             min-width: 48mm;
@@ -613,14 +604,6 @@ function exportSelectedQuestionsToPdf() {
             min-width: 0;
           }
 
-          .print-skill {
-            margin-bottom: 1.5mm;
-            color: #64748b;
-            font-size: 7.5pt;
-            font-weight: 800;
-            text-transform: uppercase;
-          }
-
           .print-question-text {
             color: #0f2742;
             font-size: 10.5pt;
@@ -650,6 +633,42 @@ function exportSelectedQuestionsToPdf() {
             font-size: 0.65em;
             line-height: 0;
             vertical-align: super;
+          }
+
+          .mixed-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.12em;
+            white-space: nowrap;
+            vertical-align: middle;
+          }
+
+          .mixed-whole {
+            line-height: 1;
+          }
+
+          .mixed-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 1.1em;
+            font-size: 0.78em;
+            line-height: 1;
+            vertical-align: middle;
+          }
+
+          .mixed-numerator {
+            width: 100%;
+            padding: 0 0.12em 0.07em;
+            border-bottom: 0.08em solid currentColor;
+            text-align: center;
+          }
+
+          .mixed-denominator {
+            width: 100%;
+            padding: 0.07em 0.12em 0;
+            text-align: center;
           }
 
           .print-answer-page {
@@ -726,7 +745,6 @@ function exportSelectedQuestionsToPdf() {
             <div><b>Date:</b> <span class="print-name-line">${escapeHtml(generatedDate)}</span></div>
             <div><b>Difficulty:</b> ${escapeHtml(selectedLevel)}</div>
             <div><b>Questions:</b> 50</div>
-            <div class="print-meta-wide"><b>Selected skills:</b> ${skillNames.map(escapeHtml).join(', ')}</div>
           </div>
           <p class="print-instructions">
             Complete all questions. Show working where needed. The answer key starts on a separate page.
@@ -967,7 +985,9 @@ function updateYearUI(resetMode = true) {
 
   const previousSkills = state.selectedSkills.filter(skill => config.skills.includes(skill));
   const defaultSkills = state.year === 5
-    ? config.skills.filter(skill => skill !== 'twoDigitMultiplication')
+    ? config.skills.filter(
+        skill => !['twoDigitMultiplication', 'fractionAddSub'].includes(skill)
+      )
     : [...config.skills];
 
   state.selectedSkills = resetMode || previousSkills.length === 0
@@ -1453,8 +1473,8 @@ function submitAnswer() {
   } else {
     state.streak = 0;
     answerInput.classList.add('wrong');
-    feedback.textContent =
-      `Correct answer: ${displayCorrect(state.current)}`;
+    feedback.innerHTML =
+      `Correct answer: ${formatMathHtml(displayCorrect(state.current))}`;
     feedback.className = 'feedback bad';
     setMathDisplay(hint, state.current.hint);
 
@@ -2167,7 +2187,7 @@ function renderMistakeList() {
           </div>
           <div>
             <b>Correct / Mastery</b><br>
-            ${escapeHtml(displayCorrect(mistake.q))}
+            ${formatMathHtml(displayCorrect(mistake.q))}
             · ${mistake.mastery || 0}/2
           </div>
         </div>
@@ -2190,10 +2210,15 @@ function escapeHtml(value) {
 }
 
 function formatMathHtml(value) {
-  return escapeHtml(cleanDisplayNumbers(value)).replace(
-    /\^(-?\d+|\?)/g,
-    '<sup>$1</sup>'
-  );
+  return escapeHtml(cleanDisplayNumbers(value))
+    .replace(
+      /(^|[^\w/])(-?\d+)\s+(\d+)\/(\d+)(?![\d/])/g,
+      '$1<span class="mixed-number"><span class="mixed-whole">$2</span><span class="mixed-fraction"><span class="mixed-numerator">$3</span><span class="mixed-denominator">$4</span></span></span>'
+    )
+    .replace(
+      /\^(-?\d+|\?)/g,
+      '<sup>$1</sup>'
+    );
 }
 
 function setMathDisplay(element, value) {

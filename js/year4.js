@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 4 configuration and question bank. */
-YEAR_CONFIGS[4] = {"title":"Year 4 Rapid Fire Mental Maths","skillLabel":"Year 4 Skill","mixed":"Mixed Year 4 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","division":"Division","placevalue":"Place Value","rounding":"Rounding & Estimation","missing":"Missing Numbers & Inverse Operations","doubles":"Doubles, Halves & Near Doubles","factors":"Factors, Multiples & Divisibility","fractions":"Fractions Basics","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences & Patterns","mixed":"Mixed Year 4 Skills","review":"Mistake Review"},"skills":["addition","subtraction","multiplication","division","placevalue","rounding","missing","doubles","factors","fractions","time","measurements","perimeterArea","sequences"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 4 now includes 14 targeted banks: the four operations plus place value, rounding and estimation, inverse operations, doubles and halves, factors and divisibility, fractions, time, measurement, perimeter and area, and sequences."};
+YEAR_CONFIGS[4] = {"title":"Year 4 Rapid Fire Mental Maths","skillLabel":"Year 4 Skill","mixed":"Mixed Year 4 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","division":"Division","placevalue":"Place Value","rounding":"Rounding & Estimation","missing":"Missing Numbers & Inverse Operations","doubles":"Doubles, Halves & Near Doubles","factors":"Factors, Multiples & Divisibility","fractions":"Fractions Basics","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences & Patterns","mixed":"Mixed Year 4 Skills","review":"Mistake Review","angleBasics":"Angle Basics"},"skills":["addition","subtraction","multiplication","division","placevalue","rounding","missing","doubles","factors","fractions","angleBasics","time","measurements","perimeterArea","sequences"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 4 includes 15 targeted banks. Angle Basics adds short mental questions on right angles, turns, angle types, and missing angles to 90°, 180° and 360°."};
 BASE_STORAGE_BY_YEAR[4] = {"stars":"dyaaRapidStars","hero":"dyaaRapidHero","best":"dyaaRapidBest","mistakes":"dyaaRapidMistakes"};
 
 /* ===== YEAR 4 QUESTION GENERATORS ===== */
@@ -401,7 +401,71 @@ function y4GenSequences(){
   const a=randInt(1,5),b=randInt(2,8);return q('sequences',`${a}, ${a+b}, ${a+b+1}, ${a+2*b+1}, ${a+2*b+3}, ... next = ?`,a+3*b+3,'The additions alternate between a fixed jump and growing small jumps.');
 }
 
+
+function y4GenAngleBasics() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+
+  if (t === 1) {
+    return q('angleBasics', 'A right angle is ?°', 90, 'A right angle is 90°.');
+  }
+
+  if (t === 2) {
+    const [turn, degrees] = pick([
+      ['quarter turn', 90],
+      ['half turn', 180],
+      ['three-quarter turn', 270],
+      ['full turn', 360]
+    ]);
+    return q('angleBasics', `A ${turn} is ?°`, degrees, 'Use 90° for each quarter turn.');
+  }
+
+  if (t === 3) {
+    const missing = pick([10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70]);
+    return q('angleBasics', `${90 - missing}° + ?° = 90°`, missing, 'Find the amount needed to make a right angle.');
+  }
+
+  if (t === 4) {
+    const [angle, code] = pick([
+      [25, 1], [40, 1], [65, 1],
+      [90, 2],
+      [110, 3], [135, 3], [160, 3],
+      [180, 4]
+    ]);
+    return q('angleBasics', `Classify ${angle}°. Enter 1 for acute, 2 for right, 3 for obtuse, or 4 for straight.`, code, 'Acute is below 90°, obtuse is between 90° and 180°.');
+  }
+
+  if (t === 5) {
+    const [turn, rightAngles] = pick([
+      ['quarter turn', 1], ['half turn', 2], ['three-quarter turn', 3], ['full turn', 4]
+    ]);
+    return q('angleBasics', `How many right angles are in a ${turn}?`, rightAngles, 'Each right angle is 90°.');
+  }
+
+  if (t === 6) {
+    const missing = pick([20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]);
+    return q('angleBasics', `${180 - missing}° + ?° = 180°`, missing, 'Angles on a straight line make 180°.');
+  }
+
+  if (t === 7) {
+    const hour = pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+    const difference = Math.min(hour, 12 - hour);
+    return q('angleBasics', `At ${hour}:00, the smaller angle between the clock hands is ?°`, difference * 30, 'Each hour mark is 30° apart.');
+  }
+
+  if (t === 8) {
+    const [a, b, missing] = pick([
+      [90, 120, 150], [80, 140, 140], [100, 110, 150], [60, 150, 150], [120, 130, 110]
+    ]);
+    return q('angleBasics', `Angles around a point are ${a}°, ${b}° and ?°. Find the missing angle.`, missing, 'Angles around a point total 360°.');
+  }
+
+  const known = pick([80, 100, 120, 140, 160]);
+  return q('angleBasics', `Two equal angles and an angle of ${known}° make a full turn. Each equal angle is ?°`, (360 - known) / 2, 'Subtract the known angle from 360°, then halve the remainder.');
+}
+
 YEAR_BANKS[4] = {
+  "angleBasics": y4GenAngleBasics,
   "addition": y4GenAdd,
   "subtraction": y4GenSub,
   "multiplication": y4GenMul,

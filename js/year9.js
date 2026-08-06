@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 9 configuration and question bank. */
-YEAR_CONFIGS[9] = {"title":"Year 9 Rapid Fire Mental Maths","skillLabel":"Year 9 Skill","mixed":"Mixed Year 9 Skills","labels":{"rational":"Rational Numbers","order":"Order of Operations","indices":"Indices & Scientific Notation","simplify":"Algebraic Simplification","expand":"Expansion & Factorisation","linear":"Linear Equations","inequalities":"Inequalities","simultaneous":"Simultaneous Equations","sequences":"Sequences","percentages":"Percentages & Proportion","coordinates":"Coordinates & Straight Lines","quadratics":"Quadratics","geometry":"Geometry & Transformations","trig":"Pythagoras, Trigonometry & Measurement","statistics":"Statistics & Probability","mixed":"Mixed Year 9 Skills","review":"Mistake Review","simultaneousRapid":"Simultaneous Equations — Quick Solve","quadraticEquations":"Simple Quadratic Equations","quadraticFactorisation":"Quadratic Factorisation","negativeIndices":"Negative Indices","scientificNotation":"Scientific Notation × and ÷","proportion":"Direct & Inverse Proportion","parallelSlopes":"Parallel Lines & Slopes","transformations":"Coordinate Transformations","similarity":"Similar Shapes — Lengths","pythagorasInverse":"Pythagoras — Reverse & Missing Side","trigRatios":"Simple Trigonometric Ratios","cylinderVolume":"Cylinder Volume","surfaceArea":"Surface Area","compoundProbability":"Compound Probability","statisticsData":"IQR & Missing Statistics Data","fdpConversions":"Fraction–Decimal–Percentage Conversion","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations"},"skills":["rational","order","indices","simplify","expand","linear","inequalities","simultaneous","sequences","percentages","fdpConversions","fdpComparison","fdpOperations","coordinates","quadratics","geometry","trig","statistics","simultaneousRapid","quadraticEquations","quadraticFactorisation","negativeIndices","scientificNotation","proportion","parallelSlopes","transformations","similarity","pythagorasInverse","trigRatios","cylinderVolume","surfaceArea","compoundProbability","statisticsData"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 9 contains 33 skill banks: all original and focused Year 9 banks plus dedicated fraction–decimal–percentage conversion, comparison and mixed-operation practice."};
+YEAR_CONFIGS[9] = {"title":"Year 9 Rapid Fire Mental Maths","skillLabel":"Year 9 Skill","mixed":"Mixed Year 9 Skills","labels":{"rational":"Rational Numbers","order":"Order of Operations","indices":"Indices & Scientific Notation","simplify":"Algebraic Simplification","expand":"Expansion & Factorisation","linear":"Linear Equations","inequalities":"Inequalities","simultaneous":"Simultaneous Equations","sequences":"Sequences","percentages":"Percentages & Proportion","coordinates":"Coordinates & Straight Lines","quadratics":"Quadratics","geometry":"Geometry & Transformations","trig":"Pythagoras, Trigonometry & Measurement","statistics":"Statistics & Probability","mixed":"Mixed Year 9 Skills","review":"Mistake Review","simultaneousRapid":"Simultaneous Equations — Quick Solve","quadraticEquations":"Simple Quadratic Equations","quadraticFactorisation":"Quadratic Factorisation","negativeIndices":"Negative Indices","scientificNotation":"Scientific Notation × and ÷","proportion":"Direct & Inverse Proportion","parallelSlopes":"Parallel Lines & Slopes","transformations":"Coordinate Transformations","similarity":"Similar Shapes — Lengths","pythagorasInverse":"Pythagoras — Reverse & Missing Side","trigRatios":"Simple Trigonometric Ratios","cylinderVolume":"Cylinder Volume","surfaceArea":"Surface Area","compoundProbability":"Compound Probability","statisticsData":"IQR & Missing Statistics Data","fdpConversions":"Fraction–Decimal–Percentage Conversion","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations","angleReasoning":"Angle Reasoning"},"skills":["rational","order","indices","simplify","expand","linear","inequalities","simultaneous","sequences","percentages","fdpConversions","fdpComparison","fdpOperations","coordinates","quadratics","geometry","angleReasoning","trig","statistics","simultaneousRapid","quadraticEquations","quadraticFactorisation","negativeIndices","scientificNotation","proportion","parallelSlopes","transformations","similarity","pythagorasInverse","trigRatios","cylinderVolume","surfaceArea","compoundProbability","statisticsData"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 9 contains 34 skill banks. Angle Reasoning adds short multi-step, regular-polygon and algebraic angle questions while keeping all solutions suitable for mental calculation."};
 BASE_STORAGE_BY_YEAR[9] = {"stars":"dyaaY9Stars","hero":"dyaaY9Hero","best":"dyaaY9Best","mistakes":"dyaaY9Mistakes"};
 
 /* ===== YEAR 9 QUESTION GENERATORS ===== */
@@ -1750,7 +1750,82 @@ function y9GenStatisticsData() {
   );
 }
 
+
+function y9GenAngleReasoning() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 12);
+
+  if (t === 1) {
+    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
+    return q('angleReasoning', `Each exterior angle of a regular ${n}-gon is ?°`, 360 / n, 'Exterior angles total 360°.');
+  }
+
+  if (t === 2) {
+    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
+    return q('angleReasoning', `Each interior angle of a regular ${n}-gon is ?°`, 180 - 360 / n, 'Interior and exterior angles total 180°.');
+  }
+
+  if (t === 3) {
+    const exterior = pick([20, 24, 30, 36, 40, 45, 60, 72, 90, 120]);
+    return q('angleReasoning', `A regular polygon has exterior angle ${exterior}°. How many sides does it have?`, 360 / exterior, 'Number of sides = 360 ÷ exterior angle.');
+  }
+
+  if (t === 4) {
+    const [exterior, opposite] = pick([[110, 45], [120, 50], [130, 55], [140, 60], [150, 70]]);
+    return q('angleReasoning', `A triangle has an exterior angle of ${exterior}°. One opposite interior angle is ${opposite}°. Find the other opposite interior angle.`, exterior - opposite, 'Use the exterior-angle theorem.');
+  }
+
+  if (t === 5) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleReasoning', `One co-interior angle between parallel lines is ${angle}°. Find the other co-interior angle.`, 180 - angle, 'Co-interior angles total 180°.');
+  }
+
+  if (t === 6) {
+    const [interior, sides] = pick([[60, 3], [90, 4], [108, 5], [120, 6], [135, 8], [140, 9], [144, 10], [150, 12], [156, 15], [160, 18]]);
+    return q('angleReasoning', `Each interior angle of a regular polygon is ${interior}°. How many sides does it have?`, sides, 'Find the exterior angle, then divide 360° by it.');
+  }
+
+  if (t === 7) {
+    const x = pick([10, 12, 15, 18, 20]);
+    const a = pick([2, 3, 4]);
+    const c = pick([a + 1, a + 2]);
+    const b = pick([10, 20, 30, 40]);
+    const d = 180 - (a + c) * x - b;
+    if (d < -50 || d > 80) return y9GenAngleReasoning();
+    const dText = d >= 0 ? `+ ${d}` : `− ${Math.abs(d)}`;
+    return q('angleReasoning', `Angles (${a}x + ${b})° and (${c}x ${dText})° form a straight line. Find x.`, x, 'Add the expressions and set the total to 180°.');
+  }
+
+  if (t === 8) {
+    const x = pick([8, 10, 12, 15, 18, 20]);
+    const a = pick([2, 3]);
+    const c = pick([4, 5, 6]);
+    const b = pick([20, 30, 40, 50]);
+    const d = (a - c) * x + b;
+    return q('angleReasoning', `Vertically opposite angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Vertically opposite angles are equal.');
+  }
+
+  if (t === 9) {
+    const exterior = pick([80, 100, 120, 140]);
+    const vertex = 180 - exterior;
+    return q('angleReasoning', `An isosceles triangle has an exterior angle of ${exterior}° at its vertex. Each equal base angle is ?°`, (180 - vertex) / 2, 'Find the interior vertex angle, then divide the remaining angle sum equally.');
+  }
+
+  if (t === 10) {
+    const n = pick([5, 6, 8, 9, 10, 12, 15]);
+    return q('angleReasoning', `The interior angle sum of a polygon is ${(n - 2) * 180}°. How many sides does it have?`, n, 'Divide by 180°, then add 2.');
+  }
+
+  if (t === 11) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleReasoning', `A corresponding angle between parallel lines is ${angle}°. Find the angle adjacent to its matching angle on a straight line.`, 180 - angle, 'Use corresponding angles, then a straight-line total.');
+  }
+
+  return q('angleReasoning', 'The three angles of a triangle are x°, 2x° and 3x°. Find x.', 30, 'The angles total 180°, so 6x = 180°.');
+}
+
 YEAR_BANKS[9] = {
+  "angleReasoning": y9GenAngleReasoning,
     // Original broad Year 9 banks
     rational: y9GenRational,
     order: y9GenOrder,

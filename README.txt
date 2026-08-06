@@ -36,3 +36,10 @@ NEW FEATURE
 - The 50 questions are balanced across the selected skills where possible.
 - Questions print first; the answer key starts on a separate page.
 - The browser print window opens automatically. Choose "Save as PDF" to create the PDF file.
+
+Year 5 update: Fraction Addition & Subtraction is a separate skill and is not selected by default. Mixed numbers are displayed with a stacked numerator and denominator in practice, review and PDF export.
+
+
+Mixed-number display
+--------------------
+Mixed numbers in Years 4–9 are rendered in mathematical form throughout the live practice page, review questions, saved-mistake list, feedback, and the 50-question PDF export. For example, source text written as 2 1/3 is displayed with the fraction stacked beside the whole number.

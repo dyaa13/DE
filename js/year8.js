@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 8 configuration and question bank. */
-YEAR_CONFIGS[8] = {"title":"Year 8 Rapid Fire Mental Maths","skillLabel":"Year 8 Skill","mixed":"Mixed Year 8 Skills","labels":{"rational":"Rational Numbers","order":"Order of Operations","powers":"Powers & Scientific Notation","factors":"Prime Factors, HCF & LCM","fractions":"Fractions","decimals":"Decimals & Rounding","percentages":"Percentages","ratio":"Ratio, Proportion & Rates","algebra":"Algebra Expressions","equations":"Linear Equations","inequalities":"Inequalities","sequences":"Sequences","coordinates":"Coordinates & Straight Lines","geometry":"Geometry & Measurement","statistics":"Statistics & Probability","mixed":"Mixed Year 8 Skills","review":"Mistake Review","reversePercentages":"Reverse Percentages","percentageChange":"Percentage Change","profitLossDiscount":"Profit, Loss & Discount","directInverseProportion":"Direct & Inverse Proportion","primeFactorisation":"Prime Factorisation","hcfLcmProblems":"HCF & LCM Problems","expandCoefficients":"Expanding Brackets & Coefficients","factorCommon":"Factorising Common Factors","bothSidesEquations":"Equations with Unknowns on Both Sides","inequalityBoundaries":"Inequality Boundary Values","gradientMidpoint":"Gradient & Midpoint","polygonAngles":"Polygon Angles","pythagorasFocused":"Pythagoras","missingStatistics":"Missing Statistics Data","twoStepProbability":"Two-Step Probability","fdpConversions":"Fraction–Decimal–Percentage Conversion","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations"},"skills":["rational","order","powers","factors","fractions","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","equations","inequalities","sequences","coordinates","geometry","statistics","reversePercentages","percentageChange","profitLossDiscount","directInverseProportion","primeFactorisation","hcfLcmProblems","expandCoefficients","factorCommon","bothSidesEquations","inequalityBoundaries","gradientMidpoint","polygonAngles","pythagorasFocused","missingStatistics","twoStepProbability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 8 contains 33 skill banks: the original broad banks, 15 focused Year 8 banks, and three dedicated fraction–decimal–percentage banks for conversion, comparison and mixed operations."};
+YEAR_CONFIGS[8] = {"title":"Year 8 Rapid Fire Mental Maths","skillLabel":"Year 8 Skill","mixed":"Mixed Year 8 Skills","labels":{"rational":"Rational Numbers","order":"Order of Operations","powers":"Powers & Scientific Notation","factors":"Prime Factors, HCF & LCM","fractions":"Fractions","decimals":"Decimals & Rounding","percentages":"Percentages","ratio":"Ratio, Proportion & Rates","algebra":"Algebra Expressions","equations":"Linear Equations","inequalities":"Inequalities","sequences":"Sequences","coordinates":"Coordinates & Straight Lines","geometry":"Geometry & Measurement","statistics":"Statistics & Probability","mixed":"Mixed Year 8 Skills","review":"Mistake Review","reversePercentages":"Reverse Percentages","percentageChange":"Percentage Change","profitLossDiscount":"Profit, Loss & Discount","directInverseProportion":"Direct & Inverse Proportion","primeFactorisation":"Prime Factorisation","hcfLcmProblems":"HCF & LCM Problems","expandCoefficients":"Expanding Brackets & Coefficients","factorCommon":"Factorising Common Factors","bothSidesEquations":"Equations with Unknowns on Both Sides","inequalityBoundaries":"Inequality Boundary Values","gradientMidpoint":"Gradient & Midpoint","polygonAngles":"Angles & Polygons","pythagorasFocused":"Pythagoras","missingStatistics":"Missing Statistics Data","twoStepProbability":"Two-Step Probability","fdpConversions":"Fraction–Decimal–Percentage Conversion","fdpComparison":"Fraction–Decimal–Percentage Comparison","fdpOperations":"Mixed Fraction, Decimal & Percentage Operations","fractionProportionProblems":"Fraction & Proportion Problem Solving"},"skills":["rational","order","powers","factors","fractions","fractionProportionProblems","decimals","percentages","fdpConversions","fdpComparison","fdpOperations","ratio","algebra","equations","inequalities","sequences","coordinates","geometry","statistics","reversePercentages","percentageChange","profitLossDiscount","directInverseProportion","primeFactorisation","hcfLcmProblems","expandCoefficients","factorCommon","bothSidesEquations","inequalityBoundaries","gradientMidpoint","polygonAngles","pythagorasFocused","missingStatistics","twoStepProbability"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 8 contains 34 skill banks. Angles & Polygons now combines line and parallel-line relationships, triangle exterior angles, regular polygons and reverse polygon questions with mental-friendly numbers."};
 BASE_STORAGE_BY_YEAR[8] = {"stars":"dyaaY8Stars","hero":"dyaaY8Hero","best":"dyaaY8Best","mistakes":"dyaaY8Mistakes"};
 
 /* ===== YEAR 8 QUESTION GENERATORS ===== */
@@ -678,43 +678,65 @@ function y8GenGradientMidpoint() {
 
 function y8GenPolygonAngles() {
   const L = state.level;
-  const t = L === 'starter' ? randInt(1, 3) : L === 'core' ? randInt(1, 5) : randInt(1, 7);
+  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 9) : randInt(1, 12);
 
   if (t === 1) {
-    const a = randInt(25, 80);
-    const b = randInt(25, 80);
-    return q('polygonAngles', `Two angles of a triangle are ${a}° and ${b}°. Third angle = ?°`, 180 - a - b, 'Angles in a triangle total 180°.');
+    const [a, b] = pick([[35, 65], [40, 75], [45, 80], [50, 60], [55, 70]]);
+    return q('polygonAngles', `Two angles of a triangle are ${a}° and ${b}°. The third angle is ?°`, 180 - a - b, 'Angles in a triangle total 180°.');
   }
 
   if (t === 2) {
-    const a = randInt(60, 120);
-    const b = randInt(60, 120);
-    const c = randInt(60, 120);
-    return q('polygonAngles', `Three angles of a quadrilateral are ${a}°, ${b}° and ${c}°. Fourth angle = ?°`, 360 - a - b - c, 'Angles in a quadrilateral total 360°.');
+    const [a, b, c] = pick([[70, 90, 110], [80, 100, 90], [60, 120, 80], [75, 105, 90], [85, 95, 100]]);
+    return q('polygonAngles', `Three angles of a quadrilateral are ${a}°, ${b}° and ${c}°. The fourth angle is ?°`, 360 - a - b - c, 'Angles in a quadrilateral total 360°.');
   }
 
   if (t === 3) {
-    const n = randInt(5, L === 'starter' ? 8 : 12);
-    return q('polygonAngles', `Interior angle sum of a ${n}-sided polygon = ?°`, (n - 2) * 180, 'Use (n − 2) × 180°.');
+    const angle = pick([35, 45, 55, 65, 75, 85, 105, 115, 125, 135, 145]);
+    return q('polygonAngles', `One of two vertically opposite angles is ${angle}°. The opposite angle is ?°`, angle, 'Vertically opposite angles are equal.');
   }
 
   if (t === 4) {
-    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
-    return q('polygonAngles', `Each exterior angle of a regular ${n}-gon = ?°`, 360 / n, 'Exterior angles of any polygon total 360°.');
+    const angle = pick([40, 50, 60, 70, 80, 100, 110, 120, 130, 140]);
+    return q('polygonAngles', `One co-interior angle between parallel lines is ${angle}°. The other is ?°`, 180 - angle, 'Co-interior angles total 180°.');
   }
 
   if (t === 5) {
-    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
-    return q('polygonAngles', `Each interior angle of a regular ${n}-gon = ?°`, 180 - 360 / n, 'Interior and exterior angles on a straight line total 180°.');
+    const n = randInt(5, L === 'starter' ? 8 : 12);
+    return q('polygonAngles', `Interior angle sum of a ${n}-sided polygon is ?°`, (n - 2) * 180, 'Use (n − 2) × 180°.');
   }
 
   if (t === 6) {
-    const exterior = pick([30, 36, 40, 45, 60, 72, 90, 120]);
+    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
+    return q('polygonAngles', `Each exterior angle of a regular ${n}-gon is ?°`, 360 / n, 'Exterior angles total 360°.');
+  }
+
+  if (t === 7) {
+    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
+    return q('polygonAngles', `Each interior angle of a regular ${n}-gon is ?°`, 180 - 360 / n, 'Interior and exterior angles total 180°.');
+  }
+
+  if (t === 8) {
+    const exterior = pick([24, 30, 36, 40, 45, 60, 72, 90, 120]);
     return q('polygonAngles', `A regular polygon has exterior angle ${exterior}°. Number of sides = ?`, 360 / exterior, 'Number of sides = 360 ÷ exterior angle.');
   }
 
-  const angle = randInt(35, 145);
-  return q('polygonAngles', `Two parallel lines are cut by a transversal. An alternate interior angle is ${angle}°. The matching alternate angle = ?°`, angle, 'Alternate interior angles are equal.');
+  if (t === 9) {
+    const [exterior, opposite] = pick([[110, 45], [120, 50], [130, 55], [140, 60], [150, 70]]);
+    return q('polygonAngles', `A triangle has an exterior angle of ${exterior}°. One opposite interior angle is ${opposite}°. The other is ?°`, exterior - opposite, 'An exterior angle equals the sum of the two opposite interior angles.');
+  }
+
+  if (t === 10) {
+    const [interior, sides] = pick([[60, 3], [90, 4], [108, 5], [120, 6], [135, 8], [140, 9], [144, 10], [150, 12], [156, 15], [160, 18]]);
+    return q('polygonAngles', `Each interior angle of a regular polygon is ${interior}°. Number of sides = ?`, sides, 'Find the exterior angle, then divide 360° by it.');
+  }
+
+  if (t === 11) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('polygonAngles', `A corresponding angle between parallel lines is ${angle}°. The adjacent angle on a straight line is ?°`, 180 - angle, 'Use corresponding angles, then subtract from 180°.');
+  }
+
+  const [a, b, x] = pick([[2, 3, 36], [3, 2, 36], [4, 2, 30], [5, 1, 30], [3, 3, 30]]);
+  return q('polygonAngles', `Angles ${a}x° and ${b}x° form a straight line. Find x.`, x, 'Add the coefficients and set the total equal to 180°.');
 }
 
 function y8GenPythagorasFocused() {
@@ -849,12 +871,76 @@ function y8GenTwoStepProbability() {
   return qFrac('twoStepProbability', `The probability of failure on one independent attempt is ${failNumerator}/${denominator}. Probability of at least one success in two attempts = ?`, 1 - fail ** 2, 'Use 1 − P(two failures).');
 }
 
+function y8GenFractionProportionProblems() {
+  const L = state.level;
+  const type = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 11);
+
+  if (type === 1) {
+    const [part, n, d] = pick([[72, 3, 8], [84, 3, 7], [72, 2, 5], [90, 3, 5], [105, 5, 8]]);
+    return q('fractionProportionProblems', `${n}/${d} of a school's students is ${part}. How many students are in the school?`, part / (n / d), 'Divide the known part by the fraction it represents.');
+  }
+
+  if (type === 2) {
+    const [fullN, fullD, usedN, usedD] = pick([[3, 4, 2, 5], [4, 5, 1, 4], [2, 3, 1, 2], [5, 6, 2, 5]]);
+    return qFrac('fractionProportionProblems', `A tank was ${fullN}/${fullD} full. Then ${usedN}/${usedD} of the water was used. What fraction of the full tank remained?`, fullN / fullD * (1 - usedN / usedD), 'Keep the fraction of water that was not used.');
+  }
+
+  if (type === 3) {
+    const [cupsN, cupsD, serves, target] = pick([[3, 2, 8, 16], [5, 4, 6, 12], [3, 4, 4, 12], [2, 3, 6, 18]]);
+    return qFrac('fractionProportionProblems', `A recipe uses ${cupsN}/${cupsD} cups of flour for ${serves} muffins. How much flour is needed for ${target} muffins?`, cupsN / cupsD * target / serves, 'Find the scale factor, then multiply the flour amount.');
+  }
+
+  if (type === 4) {
+    const [batchN, batchD, minutes] = pick([[3, 4, 30], [2, 3, 24], [4, 5, 32], [3, 5, 18]]);
+    return q('fractionProportionProblems', `A machine produces ${batchN}/${batchD} of a batch in ${minutes} minutes. At the same rate, how many minutes does a full batch take?`, minutes / (batchN / batchD), 'Divide the time by the fraction of a batch completed.');
+  }
+
+  if (type === 5) {
+    const [route, completedN, completedD, extra] = pick([[40, 3, 5, 8], [48, 1, 2, 12], [60, 2, 3, 10], [50, 3, 5, 5]]);
+    return q('fractionProportionProblems', `A cyclist completed ${completedN}/${completedD} of a ${route} km route, then travelled another ${extra} km. How many kilometres remained?`, route - route * completedN / completedD - extra, 'Find the fraction of the route completed, add the extra distance, then subtract from the total.');
+  }
+
+  if (type === 6) {
+    const [final, reducedN, reducedD] = pick([[45, 1, 4], [48, 1, 5], [54, 1, 4], [56, 1, 8], [60, 1, 4]]);
+    return q('fractionProportionProblems', `A quantity is reduced by ${reducedN}/${reducedD} and becomes ${final}. What was the original quantity?`, final / (1 - reducedN / reducedD), 'The final amount is the fraction that remained.');
+  }
+
+  if (type === 7) {
+    const [length, widthN, widthD] = pick([[20, 3, 5], [24, 2, 3], [30, 3, 5], [28, 3, 4]]);
+    const width = length * widthN / widthD;
+    return q('fractionProportionProblems', `The width of a rectangle is ${widthN}/${widthD} of its ${length} cm length. What is its perimeter?`, 2 * (length + width), 'Find the width first, then use perimeter = 2(length + width).');
+  }
+
+  if (type === 8) {
+    const [n, d, add, result] = pick([[2, 3, 5, 25], [3, 4, 6, 30], [3, 5, 4, 22], [5, 6, 5, 30]]);
+    return q('fractionProportionProblems', `${n}/${d} of a number plus ${add} equals ${result}. What is the number?`, (result - add) / (n / d), 'Subtract the added amount, then divide by the fraction.');
+  }
+
+  if (type === 9) {
+    const [redN, redD, blueN, blueD] = pick([[2, 5, 1, 4], [1, 3, 1, 4], [3, 8, 1, 4], [1, 2, 1, 5]]);
+    return qFrac('fractionProportionProblems', `${redN}/${redD} of some counters are red and ${blueN}/${blueD} are blue. The rest are green. What fraction are green?`, 1 - redN / redD - blueN / blueD, 'Subtract both known fractions from one whole.');
+  }
+
+  if (type === 10) {
+    const [n1, d1, total1, n2, d2, total2] = pick([[3, 4, 40, 5, 8, 56], [2, 3, 36, 3, 5, 50], [5, 6, 36, 3, 4, 32], [3, 5, 50, 7, 10, 40]]);
+    const amount1 = total1 * n1 / d1;
+    const amount2 = total2 * n2 / d2;
+    return q('fractionProportionProblems', `Plan A uses ${n1}/${d1} of ${total1} GB. Plan B uses ${n2}/${d2} of ${total2} GB. How many more GB does the larger amount use?`, Math.abs(amount1 - amount2), 'Calculate both amounts, then find the difference.');
+  }
+
+  const [total, firstN, firstD, secondN, secondD, fixed] = pick([[80, 1, 4, 1, 3, 10], [90, 1, 3, 1, 4, 15], [120, 2, 5, 1, 3, 12], [100, 1, 5, 1, 4, 20]]);
+  const afterFirst = total * (1 - firstN / firstD);
+  const afterSecond = afterFirst * (1 - secondN / secondD);
+  return q('fractionProportionProblems', `A store had ${total} items. ${firstN}/${firstD} were sold, then ${secondN}/${secondD} of the remainder were sold, and finally ${fixed} more were sold. How many items remained?`, afterSecond - fixed, 'Work with the remainder after each fractional sale, then subtract the fixed number.');
+}
+
 YEAR_BANKS[8] = {
     rational: y8GenRational,
     order: y8GenOrder,
     powers: y8GenPowers,
     factors: y8GenFactors,
     fractions: y8GenFractions,
+    fractionProportionProblems: y8GenFractionProportionProblems,
     decimals: y8GenDecimals,
     percentages: y8GenPercentages,
     ratio: y8GenRatio,

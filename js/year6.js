@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 6 configuration and question bank. */
-YEAR_CONFIGS[6] = {"title":"Year 6 Rapid Fire Mental Maths","skillLabel":"Year 6 Skill","mixed":"Mixed Year 6 Skills","labels":{"addsub":"Addition & Subtraction","multdiv":"Multiplication & Division","order":"Order of Operations","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","decimalShift":"Decimal Multiplication & Division","percentages":"Percentages","ratio":"Ratio & Proportion","negatives":"Negative Numbers","units":"Units & Time","mixed":"Mixed Year 6 Skills","review":"Mistake Review","placeRounding":"Place Value, Rounding & Estimation","inverseOperations":"Missing Numbers & Inverse Operations","fdpConversions":"Fraction, Decimal & Percentage Conversion","mixedFractions":"Mixed Numbers & Equivalent Fractions","equationsMachines":"Simple Equations & Function Machines","sequencesPatterns":"Sequences & Number Patterns","statistics":"Mean, Median, Mode & Range","perimeterAreaVolume":"Perimeter, Area & Volume","speedDistanceTime":"Speed, Distance & Time","probability":"Basic Probability"},"skills":["addsub","multdiv","order","factors","fractions","decimals","decimalShift","percentages","ratio","negatives","units","placeRounding","inverseOperations","fdpConversions","mixedFractions","equationsMachines","sequencesPatterns","statistics","perimeterAreaVolume","speedDistanceTime","probability"],"levels":[["starter","Starter — Year 5 Review"],["core","Core — Year 6"],["challenge","Challenge — Year 6+"]],"teacher":"Year 6 now includes 21 targeted banks, with a separate decimal multiplication and division section covering place-value shifts, decimal × decimal, and exact decimal ÷ decimal calculations."};
+YEAR_CONFIGS[6] = {"title":"Year 6 Rapid Fire Mental Maths","skillLabel":"Year 6 Skill","mixed":"Mixed Year 6 Skills","labels":{"addsub":"Addition & Subtraction","multdiv":"Multiplication & Division","order":"Order of Operations","factors":"Factors, Multiples & Primes","fractions":"Fractions","decimals":"Decimals","decimalShift":"Decimal Multiplication & Division","percentages":"Percentages","ratio":"Ratio & Proportion","negatives":"Negative Numbers","units":"Units & Time","mixed":"Mixed Year 6 Skills","review":"Mistake Review","placeRounding":"Place Value, Rounding & Estimation","inverseOperations":"Missing Numbers & Inverse Operations","fdpConversions":"Fraction, Decimal & Percentage Conversion","mixedFractions":"Mixed Numbers & Equivalent Fractions","equationsMachines":"Simple Equations & Function Machines","sequencesPatterns":"Sequences & Number Patterns","statistics":"Mean, Median, Mode & Range","perimeterAreaVolume":"Perimeter, Area & Volume","speedDistanceTime":"Speed, Distance & Time","probability":"Basic Probability","fractionWordProblems":"Fraction Operations Word Problems","triangleQuadAngles":"Triangle & Quadrilateral Angles"},"skills":["addsub","multdiv","order","factors","fractions","fractionWordProblems","decimals","decimalShift","percentages","ratio","negatives","units","placeRounding","inverseOperations","fdpConversions","mixedFractions","equationsMachines","sequencesPatterns","statistics","perimeterAreaVolume","triangleQuadAngles","speedDistanceTime","probability"],"levels":[["starter","Starter — Year 5 Review"],["core","Core — Year 6"],["challenge","Challenge — Year 6+"]],"teacher":"Year 6 includes 23 targeted banks. Triangle & Quadrilateral Angles develops fast recall of angle sums, right and isosceles triangles, quadrilaterals and simple equal-angle reasoning."};
 BASE_STORAGE_BY_YEAR[6] = {"stars":"dyaaY6RapidStars","hero":"dyaaY6RapidHero","best":"dyaaY6RapidBest","mistakes":"dyaaY6RapidMistakes"};
 
 /* ===== YEAR 6 QUESTION GENERATORS ===== */
@@ -131,46 +131,423 @@ function y6GenFactors(){
 
 
 function y6GenFractions(){
-  if(state.level!=='starter'&&chance(.2)){
-    const pair=state.level==='core'
-      ?pick([[2,3],[3,4],[2,5],[3,5],[5,6],[3,8]])
-      :pick([[3,4],[5,6],[4,7],[5,8],[7,10],[7,12]]);
-    const [num,den]=pair;
-    const scale=state.level==='core'?randInt(4,15):randInt(6,24);
-    const whole=den*scale;
-    const part=num*scale;
-    const scenario=pick([
-      `${num}/${den} of a class is ${part} students. How many students are in the whole class?`,
-      `${num}/${den} of a collection is ${part} items. How many items are there altogether?`,
-      `${num}/${den} of a ribbon is ${part} cm. What is the full length of the ribbon?`,
-      `${num}/${den} of a number is ${part}. What is the number?`
+  const L = state.level;
+  const roll = randInt(1, 100);
+
+  // Starter distribution:
+  // 30% same-denominator addition/subtraction
+  // 25% fraction of a whole number
+  // 25% equivalent fractions and simplifying
+  // 20% simple fraction × integer
+  if (L === 'starter') {
+    if (roll <= 30) {
+      const denominator = pick([4, 5, 6, 8, 10, 12]);
+
+      if (chance(0.5)) {
+        const first = randInt(1, denominator - 2);
+        const second = randInt(1, denominator - first - 1);
+
+        return qFrac(
+          'fractions',
+          `${first}/${denominator} + ${second}/${denominator} = ?`,
+          (first + second) / denominator,
+          'The denominators are equal, so add the numerators and simplify.'
+        );
+      }
+
+      const first = randInt(2, denominator - 1);
+      const second = randInt(1, first - 1);
+
+      return qFrac(
+        'fractions',
+        `${first}/${denominator} − ${second}/${denominator} = ?`,
+        (first - second) / denominator,
+        'The denominators are equal, so subtract the numerators and simplify.'
+      );
+    }
+
+    if (roll <= 55) {
+      const [numerator, denominator] = pick([
+        [1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5]
+      ]);
+      const scale = randInt(3, 14);
+      const whole = denominator * scale;
+
+      return q(
+        'fractions',
+        `${numerator}/${denominator} of ${whole} = ?`,
+        numerator * scale,
+        `Divide ${whole} by ${denominator}, then multiply by ${numerator}.`
+      );
+    }
+
+    if (roll <= 80) {
+      if (chance(0.5)) {
+        const [numerator, denominator, multiplier] = pick([
+          [1, 2, 3], [1, 3, 4], [2, 3, 3], [3, 4, 2],
+          [2, 5, 4], [3, 5, 3], [5, 6, 2]
+        ]);
+
+        return q(
+          'fractions',
+          `${numerator}/${denominator} = ?/${denominator * multiplier}`,
+          numerator * multiplier,
+          'Multiply the numerator and denominator by the same number.'
+        );
+      }
+
+      const [numerator, denominator] = pick([
+        [6, 8], [8, 12], [10, 15], [12, 18], [15, 20],
+        [18, 24], [20, 30], [21, 28]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `Simplify ${numerator}/${denominator}.`,
+        numerator / denominator,
+        'Divide the numerator and denominator by their highest common factor.'
+      );
+    }
+
+    const [numerator, denominator] = pick([
+      [1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [2, 5], [3, 5]
     ]);
-    return{
-      operation:'fractions',
-      text:scenario,
-      answer:whole,
-      hint:`First find 1/${den}, then multiply by ${den}.`
-    };
+    const integer = denominator * randInt(2, 8);
+
+    return q(
+      'fractions',
+      `${numerator}/${denominator} × ${integer} = ?`,
+      numerator * integer / denominator,
+      'Divide the integer by the denominator first, then multiply by the numerator.'
+    );
   }
 
-  if(state.level==='starter'){
-    const [num,den]=pick([[1,2],[1,3],[2,3],[1,4],[3,4],[1,5],[2,5]]),k=randInt(3,14),whole=den*k;return{operation:'fractions',text:`${num}/${den} of ${whole} = ?`,answer:num*k,hint:`Divide ${whole} by ${den}, then multiply by ${num}.`}
+  // Core distribution:
+  // 35% unlike-denominator addition/subtraction
+  // 30% fraction multiplication
+  // 20% fraction division
+  // 15% equivalent fractions and simplifying
+  if (L === 'core') {
+    if (roll <= 35) {
+      if (chance(0.5)) {
+        const [a, b, c, d] = pick([
+          [1, 2, 1, 3], [1, 2, 1, 4], [2, 3, 1, 6],
+          [1, 4, 3, 8], [2, 5, 1, 10], [3, 4, 1, 6],
+          [3, 5, 1, 4], [5, 6, 1, 3]
+        ]);
+
+        return qFrac(
+          'fractions',
+          `${a}/${b} + ${c}/${d} = ?`,
+          a / b + c / d,
+          'Find a common denominator, add, then simplify.'
+        );
+      }
+
+      const [a, b, c, d] = pick([
+        [3, 4, 1, 2], [5, 6, 1, 3], [7, 8, 1, 4],
+        [4, 5, 3, 10], [2, 3, 1, 4], [5, 6, 1, 4],
+        [7, 10, 1, 5], [11, 12, 1, 3]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `${a}/${b} − ${c}/${d} = ?`,
+        a / b - c / d,
+        'Find a common denominator, subtract, then simplify.'
+      );
+    }
+
+    if (roll <= 65) {
+      const type = randInt(1, 3);
+
+      if (type === 1) {
+        const [numerator, denominator] = pick([
+          [1, 2], [2, 3], [3, 4], [2, 5], [3, 5], [5, 6], [3, 8]
+        ]);
+        const integer = denominator * randInt(2, 10);
+
+        return q(
+          'fractions',
+          `${numerator}/${denominator} × ${integer} = ?`,
+          numerator * integer / denominator,
+          'Divide the integer by the denominator first, then multiply.'
+        );
+      }
+
+      if (type === 2) {
+        const [a, b, c, d] = pick([
+          [1, 2, 3, 4], [2, 3, 3, 5], [3, 4, 2, 5],
+          [2, 5, 3, 4], [3, 5, 5, 6], [4, 7, 7, 8]
+        ]);
+
+        return qFrac(
+          'fractions',
+          `${a}/${b} × ${c}/${d} = ?`,
+          a / b * c / d,
+          'Multiply the numerators and denominators, then simplify.'
+        );
+      }
+
+      const [a, b, c, d] = pick([
+        [3, 4, 8, 9], [5, 6, 9, 10], [2, 3, 9, 14],
+        [4, 5, 15, 16], [3, 7, 14, 15], [5, 8, 12, 25]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `${a}/${b} × ${c}/${d} = ?`,
+        a / b * c / d,
+        'Cancel common factors before multiplying.'
+      );
+    }
+
+    if (roll <= 85) {
+      const type = randInt(1, 3);
+
+      if (type === 1) {
+        const [numerator, denominator] = pick([
+          [1, 2], [2, 3], [3, 4], [2, 5], [3, 5], [5, 6]
+        ]);
+        const divisor = pick([2, 3, 4]);
+
+        return qFrac(
+          'fractions',
+          `${numerator}/${denominator} ÷ ${divisor} = ?`,
+          numerator / denominator / divisor,
+          'Dividing by a whole number is the same as multiplying by its reciprocal.'
+        );
+      }
+
+      if (type === 2) {
+        const whole = randInt(2, 8);
+        const denominator = pick([2, 3, 4, 5, 6]);
+
+        return q(
+          'fractions',
+          `${whole} ÷ 1/${denominator} = ?`,
+          whole * denominator,
+          `There are ${denominator} lots of 1/${denominator} in each whole.`
+        );
+      }
+
+      const [a, b, c, d] = pick([
+        [1, 2, 1, 4], [2, 3, 1, 3], [3, 4, 1, 2],
+        [2, 5, 4, 5], [5, 6, 5, 12], [3, 8, 1, 4]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `${a}/${b} ÷ ${c}/${d} = ?`,
+        (a / b) / (c / d),
+        'Multiply by the reciprocal of the second fraction.'
+      );
+    }
+
+    if (chance(0.5)) {
+      const [numerator, denominator, multiplier] = pick([
+        [2, 3, 4], [3, 4, 5], [3, 5, 4], [5, 6, 3],
+        [3, 8, 5], [7, 10, 4]
+      ]);
+
+      return q(
+        'fractions',
+        `${numerator}/${denominator} = ?/${denominator * multiplier}`,
+        numerator * multiplier,
+        'Multiply numerator and denominator by the same scale factor.'
+      );
+    }
+
+    const [numerator, denominator] = pick([
+      [12, 18], [15, 25], [21, 28], [24, 36], [35, 49],
+      [42, 56], [45, 60], [54, 72]
+    ]);
+
+    return qFrac(
+      'fractions',
+      `Simplify ${numerator}/${denominator}.`,
+      numerator / denominator,
+      'Divide the numerator and denominator by their highest common factor.'
+    );
   }
-  if(state.level==='core'){
-    const type=randInt(1,4);
-    if(type===1){const [num,den]=pick([[2,3],[3,4],[2,5],[3,5],[5,6],[3,8],[5,8]]),k=randInt(4,16),whole=den*k;return{operation:'fractions',text:`${num}/${den} of ${whole} = ?`,answer:num*k,hint:'Find one part first, then multiply.'}}
-    if(type===2){const [n,d,m]=pick([[3,4,20],[2,3,18],[3,5,25],[5,6,24],[3,8,32]]);return{operation:'fractions',text:`${n}/${d} = ?/${m}`,answer:n*m/d,hint:'Multiply numerator and denominator by the same number.'}}
-    if(type===3){const d=pick([4,5,6,8,10,12]),a=randInt(1,d-2),b=randInt(1,d-a);return{operation:'fractions',text:`${a}/${d} + ${b}/${d} = ?/${d}`,answer:a+b,hint:'Add the numerators because the denominators are equal.'}}
-    const pair=pick([[1,2,1,4,4],[1,3,1,6,6],[1,4,3,8,8],[2,3,1,6,6]]);const [a,b,c,d,out]=pair;return{operation:'fractions',text:`${a}/${b} + ${c}/${d} = ?/${out}`,answer:a*out/b+c*out/d,hint:`Convert both fractions to denominator ${out}.`}
+
+  // Challenge distribution:
+  // 25% unlike-denominator addition/subtraction
+  // 30% fraction multiplication
+  // 25% fraction division
+  // 20% two-step mixed operations
+  if (roll <= 25) {
+    if (chance(0.5)) {
+      const [a, b, c, d] = pick([
+        [2, 3, 3, 4], [3, 5, 5, 6], [5, 8, 2, 3],
+        [7, 10, 5, 12], [5, 6, 7, 8], [7, 12, 3, 5]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `${a}/${b} + ${c}/${d} = ?`,
+        a / b + c / d,
+        'Use the least common denominator, add, then simplify.'
+      );
+    }
+
+    const [a, b, c, d] = pick([
+      [5, 6, 3, 8], [7, 8, 5, 12], [9, 10, 2, 5],
+      [11, 12, 3, 8], [7, 9, 5, 12], [13, 15, 7, 10]
+    ]);
+
+    return qFrac(
+      'fractions',
+      `${a}/${b} − ${c}/${d} = ?`,
+      a / b - c / d,
+      'Use the least common denominator, subtract, then simplify.'
+    );
   }
-  const type=randInt(1,5);
-  if(type===1){const pair=pick([[1,3,1,4,12],[2,5,1,4,20],[3,8,1,4,8],[5,6,1,3,6]]);const [a,b,c,d,out]=pair;return{operation:'fractions',text:`${a}/${b} + ${c}/${d} = ?/${out}`,answer:a*out/b+c*out/d,hint:`Use denominator ${out}.`}}
-  if(type===2){const pair=pick([[3,4,1,3,12],[5,6,1,4,12],[7,8,1,2,8],[4,5,3,10,10]]);const [a,b,c,d,out]=pair;return{operation:'fractions',text:`${a}/${b} − ${c}/${d} = ?/${out}`,answer:a*out/b-c*out/d,hint:`Convert both fractions to denominator ${out}.`}}
-  if(type===3){const d=pick([4,5,6,8,10]),n=randInt(1,d-1),whole=randInt(2,4);return{operation:'fractions',text:`${whole} − ${n}/${d} = ?/${d}`,answer:whole*d-n,hint:`Write ${whole} as ${whole*d}/${d}.`}}
-  if(type===4){const [n,d]=pick([[12,18],[15,25],[21,28],[24,36],[35,49]]),g=gcd(n,d);return{operation:'fractions',text:`${n}/${d} = ?/${d/g}`,answer:n/g,hint:'Divide the numerator and denominator by their HCF.'}}
-  const [num,den]=pick([[5,6],[7,8],[3,5],[7,10]]),k=randInt(6,18),whole=den*k;return{operation:'fractions',text:`${num}/${den} of ${whole} = ?`,answer:num*k,hint:'Divide by the denominator, then multiply by the numerator.'}
+
+  if (roll <= 55) {
+    const type = randInt(1, 3);
+
+    if (type === 1) {
+      const [a, b, c, d] = pick([
+        [3, 4, 8, 9], [5, 6, 9, 10], [7, 8, 12, 21],
+        [4, 9, 15, 16], [5, 12, 18, 25], [7, 15, 20, 21]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `${a}/${b} × ${c}/${d} = ?`,
+        a / b * c / d,
+        'Cancel common factors before multiplying.'
+      );
+    }
+
+    if (type === 2) {
+      const whole = randInt(2, 5);
+      const [numerator, denominator] = pick([
+        [2, 3], [3, 4], [4, 5], [5, 6], [3, 8], [7, 10]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `${whole} × ${numerator}/${denominator} = ?`,
+        whole * numerator / denominator,
+        'Write the whole number over 1, multiply, then simplify.'
+      );
+    }
+
+    const [a, b, c, d] = pick([
+      [2, 3, 5, 8], [3, 5, 7, 9], [5, 6, 9, 14],
+      [7, 10, 15, 28], [4, 7, 21, 25], [5, 12, 18, 35]
+    ]);
+
+    return qFrac(
+      'fractions',
+      `${a}/${b} of ${c}/${d} = ?`,
+      a / b * c / d,
+      '“Of” means multiply. Simplify before or after multiplying.'
+    );
+  }
+
+  if (roll <= 80) {
+    const type = randInt(1, 3);
+
+    if (type === 1) {
+      const [a, b, c, d] = pick([
+        [3, 4, 2, 3], [5, 6, 3, 5], [7, 8, 1, 2],
+        [4, 5, 2, 3], [7, 10, 14, 15], [5, 12, 10, 21]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `${a}/${b} ÷ ${c}/${d} = ?`,
+        (a / b) / (c / d),
+        'Multiply by the reciprocal, then simplify.'
+      );
+    }
+
+    if (type === 2) {
+      const whole = randInt(2, 8);
+      const [numerator, denominator] = pick([
+        [2, 3], [3, 4], [4, 5], [5, 6], [3, 8], [7, 10]
+      ]);
+
+      return qFrac(
+        'fractions',
+        `${whole} ÷ ${numerator}/${denominator} = ?`,
+        whole / (numerator / denominator),
+        'Multiply the whole number by the reciprocal of the fraction.'
+      );
+    }
+
+    const [numerator, denominator] = pick([
+      [3, 4], [5, 6], [7, 8], [4, 5], [7, 10], [11, 12]
+    ]);
+    const divisor = pick([2, 3, 4, 5]);
+
+    return qFrac(
+      'fractions',
+      `${numerator}/${denominator} ÷ ${divisor} = ?`,
+      numerator / denominator / divisor,
+      'Multiply by the reciprocal of the whole-number divisor.'
+    );
+  }
+
+  const type = randInt(1, 4);
+
+  if (type === 1) {
+    const [a, b, c, d, e, f] = pick([
+      [1, 2, 3, 4, 2, 3], [2, 3, 3, 5, 5, 6],
+      [3, 4, 2, 5, 5, 8], [5, 6, 3, 4, 2, 3]
+    ]);
+
+    return qFrac(
+      'fractions',
+      `${a}/${b} + ${c}/${d} × ${e}/${f} = ?`,
+      a / b + c / d * e / f,
+      'Multiply before adding, then simplify.'
+    );
+  }
+
+  if (type === 2) {
+    const [a, b, c, d, e, f] = pick([
+      [3, 4, 1, 2, 1, 3], [5, 6, 1, 3, 1, 4],
+      [7, 8, 1, 2, 2, 5], [4, 5, 2, 3, 1, 4]
+    ]);
+
+    return qFrac(
+      'fractions',
+      `${a}/${b} ÷ ${c}/${d} − ${e}/${f} = ?`,
+      (a / b) / (c / d) - e / f,
+      'Complete the division first, then subtract.'
+    );
+  }
+
+  if (type === 3) {
+    const [a, b, c, d, e, f] = pick([
+      [3, 4, 2, 3, 1, 6], [5, 6, 3, 5, 1, 4],
+      [7, 8, 4, 7, 1, 3], [4, 5, 5, 8, 1, 2]
+    ]);
+
+    return qFrac(
+      'fractions',
+      `${a}/${b} × ${c}/${d} + ${e}/${f} = ?`,
+      a / b * c / d + e / f,
+      'Complete the multiplication first, then add.'
+    );
+  }
+
+  const [a, b, c, d, e, f] = pick([
+    [2, 3, 1, 4, 1, 2], [3, 4, 1, 3, 2, 5],
+    [5, 6, 1, 2, 3, 4], [7, 8, 1, 4, 2, 3]
+  ]);
+
+  return qFrac(
+    'fractions',
+    `(${a}/${b} − ${c}/${d}) ÷ ${e}/${f} = ?`,
+    (a / b - c / d) / (e / f),
+    'Work inside the brackets first, then divide by multiplying by the reciprocal.'
+  );
 }
-
 
 function y6GenDecimals(){
   if(state.level==='starter'){
@@ -689,12 +1066,126 @@ function y6GenProbability(){
   return qFrac('probability','A fair die is rolled twice. P(rolling a 6 both times) = ?',1/36,'Multiply 1/6 × 1/6.');
 }
 
+function y6GenFractionWordProblems() {
+  const L = state.level;
+  const type = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 11);
+
+  if (type === 1) {
+    const [total, n, d] = pick([[30, 2, 5], [32, 3, 8], [36, 5, 6], [40, 3, 5], [48, 7, 8]]);
+    return q('fractionWordProblems', `A class has ${total} students. ${n}/${d} of them brought lunch from home. How many students is this?`, total * n / d, 'Divide by the denominator, then multiply by the numerator.');
+  }
+
+  if (type === 2) {
+    const [total, n, d] = pick([[40, 3, 5], [36, 2, 3], [48, 5, 8], [30, 4, 5]]);
+    return q('fractionWordProblems', `A box contains ${total} chocolates. ${n}/${d} are milk chocolate. How many are not milk chocolate?`, total * (1 - n / d), 'Find the milk chocolates, then subtract from the total.');
+  }
+
+  if (type === 3) {
+    const [a, b, c, d] = pick([[3, 4, 2, 3], [2, 3, 3, 4], [5, 6, 3, 5], [4, 5, 5, 8]]);
+    return qFrac('fractionWordProblems', `A recipe needs ${a}/${b} cup of milk. Leo makes ${c}/${d} of the recipe. How much milk is needed?`, a / b * c / d, 'Multiply the recipe amount by the fraction being made.');
+  }
+
+  if (type === 4) {
+    const [amountN, amountD, children] = pick([[3, 4, 3], [2, 3, 4], [5, 6, 5], [3, 5, 3]]);
+    return qFrac('fractionWordProblems', `${amountN}/${amountD} L of juice is shared equally among ${children} children. How much does each child receive?`, amountN / amountD / children, 'Divide the fraction by the number of children.');
+  }
+
+  if (type === 5) {
+    const [litres, n, d] = pick([[3, 1, 4], [4, 1, 2], [3, 3, 4], [5, 1, 5]]);
+    return q('fractionWordProblems', `Each bottle holds ${n}/${d} L. How many full bottles can be filled with ${litres} L?`, litres / (n / d), 'Divide the total amount by the amount in each bottle.');
+  }
+
+  if (type === 6) {
+    const [lengthN, lengthD, pieceN, pieceD] = pick([[3, 4, 1, 8], [5, 6, 1, 6], [4, 5, 1, 10], [7, 8, 1, 8]]);
+    return q('fractionWordProblems', `A ribbon is ${lengthN}/${lengthD} m long. Each piece is ${pieceN}/${pieceD} m. How many complete pieces can be cut?`, (lengthN / lengthD) / (pieceN / pieceD), 'Divide the total length by the length of one piece.');
+  }
+
+  if (type === 7) {
+    const [laps, lapN, lapD, extraN, extraD] = pick([[2, 3, 4, 1, 2], [3, 1, 2, 1, 2], [2, 2, 3, 2, 3], [4, 1, 4, 1, 2]]);
+    return qFrac('fractionWordProblems', `Ava cycled ${lapN}/${lapD} km on each of ${laps} laps, then another ${extraN}/${extraD} km. How far did she cycle?`, laps * lapN / lapD + extraN / extraD, 'Multiply the lap distance, then add the extra distance.');
+  }
+
+  if (type === 8) {
+    const [total, n1, d1, n2, d2] = pick([[24, 1, 3, 1, 4], [40, 1, 5, 1, 4], [36, 1, 2, 1, 6], [48, 3, 8, 1, 4]]);
+    return q('fractionWordProblems', `A tank contained ${total} L. ${n1}/${d1} of the original amount was used in the morning and ${n2}/${d2} of the original amount later. How many litres remained?`, total * (1 - n1 / d1 - n2 / d2), 'Find both fractions of the original amount, then subtract them.');
+  }
+
+  if (type === 9) {
+    const [total, n1, d1, n2, d2] = pick([[24, 1, 3, 1, 4], [30, 1, 5, 1, 4], [36, 1, 3, 1, 2], [48, 1, 4, 1, 3]]);
+    const afterFirst = total * (1 - n1 / d1);
+    return q('fractionWordProblems', `A container held ${total} L. ${n1}/${d1} was used, then ${n2}/${d2} of the remaining water was used. How many litres remained?`, afterFirst * (1 - n2 / d2), 'Find the amount after the first use, then take the second fraction from the remainder.');
+  }
+
+  if (type === 10) {
+    const [total, n, d, extra] = pick([[40, 3, 5, 4], [32, 3, 8, 5], [30, 2, 5, 6], [48, 5, 8, 6]]);
+    return q('fractionWordProblems', `${n}/${d} of ${total} students joined a club. Then ${extra} more students joined. How many students are now in the club?`, total * n / d + extra, 'Find the fraction of the group, then add the extra students.');
+  }
+
+  const [total, shareN, shareD, groups] = pick([[36, 2, 3, 4], [40, 3, 5, 3], [48, 3, 4, 6], [30, 4, 5, 4]]);
+  return q('fractionWordProblems', `${shareN}/${shareD} of ${total} stickers are shared equally among ${groups} students. How many stickers does each student receive?`, total * shareN / shareD / groups, 'Find the selected fraction, then divide it equally.');
+}
+
+
+function y6GenTriangleQuadAngles() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 10);
+
+  if (t === 1) {
+    const [a, b] = pick([[40, 60], [35, 75], [50, 65], [45, 80], [55, 70], [30, 90]]);
+    return q('triangleQuadAngles', `A triangle has angles ${a}° and ${b}°. The third angle is ?°`, 180 - a - b, 'Angles in a triangle total 180°.');
+  }
+
+  if (t === 2) {
+    const angle = pick([25, 30, 35, 40, 45, 50, 55, 60, 65]);
+    return q('triangleQuadAngles', `A right triangle has another angle of ${angle}°. The third angle is ?°`, 90 - angle, 'The two non-right angles in a right triangle total 90°.');
+  }
+
+  if (t === 3) {
+    return q('triangleQuadAngles', 'Each angle in an equilateral triangle is ?°', 60, 'Three equal angles total 180°.');
+  }
+
+  if (t === 4) {
+    const [a, b, c] = pick([[90, 80, 100], [70, 90, 110], [85, 95, 100], [60, 120, 80], [75, 105, 90]]);
+    return q('triangleQuadAngles', `Three angles of a quadrilateral are ${a}°, ${b}° and ${c}°. The fourth angle is ?°`, 360 - a - b - c, 'Angles in a quadrilateral total 360°.');
+  }
+
+  if (t === 5) {
+    const vertex = pick([40, 60, 80, 100, 120]);
+    return q('triangleQuadAngles', `An isosceles triangle has a vertex angle of ${vertex}°. Each equal base angle is ?°`, (180 - vertex) / 2, 'Subtract the vertex angle, then halve the remainder.');
+  }
+
+  if (t === 6) {
+    const base = pick([30, 35, 40, 45, 50, 55, 60, 65, 70]);
+    return q('triangleQuadAngles', `An isosceles triangle has two equal angles of ${base}°. The third angle is ?°`, 180 - 2 * base, 'Subtract the two equal angles from 180°.');
+  }
+
+  if (t === 7) {
+    const angle = pick([45, 55, 65, 75, 85, 95, 105, 115, 125, 135]);
+    return q('triangleQuadAngles', `One angle of a parallelogram is ${angle}°. An adjacent angle is ?°`, 180 - angle, 'Adjacent angles in a parallelogram total 180°.');
+  }
+
+  if (t === 8) {
+    const known = pick([60, 90, 120, 150]);
+    return q('triangleQuadAngles', `A quadrilateral has one angle of ${known}° and the other three angles are equal. Each equal angle is ?°`, (360 - known) / 3, 'Subtract the known angle, then divide the remainder by 3.');
+  }
+
+  if (t === 9) {
+    const [equal, third] = pick([[60, 100], [70, 100], [80, 90], [90, 80], [100, 70]]);
+    return q('triangleQuadAngles', `A quadrilateral has two equal angles of ${equal}° and a third angle of ${third}°. The fourth angle is ?°`, 360 - 2 * equal - third, 'Subtract all three known angles from 360°.');
+  }
+
+  const third = pick([40, 60, 80, 100, 120]);
+  return q('triangleQuadAngles', `A triangle has two equal angles and a third angle of ${third}°. Each equal angle is ?°`, (180 - third) / 2, 'Subtract the third angle, then halve the remainder.');
+}
+
 YEAR_BANKS[6] = {
+  "triangleQuadAngles": y6GenTriangleQuadAngles,
   "addsub": y6GenAddSub,
   "multdiv": y6GenMultDiv,
   "order": y6GenOrder,
   "factors": y6GenFactors,
   "fractions": y6GenFractions,
+    fractionWordProblems: y6GenFractionWordProblems,
   "decimals": y6GenDecimals,
   "decimalShift": y6GenDecimalShift,
   "percentages": y6GenPercentages,

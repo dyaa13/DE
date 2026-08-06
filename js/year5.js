@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 5 configuration and question bank. */
-YEAR_CONFIGS[5] = {"title":"Year 5 Rapid Fire Mental Maths","skillLabel":"Year 5 Skill","mixed":"Mixed Year 5 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","twoDigitMultiplication":"Two-Digit × Two-Digit","division":"Division","placevalue":"×/÷ 10, 100, 1000, 0.1, 0.01 & 0.001","doubles":"Doubles & Halves","fractions":"Fractions of Quantities","decimals":"Decimal Mental Maths","decimalShift":"Decimal Multiplication & Division","rounding":"Place Value & Rounding","missing":"Missing Numbers & Inverse Operations","factorsDivisibility":"Factors, Multiples & Divisibility","fractionCompare":"Fraction Equivalence & Comparison","fractionAddSub":"Fraction Addition & Subtraction","basicPercentages":"Basic Percentages","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences","mixed":"Mixed Year 5 Skills","review":"Mistake Review"},"skills":["addition","subtraction","multiplication","twoDigitMultiplication","division","placevalue","doubles","fractions","decimals","decimalShift","rounding","missing","factorsDivisibility","fractionCompare","fractionAddSub","basicPercentages","time","measurements","perimeterArea","sequences"],"levels":[["starter","Starter — Year 4 Review"],["core","Core — Year 5"],["challenge","Challenge — Year 5+"]],"teacher":"Year 5 now includes 20 targeted banks, including a separate two-digit multiplication section and a decimal multiplication and division section covering powers of 10, simple decimal × decimal questions, and exact decimal ÷ decimal questions."};
+YEAR_CONFIGS[5] = {"title":"Year 5 Rapid Fire Mental Maths","skillLabel":"Year 5 Skill","mixed":"Mixed Year 5 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","twoDigitMultiplication":"Two-Digit × Two-Digit","division":"Division","placevalue":"×/÷ 10, 100, 1000, 0.1, 0.01 & 0.001","doubles":"Doubles & Halves","fractions":"Fractions of Quantities","decimals":"Decimal Mental Maths","decimalShift":"Decimal Multiplication & Division","rounding":"Place Value & Rounding","missing":"Missing Numbers & Inverse Operations","factorsDivisibility":"Factors, Multiples & Divisibility","fractionCompare":"Fraction Equivalence & Comparison","fractionAddSub":"Fraction Addition & Subtraction","basicPercentages":"Basic Percentages","time":"Time","measurements":"Measurement Conversions","perimeterArea":"Perimeter & Area","sequences":"Sequences","mixed":"Mixed Year 5 Skills","review":"Mistake Review","fractionWordProblems":"Fraction Addition & Subtraction Word Problems","anglesLinePoint":"Angles on Lines & Around a Point"},"skills":["addition","subtraction","multiplication","twoDigitMultiplication","division","placevalue","doubles","fractions","decimals","decimalShift","rounding","missing","factorsDivisibility","fractionCompare","fractionAddSub","fractionWordProblems","basicPercentages","time","anglesLinePoint","measurements","perimeterArea","sequences"],"levels":[["starter","Starter — Year 4 Review"],["core","Core — Year 5"],["challenge","Challenge — Year 5+"]],"teacher":"Year 5 includes 22 targeted banks. The angle bank covers complements, straight lines, vertically opposite angles, angles around a point and exact-hour clock angles, all with mental-friendly values."};
 BASE_STORAGE_BY_YEAR[5] = {"stars":"dyaaY5RapidStars","hero":"dyaaY5RapidHero","best":"dyaaY5RapidBest","mistakes":"dyaaY5RapidMistakes"};
 
 /* ===== YEAR 5 QUESTION GENERATORS ===== */
@@ -1217,7 +1217,7 @@ function y5GenMeasurements() {
     ? randInt(1, 5)
     : L === 'core'
       ? randInt(1, 8)
-      : randInt(1, 13);
+      : randInt(1, 18);
 
   if (type === 1) {
     const metres = randInt(2, L === 'starter' ? 20 : 80);
@@ -1298,7 +1298,7 @@ function y5GenMeasurements() {
 
     return q(
       'measurements',
-      `${fmt(metres)} m = ${wholeMetres} m and ? cm`,
+      `${fmt(metres)} m = ${wholeMetres} m + ? cm`,
       extraCentimetres,
       'The whole-number part is metres. Convert the decimal part to centimetres by multiplying by 100.'
     );
@@ -1311,21 +1311,82 @@ function y5GenMeasurements() {
 
     return q(
       'measurements',
-      `${fmt(litres)} L = ${wholeLitres} L and ? mL`,
+      `${fmt(litres)} L = ${wholeLitres} L + ? mL`,
       extraMillilitres,
       'The whole-number part is litres. Convert the decimal part to millilitres by multiplying by 1000.'
     );
   }
 
+  if (type === 13) {
+    const wholeKilograms = randInt(1, 8);
+    const extraGrams = pick([100, 125, 200, 250, 375, 500, 600, 750, 800, 900]);
+    const kilograms = wholeKilograms + extraGrams / 1000;
+
+    return q(
+      'measurements',
+      `${fmt(kilograms)} kg = ${wholeKilograms} kg + ? g`,
+      extraGrams,
+      'The whole-number part is kilograms. Convert the decimal part to grams by multiplying by 1000.'
+    );
+  }
+
+  if (type === 14) {
+    const wholeKilograms = randInt(1, 8);
+    const extraGrams = pick([100, 125, 200, 250, 375, 500, 600, 750, 800, 900]);
+    const kilograms = wholeKilograms + extraGrams / 1000;
+
+    return q(
+      'measurements',
+      `${fmt(kilograms)} kg = ? kg + ${extraGrams} g`,
+      wholeKilograms,
+      'The whole-number part of the decimal measurement gives the kilograms.'
+    );
+  }
+
+  if (type === 15) {
+    const wholeKilograms = randInt(1, 8);
+    const extraGrams = pick([100, 125, 200, 250, 375, 500, 600, 750, 800, 900]);
+
+    return q(
+      'measurements',
+      `${wholeKilograms} kg ${extraGrams} g = ${wholeKilograms} kg + ? g`,
+      extraGrams,
+      'The mixed measurement already shows the number of grams.'
+    );
+  }
+
+  if (type === 16) {
+    const wholeKilograms = randInt(1, 8);
+    const extraGrams = pick([100, 125, 200, 250, 375, 500, 600, 750, 800, 900]);
+
+    return q(
+      'measurements',
+      `${wholeKilograms} kg ${extraGrams} g = ? kg + ${extraGrams} g`,
+      wholeKilograms,
+      'The mixed measurement already shows the number of whole kilograms.'
+    );
+  }
+
+  if (type === 17) {
+    const wholeKilograms = randInt(1, 8);
+    const extraGrams = pick([100, 125, 200, 250, 375, 500, 600, 750, 800, 900]);
+
+    return q(
+      'measurements',
+      `${wholeKilograms} kg + ${extraGrams} g = ? kg`,
+      wholeKilograms + extraGrams / 1000,
+      'Convert grams to kilograms by dividing by 1000, then add.'
+    );
+  }
+
   const wholeKilograms = randInt(1, 8);
   const extraGrams = pick([100, 125, 200, 250, 375, 500, 600, 750, 800, 900]);
-  const kilograms = wholeKilograms + extraGrams / 1000;
 
   return q(
     'measurements',
-    `${fmt(kilograms)} kg = ${wholeKilograms} kg and ? g`,
-    extraGrams,
-    'The whole-number part is kilograms. Convert the decimal part to grams by multiplying by 1000.'
+    `${wholeKilograms} kg + ${extraGrams} g = ? g`,
+    wholeKilograms * 1000 + extraGrams,
+    'Convert kilograms to grams by multiplying by 1000, then add.'
   );
 }
 
@@ -1569,7 +1630,115 @@ function y5GenSequences() {
   );
 }
 
+function y5GenFractionWordProblems() {
+  const L = state.level;
+  const type = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 7) : randInt(1, 10);
+
+  if (type === 1) {
+    const [a, b, c] = pick([[2, 5, 1], [3, 8, 2], [1, 6, 4], [4, 10, 3]]);
+    return qFrac('fractionWordProblems', `Mia drank ${a}/${b} L of water in the morning and ${c}/${b} L in the afternoon. How much did she drink altogether?`, (a + c) / b, 'Add the numerators because the denominators are the same.');
+  }
+
+  if (type === 2) {
+    const [whole, used, d] = pick([[7, 3, 8], [9, 4, 10], [5, 2, 6], [11, 5, 12]]);
+    return qFrac('fractionWordProblems', `A ribbon was ${whole}/${d} m long. Ella used ${used}/${d} m. How much ribbon remained?`, (whole - used) / d, 'Subtract the used part from the starting length.');
+  }
+
+  if (type === 3) {
+    const [a, b, c, d] = pick([[1, 2, 1, 4], [1, 3, 1, 6], [2, 5, 1, 10], [3, 4, 1, 8]]);
+    return qFrac('fractionWordProblems', `Ben walked ${a}/${b} km before lunch and ${c}/${d} km after lunch. How far did he walk altogether?`, a / b + c / d, 'Use a common denominator, then add.');
+  }
+
+  if (type === 4) {
+    const [a, b, c, d] = pick([[5, 6, 1, 3], [7, 8, 1, 4], [4, 5, 3, 10], [3, 4, 1, 2]]);
+    return qFrac('fractionWordProblems', `A bottle contained ${a}/${b} L of juice. After ${c}/${d} L was used, how much remained?`, a / b - c / d, 'Use a common denominator, then subtract.');
+  }
+
+  if (type === 5) {
+    const [read1, read2, d] = pick([[2, 3, 8], [1, 4, 6], [3, 2, 10], [2, 5, 12]]);
+    return qFrac('fractionWordProblems', `Noah read ${read1}/${d} of a book on Monday and ${read2}/${d} on Tuesday. What fraction of the book did he read in total?`, (read1 + read2) / d, 'Add the two fractions of the same whole.');
+  }
+
+  if (type === 6) {
+    const [start, used1, used2, d] = pick([[7, 2, 1, 8], [11, 3, 2, 12], [9, 2, 3, 10], [5, 1, 2, 6]]);
+    return qFrac('fractionWordProblems', `A container held ${start}/${d} L. First ${used1}/${d} L was used, then another ${used2}/${d} L. How much remained?`, (start - used1 - used2) / d, 'Subtract both amounts from the starting amount.');
+  }
+
+  if (type === 7) {
+    const [start, d, used1, d1, used2, d2] = pick([[3, 2, 1, 4, 1, 2], [7, 4, 1, 2, 1, 4], [5, 3, 1, 3, 2, 3]]);
+    return qFrac('fractionWordProblems', `A jug contained ${start}/${d} L. Sam used ${used1}/${d1} L and then ${used2}/${d2} L. How much remained?`, start / d - used1 / d1 - used2 / d2, 'Use a common denominator and subtract the two amounts.');
+  }
+
+  if (type === 8) {
+    const [start, d, used1, d1, added, d2] = pick([[3, 4, 1, 4, 1, 8], [5, 6, 1, 3, 1, 6], [7, 8, 1, 2, 1, 4]]);
+    return qFrac('fractionWordProblems', `A bowl contained ${start}/${d} kg of fruit. ${used1}/${d1} kg was used, then ${added}/${d2} kg was added. How much fruit is in the bowl now?`, start / d - used1 / d1 + added / d2, 'Subtract the used amount, then add the new amount.');
+  }
+
+  if (type === 9) {
+    const [full, first, second] = pick([[12, 4, 3], [10, 2, 3], [8, 2, 1], [6, 1, 2]]);
+    return qFrac('fractionWordProblems', `A 1 m strip was used in two pieces: ${first}/${full} m and ${second}/${full} m. How much strip remained?`, 1 - first / full - second / full, 'Start with one whole and subtract both pieces.');
+  }
+
+  const [a, b, c, d, e, f] = pick([[1, 2, 1, 4, 1, 8], [2, 3, 1, 6, 1, 3], [3, 4, 1, 8, 1, 4]]);
+  return qFrac('fractionWordProblems', `A trail is ${a}/${b} km long. Ava walked ${c}/${d} km, rested, then walked another ${e}/${f} km. How much farther must she walk?`, a / b - c / d - e / f, 'Subtract both distances walked from the total trail length.');
+}
+
+
+function y5GenAnglesLinePoint() {
+  const L = state.level;
+  const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
+
+  if (t === 1) {
+    const angle = pick([15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75]);
+    return q('anglesLinePoint', `An angle of ${angle}° and another angle make a right angle. The other angle is ?°`, 90 - angle, 'Complementary angles total 90°.');
+  }
+
+  if (t === 2) {
+    const angle = pick([25, 35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('anglesLinePoint', `One angle on a straight line is ${angle}°. The other angle is ?°`, 180 - angle, 'Angles on a straight line total 180°.');
+  }
+
+  if (t === 3) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 105, 115, 125, 135, 145]);
+    return q('anglesLinePoint', `One of two vertically opposite angles is ${angle}°. The opposite angle is ?°`, angle, 'Vertically opposite angles are equal.');
+  }
+
+  if (t === 4) {
+    const angle = pick([15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75]);
+    return q('anglesLinePoint', `A right angle is split into ${angle}° and ?°. Find the missing angle.`, 90 - angle, 'A right angle totals 90°.');
+  }
+
+  if (t === 5) {
+    const [a, b, answer] = pick([
+      [90, 120, 150], [80, 130, 150], [100, 140, 120], [60, 160, 140], [110, 120, 130]
+    ]);
+    return q('anglesLinePoint', `Angles around a point are ${a}°, ${b}° and ?°. Find the missing angle.`, answer, 'Angles around a point total 360°.');
+  }
+
+  if (t === 6) {
+    const hour = pick([1, 2, 3, 4, 5, 7, 8, 9, 10, 11]);
+    const difference = Math.min(hour, 12 - hour);
+    return q('anglesLinePoint', `At ${hour}:00, the smaller angle between the clock hands is ?°`, difference * 30, 'Each hour mark represents 30°.');
+  }
+
+  if (t === 7) {
+    const [a, b, answer] = pick([
+      [30, 60, 90], [40, 70, 70], [50, 80, 50], [25, 65, 90], [45, 55, 80]
+    ]);
+    return q('anglesLinePoint', `Three adjacent angles on a straight line are ${a}°, ${b}° and ?°. Find the missing angle.`, answer, 'The three angles total 180°.');
+  }
+
+  if (t === 8) {
+    const known = pick([80, 100, 120, 140, 160]);
+    return q('anglesLinePoint', `Two equal angles and an angle of ${known}° meet at a point. Each equal angle is ?°`, (360 - known) / 2, 'Subtract from 360°, then divide the remainder by 2.');
+  }
+
+  const [first, second] = pick([[40, 50], [50, 60], [60, 70], [70, 80], [80, 60]]);
+  return q('anglesLinePoint', `A full turn is split into ${first}°, ${second}°, 90° and one missing angle. The missing angle is ?°`, 360 - first - second - 90, 'Subtract all known angles from 360°.');
+}
+
 YEAR_BANKS[5] = {
+  "anglesLinePoint": y5GenAnglesLinePoint,
   "addition": y5GenAdd,
   "subtraction": y5GenSub,
   "multiplication": y5GenMul,
@@ -1585,6 +1754,7 @@ YEAR_BANKS[5] = {
   "factorsDivisibility": y5GenFactorsDivisibility,
   "fractionCompare": y5GenFractionCompare,
   "fractionAddSub": y5GenFractionAddSub,
+    fractionWordProblems: y5GenFractionWordProblems,
   "basicPercentages": y5GenBasicPercentages,
   "time": y5GenTime,
   "measurements": y5GenMeasurements,
