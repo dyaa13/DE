@@ -806,7 +806,7 @@ function y6GenRatio(){
     const type=randInt(1,4);
     if(type===1){const a=randInt(2,7),b=randInt(3,9),k=randInt(2,8);return{operation:'ratio',text:`${a}:${b} = ${a*k}:?`,answer:b*k,hint:'Scale both parts by the same factor.'}}
     if(type===2){const a=randInt(2,5),b=randInt(3,7),k=randInt(3,9);return{operation:'ratio',text:`Red:Blue = ${a}:${b}. Red = ${a*k}. Blue = ?`,answer:b*k,hint:`The scale factor is ${k}.`}}
-    if(type===3){const items=pick([3,4,5,6]),unit=pick([2,3,4,5,6]),cost=items*unit;return{operation:'ratio',text:`${items} pens cost $${cost}.  Then 1 pen costs $?`,answer:unit,hint:'Divide the total cost by the number of pens.'}}
+    if(type===3){const items=pick([3,4,5,6]),unit=pick([2,3,4,5,6]),cost=items*unit;return{operation:'ratio',text:`${items} pens cost $${cost}. 1 pen costs $?`,answer:unit,hint:'Divide the total cost by the number of pens.'}}
     const a=randInt(2,5),b=randInt(2,6),k=randInt(3,8),total=(a+b)*k;return{operation:'ratio',text:`Ratio ${a}:${b}, total ${total}. Larger share = ?`,answer:Math.max(a,b)*k,hint:'Find one part, then multiply by the larger ratio number.'}
   }
   const type=randInt(1,4);
@@ -1298,7 +1298,52 @@ function y6GenTriangleQuadAngles() {
 
 /* ===== YEAR 6 EASY MENTAL-MATH ADDITIONS ===== */
 
+function y6GenCommutativeAssociative(forceRecognition = null) {
+  const L = state.level;
+  const recognition = forceRecognition === null ? randInt(1, 5) === 1 : forceRecognition;
+
+  if (recognition) {
+    const r = randInt(1, 4);
+    if (r === 1) {
+      const a = randInt(15, 90), b = randInt(15, 90);
+      return q('mentalStrategies', `${a} + ${b} = ${b} + ${a}. Which property is shown? Enter 1=Commutative, 2=Associative.`, 1, 'Commutative changes the order of the addends.');
+    }
+    if (r === 2) {
+      const a = randInt(2, 15), b = randInt(2, 15);
+      return q('mentalStrategies', `${a} × ${b} = ${b} × ${a}. Which property is shown? Enter 1=Commutative, 2=Associative.`, 1, 'Commutative changes the order of the factors.');
+    }
+    if (r === 3) {
+      const a = randInt(5, 30), b = randInt(5, 30), c = randInt(5, 30);
+      return q('mentalStrategies', `(${a} + ${b}) + ${c} = ${a} + (${b} + ${c}). Which property is shown? Enter 1=Commutative, 2=Associative.`, 2, 'Associative changes the grouping while the order stays the same.');
+    }
+    const a = randInt(2, 9), b = randInt(2, 9), c = randInt(2, 9);
+    return q('mentalStrategies', `(${a} × ${b}) × ${c} = ${a} × (${b} × ${c}). Which property is shown? Enter 1=Commutative, 2=Associative.`, 2, 'Associative changes the grouping while the order stays the same.');
+  }
+
+  const r = randInt(1, 8);
+  if (r <= 2) {
+    const a = pick([28, 37, 46, 58, 64, 73]), c = 100 - a;
+    const b = pick([17, 26, 39, 48, 57]), d = 100 - b;
+    return q('mentalStrategies', `${a} + ${b} + ${c} + ${d} = ?`, 200, `Reorder and regroup into two hundreds: (${a} + ${c}) + (${b} + ${d}).`);
+  }
+  if (r <= 4) {
+    const a = pick([125, 250]);
+    const partner = a === 125 ? 8 : 4;
+    const middle = L === 'starter' ? randInt(2, 6) : randInt(3, 12);
+    return q('mentalStrategies', `${a} × ${middle} × ${partner} = ?`, a * middle * partner, `Reorder and regroup: (${a} × ${partner}) × ${middle}.`);
+  }
+  if (r <= 6) {
+    const middle = L === 'starter' ? randInt(2, 8) : randInt(3, 16);
+    return q('mentalStrategies', `0.5 × ${middle} × 2 = ?`, middle, `Reorder and regroup: (0.5 × 2) × ${middle} = 1 × ${middle}.`);
+  }
+  const middle = L === 'starter' ? randInt(2, 8) : randInt(3, 16);
+  return q('mentalStrategies', `0.25 × ${middle} × 4 = ?`, middle, `Reorder and regroup: (0.25 × 4) × ${middle} = 1 × ${middle}.`);
+}
+
 function y6GenMentalStrategies() {
+  const strategyRoll = randInt(1, 10);
+  if (strategyRoll <= 2) return y6GenCommutativeAssociative(true);   // ~20% property recognition
+  if (strategyRoll <= 5) return y6GenCommutativeAssociative(false);  // ~30% practical regrouping
   const L = state.level;
   const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
 

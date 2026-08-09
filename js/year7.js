@@ -1373,7 +1373,59 @@ function y7GenAngleRelationships() {
 
 /* ===== YEAR 7 EASY MENTAL-MATH ADDITIONS ===== */
 
+function y7GenCommutativeAssociative(forceRecognition = null) {
+  const L = state.level;
+  const recognition = forceRecognition === null ? randInt(1, 5) === 1 : forceRecognition;
+
+  if (recognition) {
+    const r = randInt(1, 5);
+    if (r === 1) {
+      const a = randInt(20, 120), b = randInt(20, 120);
+      return q('mentalStrategies', `${a} + ${b} = ${b} + ${a}. Which property is shown? Enter 1=Commutative, 2=Associative.`, 1, 'Commutative changes the order of the addends.');
+    }
+    if (r === 2) {
+      const a = randInt(2, 15), b = randInt(2, 15);
+      return q('mentalStrategies', `${a} × ${b} = ${b} × ${a}. Which property is shown? Enter 1=Commutative, 2=Associative.`, 1, 'Commutative changes the order of the factors.');
+    }
+    if (r === 3) {
+      const a = randInt(5, 30), b = randInt(5, 30), c = randInt(5, 30);
+      return q('mentalStrategies', `(${a} + ${b}) + ${c} = ${a} + (${b} + ${c}). Which property is shown? Enter 1=Commutative, 2=Associative.`, 2, 'Associative changes the grouping while the order stays the same.');
+    }
+    if (r === 4) {
+      const a = randInt(2, 9), b = randInt(2, 9), c = randInt(2, 9);
+      return q('mentalStrategies', `(${a} × ${b}) × ${c} = ${a} × (${b} × ${c}). Which property is shown? Enter 1=Commutative, 2=Associative.`, 2, 'Associative changes the grouping while the order stays the same.');
+    }
+    const useSubtraction = randInt(0, 1) === 0;
+    if (useSubtraction) {
+      const a = randInt(8, 20), b = randInt(2, 7);
+      return q('mentalStrategies', `${a} − ${b} = ${b} − ${a}. Enter 1=True, 0=False.`, 0, 'Subtraction is not commutative: changing the order changes the answer.');
+    }
+    const a = randInt(2, 12), b = randInt(2, 12);
+    return q('mentalStrategies', `${a * b} ÷ ${a} = ${a} ÷ ${a * b}. Enter 1=True, 0=False.`, 0, 'Division is not commutative: changing the order changes the answer.');
+  }
+
+  const r = randInt(1, 8);
+  if (r <= 2) {
+    const a = pick([38, 47, 56, 68, 73, 84]), c = 100 - a;
+    const b = pick([19, 27, 36, 44, 58]), d = 100 - b;
+    return q('mentalStrategies', `${a} + ${b} + ${c} + ${d} = ?`, 200, `Reorder and regroup into two hundreds: (${a} + ${c}) + (${b} + ${d}).`);
+  }
+  if (r <= 4) {
+    const middle = L === 'starter' ? randInt(2, 8) : randInt(3, 20);
+    return q('mentalStrategies', `2.5 × ${middle} × 4 = ?`, middle * 10, `Reorder and regroup: (2.5 × 4) × ${middle} = 10 × ${middle}.`);
+  }
+  if (r <= 6) {
+    const middle = L === 'starter' ? randInt(2, 8) : randInt(3, 16);
+    return q('mentalStrategies', `0.25 × ${middle} × 4 = ?`, middle, `Reorder and regroup: (0.25 × 4) × ${middle} = 1 × ${middle}.`);
+  }
+  const [num, den] = pick([[1,4],[1,2],[3,4]]);
+  return qFrac('mentalStrategies', `3/5 + ${num}/${den} + 2/5 = ?`, 1 + num / den, 'Reorder the fractions first: 3/5 + 2/5 = 1, then add the remaining fraction.');
+}
+
 function y7GenMentalStrategies() {
+  const strategyRoll = randInt(1, 10);
+  if (strategyRoll <= 2) return y7GenCommutativeAssociative(true);   // ~20% property recognition
+  if (strategyRoll <= 5) return y7GenCommutativeAssociative(false);  // ~30% practical regrouping
   const L = state.level;
   const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
 

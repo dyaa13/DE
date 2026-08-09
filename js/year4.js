@@ -424,7 +424,49 @@ function y4GenAngleBasics() {
 
 /* ===== YEAR 4 EASY MENTAL-MATH ADDITIONS ===== */
 
+function y4GenCommutativeAssociative(forceRecognition = null) {
+  const L = state.level;
+  const recognition = forceRecognition === null ? randInt(1, 5) === 1 : forceRecognition;
+
+  if (recognition) {
+    const r = randInt(1, 4);
+    if (r === 1) {
+      const a = randInt(3, 20), b = randInt(3, 20);
+      return q('mentalStrategies', `${a} + ${b} = ${b} + ${a}. Which property is shown? Enter 1=Commutative, 2=Associative.`, 1, 'Commutative means the order can change: a + b = b + a.');
+    }
+    if (r === 2) {
+      const a = randInt(2, 9), b = randInt(2, 9);
+      return q('mentalStrategies', `${a} × ${b} = ${b} × ${a}. Which property is shown? Enter 1=Commutative, 2=Associative.`, 1, 'Commutative means the order can change: a × b = b × a.');
+    }
+    if (r === 3) {
+      const a = randInt(2, 8), b = randInt(2, 8), c = randInt(2, 8);
+      return q('mentalStrategies', `(${a} + ${b}) + ${c} = ${a} + (${b} + ${c}). Which property is shown? Enter 1=Commutative, 2=Associative.`, 2, 'Associative means the grouping can change while the order stays the same.');
+    }
+    const a = randInt(2, 5), b = randInt(2, 5), c = randInt(2, 5);
+    return q('mentalStrategies', `(${a} × ${b}) × ${c} = ${a} × (${b} × ${c}). Which property is shown? Enter 1=Commutative, 2=Associative.`, 2, 'Associative means the grouping can change while the order stays the same.');
+  }
+
+  const r = randInt(1, 8);
+  if (r <= 2) {
+    const a = randInt(2, 9), c = 10 - a, b = L === 'starter' ? randInt(10, 30) : randInt(20, 70);
+    return q('mentalStrategies', `${a} + ${b} + ${c} = ?`, a + b + c, `Reorder and regroup: (${a} + ${c}) + ${b} = 10 + ${b}.`);
+  }
+  if (r <= 4) {
+    const a = pick([12, 18, 24, 27, 32, 36, 43, 46]), c = 100 - a, b = L === 'starter' ? randInt(5, 20) : randInt(10, 50);
+    return q('mentalStrategies', `${a} + ${b} + ${c} = ?`, a + b + c, `Use commutative and associative properties: (${a} + ${c}) + ${b} = 100 + ${b}.`);
+  }
+  if (r <= 6) {
+    const middle = L === 'starter' ? randInt(2, 9) : randInt(4, 12);
+    return q('mentalStrategies', `2 × ${middle} × 5 = ?`, middle * 10, `Reorder and regroup: (2 × 5) × ${middle} = 10 × ${middle}.`);
+  }
+  const middle = L === 'starter' ? randInt(2, 8) : randInt(3, 12);
+  return q('mentalStrategies', `4 × ${middle} × 25 = ?`, middle * 100, `Reorder and regroup: (4 × 25) × ${middle} = 100 × ${middle}.`);
+}
+
 function y4GenMentalStrategies() {
+  const strategyRoll = randInt(1, 10);
+  if (strategyRoll <= 2) return y4GenCommutativeAssociative(true);   // ~20% property recognition
+  if (strategyRoll <= 5) return y4GenCommutativeAssociative(false);  // ~30% practical regrouping
   const L = state.level;
   const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 7) : randInt(1, 9);
 

@@ -1786,7 +1786,51 @@ function y5GenAnglesLinePoint() {
   return q('anglesLinePoint', `A full turn is split into ${first}°, ${second}°, 90° and one missing angle. The missing angle is ?°`, 360 - first - second - 90, 'Subtract all known angles from 360°.');
 }
 
+function y5GenCommutativeAssociative(forceRecognition = null) {
+  const L = state.level;
+  const recognition = forceRecognition === null ? randInt(1, 5) === 1 : forceRecognition;
+
+  if (recognition) {
+    const r = randInt(1, 4);
+    if (r === 1) {
+      const a = randInt(10, 60), b = randInt(10, 60);
+      return q('mentalStrategies', `${a} + ${b} = ${b} + ${a}. Which property is shown? Enter 1=Commutative, 2=Associative.`, 1, 'Commutative changes the order of the addends.');
+    }
+    if (r === 2) {
+      const a = randInt(2, 12), b = randInt(2, 12);
+      return q('mentalStrategies', `${a} × ${b} = ${b} × ${a}. Which property is shown? Enter 1=Commutative, 2=Associative.`, 1, 'Commutative changes the order of the factors.');
+    }
+    if (r === 3) {
+      const a = randInt(3, 15), b = randInt(3, 15), c = randInt(3, 15);
+      return q('mentalStrategies', `(${a} + ${b}) + ${c} = ${a} + (${b} + ${c}). Which property is shown? Enter 1=Commutative, 2=Associative.`, 2, 'Associative changes the grouping, not the order.');
+    }
+    const a = randInt(2, 8), b = randInt(2, 8), c = randInt(2, 8);
+    return q('mentalStrategies', `(${a} × ${b}) × ${c} = ${a} × (${b} × ${c}). Which property is shown? Enter 1=Commutative, 2=Associative.`, 2, 'Associative changes the grouping, not the order.');
+  }
+
+  const r = randInt(1, 8);
+  if (r <= 2) {
+    const a = pick([23, 36, 47, 58, 64, 72]), c = 100 - a;
+    const b = L === 'starter' ? randInt(5, 30) : randInt(20, 80);
+    return q('mentalStrategies', `${a} + ${b} + ${c} = ?`, a + b + c, `Reorder and regroup: (${a} + ${c}) + ${b} = 100 + ${b}.`);
+  }
+  if (r <= 4) {
+    const a = pick([16, 24, 32, 45, 55, 68, 76, 84]), c = 100 - a;
+    const b = pick([10, 20, 30, 40, 50]), d = 100 - b;
+    return q('mentalStrategies', `${a} + ${b} + ${c} + ${d} = ?`, 200, `Pair numbers that make 100: (${a} + ${c}) + (${b} + ${d}).`);
+  }
+  if (r <= 6) {
+    const middle = L === 'starter' ? randInt(2, 9) : randInt(4, 16);
+    return q('mentalStrategies', `4 × ${middle} × 25 = ?`, middle * 100, `Reorder and regroup: (4 × 25) × ${middle} = 100 × ${middle}.`);
+  }
+  const middle = L === 'starter' ? randInt(2, 10) : randInt(3, 20);
+  return q('mentalStrategies', `2 × ${middle} × 50 = ?`, middle * 100, `Reorder and regroup: (2 × 50) × ${middle} = 100 × ${middle}.`);
+}
+
 function y5GenMentalStrategies() {
+  const strategyRoll = randInt(1, 10);
+  if (strategyRoll <= 2) return y5GenCommutativeAssociative(true);   // ~20% property recognition
+  if (strategyRoll <= 5) return y5GenCommutativeAssociative(false);  // ~30% practical regrouping
   const L = state.level;
   const t = L === 'starter' ? randInt(1, 4) : L === 'core' ? randInt(1, 6) : randInt(1, 8);
 
