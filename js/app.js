@@ -1160,15 +1160,11 @@ function markReviewCorrect(item) {
 
   if (index < 0) return;
 
-  state.mistakeBank[index].mastery =
-    (state.mistakeBank[index].mastery || 0) + 1;
-
-  if (state.mistakeBank[index].mastery >= 2) {
-    state.mistakeBank.splice(index, 1);
-    showReward('✅ Mastered twice — removed from the mistake bank!');
-  } else {
-    showReward('✅ Correct once. Solve it correctly one more time to master it.');
-  }
+  // One correct answer in Mistake Review is enough to clear the saved mistake.
+  // Save immediately so the removal is kept even if the student finishes
+  // the review early before completing the rest of the review queue.
+  state.mistakeBank.splice(index, 1);
+  showReward('✅ Correct — removed from the saved mistakes!');
 
   saveProgress();
   updateMistakeCounts();
@@ -1390,7 +1386,7 @@ function showQuestion() {
   hint.textContent = hasChoiceLayout
     ? 'Click the correct expression or equation. You can also press 1, 2, 3 or 4 on the keyboard.'
     : state.reviewMode
-      ? 'Try the question again. It will be removed after two correct review attempts.'
+      ? 'Try the question again. A correct answer will remove it from your saved mistakes.'
       : state.current.requireImproperFraction
         ? 'Enter the answer as an improper fraction, for example 7/4. Do not enter a mixed number.'
         : state.current.answerType === 'time' || /\bHHMM\b/.test(state.current.text)
@@ -2118,7 +2114,7 @@ function startReview(items, source) {
   practiceRecords.style.display = 'none';
   playArea.classList.remove('hidden');
   missionText.textContent =
-    'Master each mistake twice to remove it from the bank.';
+    'Answer a saved mistake correctly once to remove it from the bank.';
 
   setControlsForGame(true);
   showQuestion();
@@ -2149,7 +2145,7 @@ function finishReview() {
   badges.innerHTML =
     '<span class="badge">🧠 Mistake Detective</span>';
   summaryMessage.textContent =
-    'A saved question is removed after two correct review attempts.';
+    'Each saved mistake is removed as soon as you answer it correctly in review.';
   reviewRoundBtn.disabled = true;
 
   saveProgress();
@@ -2186,9 +2182,8 @@ function renderMistakeList() {
             ${escapeHtml(mistake.lastAnswer || '—')}
           </div>
           <div>
-            <b>Correct / Mastery</b><br>
+            <b>Correct answer</b><br>
             ${formatMathHtml(displayCorrect(mistake.q))}
-            · ${mistake.mastery || 0}/2
           </div>
         </div>
       `;

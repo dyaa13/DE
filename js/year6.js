@@ -806,7 +806,7 @@ function y6GenRatio(){
     const type=randInt(1,4);
     if(type===1){const a=randInt(2,7),b=randInt(3,9),k=randInt(2,8);return{operation:'ratio',text:`${a}:${b} = ${a*k}:?`,answer:b*k,hint:'Scale both parts by the same factor.'}}
     if(type===2){const a=randInt(2,5),b=randInt(3,7),k=randInt(3,9);return{operation:'ratio',text:`Red:Blue = ${a}:${b}. Red = ${a*k}. Blue = ?`,answer:b*k,hint:`The scale factor is ${k}.`}}
-    if(type===3){const items=pick([3,4,5,6]),unit=pick([2,3,4,5,6]),cost=items*unit;return{operation:'ratio',text:`${items} pens cost $${cost}.    1 pen costs $?`,answer:unit,hint:'Divide the total cost by the number of pens.'}}
+    if(type===3){const items=pick([3,4,5,6]),unit=pick([2,3,4,5,6]),cost=items*unit;return{operation:'ratio',text:`${items} pens cost $${cost}.  Then 1 pen costs $?`,answer:unit,hint:'Divide the total cost by the number of pens.'}}
     const a=randInt(2,5),b=randInt(2,6),k=randInt(3,8),total=(a+b)*k;return{operation:'ratio',text:`Ratio ${a}:${b}, total ${total}. Larger share = ?`,answer:Math.max(a,b)*k,hint:'Find one part, then multiply by the larger ratio number.'}
   }
   const type=randInt(1,4);
