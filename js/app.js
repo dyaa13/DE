@@ -1287,36 +1287,47 @@ function setControlsForGame(active) {
   });
 }
 
-function showQuestion() {
+function showQuestion(reuseCurrent = false) {
   if (!state.running || state.paused) return;
 
   state.locked = false;
 
   if (state.reviewMode) {
-    const item = state.reviewQueue[state.reviewIndex];
+    if (!reuseCurrent) {
+      const item = state.reviewQueue[state.reviewIndex];
 
-    if (!item) {
-      finishReview();
-      return;
+      if (!item) {
+        finishReview();
+        return;
+      }
+
+      state.current = {
+        ...item.q,
+        _reviewItem: item
+      };
     }
 
-    state.current = {
-      ...item.q,
-      _reviewItem: item
-    };
+    if (!state.current) return;
 
     modeBadge.textContent =
       `Review: ${currentLabels()[state.current.skill] || state.current.skill}`;
     playArea.classList.add('review-mode');
   } else {
-    state.current = generateQuestion();
-    rememberRecentQuestion(state.current);
+    if (!reuseCurrent) {
+      state.current = generateQuestion();
+      rememberRecentQuestion(state.current);
+    }
+
+    if (!state.current) return;
+
     modeBadge.textContent =
       currentLabels()[state.current.skill] || state.current.skill;
     playArea.classList.remove('review-mode');
   }
 
-  state.questionStartedAt = performance.now();
+  if (!reuseCurrent) {
+    state.questionStartedAt = performance.now();
+  }
 
   const hasChoiceLayout =
     Array.isArray(state.current.choiceOptions)
@@ -1884,6 +1895,28 @@ function clearPracticeRecords() {
   }
 }
 
+function getPauseLimit(durationSeconds) {
+  // Allow 3 pauses for every 5 minutes of scheduled practice.
+  // Short practice modes scale proportionally: 1 min = 1 pause, 3 min = 2 pauses.
+  return Math.max(1, Math.ceil((Number(durationSeconds) / 300) * 3));
+}
+
+function getPausesRemaining() {
+  return Math.max(0, Number(state.pauseLimit || 0) - Number(state.pauseCount || 0));
+}
+
+function updatePauseButton() {
+  if (state.paused) {
+    pauseBtn.textContent = 'Resume';
+    pauseBtn.disabled = false;
+    return;
+  }
+
+  const remaining = getPausesRemaining();
+  pauseBtn.textContent = `Pause (${remaining} left)`;
+  pauseBtn.disabled = state.running && !state.reviewMode && remaining <= 0;
+}
+
 function startGame() {
   clearInterval(state.timerId);
 
@@ -1898,6 +1931,9 @@ function startGame() {
   state.level = levelSelect.value;
   state.duration = Number(timeSelect.value);
   state.remaining = state.duration;
+  state.pauseLimit = getPauseLimit(state.duration);
+  state.pauseCount = 0;
+  state.pauseSnapshot = null;
   state.heroKey = heroSelect.value;
   state.running = true;
   state.paused = false;
@@ -1922,9 +1958,10 @@ function startGame() {
   practiceRecords.style.display = 'none';
   playArea.classList.remove('hidden');
   summaryTitle.textContent = `Year ${state.year} Warm-up Complete!`;
-  pauseBtn.textContent = 'Pause';
+  updatePauseButton();
 
   setControlsForGame(true);
+  updatePauseButton();
   updateStatus();
   showQuestion();
 
@@ -1933,20 +1970,53 @@ function startGame() {
 }
 
 function togglePause() {
-  if (!state.running || state.reviewMode) return;
+  if (!state.running || state.reviewMode || state.locked) return;
 
-  state.paused = !state.paused;
-  pauseBtn.textContent = state.paused ? 'Resume' : 'Pause';
+  if (!state.paused) {
+    if (getPausesRemaining() <= 0) {
+      updatePauseButton();
+      return;
+    }
+
+    state.pauseCount = Number(state.pauseCount || 0) + 1;
+    state.pauseSnapshot = {
+      answerValue: answerInput.value,
+      questionStartedAt: state.questionStartedAt,
+      pauseStartedAt: performance.now()
+    };
+
+    state.paused = true;
+    updatePauseButton();
+    setControlsForGame(true);
+    updatePauseButton();
+
+    questionText.textContent = 'Paused';
+    modeBadge.textContent = 'Take a break';
+    feedback.textContent = '';
+    hint.textContent = `Press Resume to continue the same question. ${getPausesRemaining()} pause${getPausesRemaining() === 1 ? '' : 's'} left after this one.`;
+    return;
+  }
+
+  const snapshot = state.pauseSnapshot || {};
+  const resumedAt = performance.now();
+
+  state.paused = false;
   setControlsForGame(true);
 
-  if (state.paused) {
-    questionText.textContent = 'Paused';
-    modeBadge.textContent = 'Take a breath';
-    feedback.textContent = '';
-    hint.textContent = 'Press Resume when ready.';
-  } else {
-    showQuestion();
+  // Re-render the exact same question instead of generating a new one.
+  showQuestion(true);
+
+  answerInput.value = snapshot.answerValue || '';
+  if (Number.isFinite(snapshot.questionStartedAt)) {
+    const pausedFor = Number.isFinite(snapshot.pauseStartedAt)
+      ? resumedAt - snapshot.pauseStartedAt
+      : 0;
+    // Freeze the per-question speed timer while paused as well.
+    state.questionStartedAt = snapshot.questionStartedAt + pausedFor;
   }
+  state.pauseSnapshot = null;
+  updatePauseButton();
+  answerInput.focus();
 }
 
 function weakestArea() {
@@ -2023,6 +2093,7 @@ function finishGame() {
   clearInterval(state.timerId);
   state.running = false;
   state.paused = false;
+  state.pauseSnapshot = null;
   state.remaining = Math.max(0, state.remaining);
 
   setControlsForGame(false);
@@ -2123,6 +2194,8 @@ function startReview(items, source) {
 function finishReview() {
   state.running = false;
   state.reviewMode = false;
+  state.paused = false;
+  state.pauseSnapshot = null;
 
   setControlsForGame(false);
   playArea.classList.add('hidden');
