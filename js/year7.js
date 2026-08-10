@@ -1163,8 +1163,8 @@ function y7GenStatistics() {
     return q('statistics', `Five values have mean ${meanValue}. Known values: ${known.join(', ')}. Missing value = ?`, missing, 'Total = mean × 5, then subtract the known values.');
   }
   if (t === 6) {
-    const q1 = randInt(3, 10), med = randInt(q1 + 2, q1 + 8), q3 = randInt(med + 2, med + 10), vals = [q1 - 2, q1, q1 + 1, med, q3 - 1, q3, q3 + 2];
-    return q('statistics', `For the ordered data ${vals.join(', ')}, interquartile range = ?`, q3 - q1, 'IQR = Q3 − Q1.');
+    const add = randInt(1, 8), oldMedian = randInt(6, 20);
+    return q('statistics', `Every value in a data set is increased by ${add}. If the old median is ${oldMedian}, new median = ?`, oldMedian + add, 'Adding the same amount to every value increases the median by the same amount.');
   }
   if (t === 7) {
     const add = randInt(1, 8);
