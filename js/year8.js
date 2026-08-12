@@ -676,67 +676,98 @@ function y8GenGradientMidpoint() {
 
 function y8GenPolygonAngles() {
   const L = state.level;
-  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 9) : randInt(1, 12);
+  const t = L === 'starter' ? randInt(1, 8) : L === 'core' ? randInt(1, 13) : randInt(1, 17);
 
   if (t === 1) {
-    const [a, b] = pick([[35, 65], [40, 75], [45, 80], [50, 60], [55, 70]]);
-    return q('polygonAngles', `Two angles of a triangle are ${a}° and ${b}°. The third angle is ?°`, 180 - a - b, 'Angles in a triangle total 180°.');
+    const angle = pick([20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70]);
+    return q('polygonAngles', `Two angles are complementary. One is ${angle}°. The other is ?°`, 90 - angle, 'Complementary angles total 90°.');
   }
 
   if (t === 2) {
-    const [a, b, c] = pick([[70, 90, 110], [80, 100, 90], [60, 120, 80], [75, 105, 90], [85, 95, 100]]);
-    return q('polygonAngles', `Three angles of a quadrilateral are ${a}°, ${b}° and ${c}°. The fourth angle is ?°`, 360 - a - b - c, 'Angles in a quadrilateral total 360°.');
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('polygonAngles', `Two angles are supplementary. One is ${angle}°. The other is ?°`, 180 - angle, 'Supplementary angles total 180°.');
   }
 
   if (t === 3) {
-    const angle = pick([35, 45, 55, 65, 75, 85, 105, 115, 125, 135, 145]);
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
     return q('polygonAngles', `One of two vertically opposite angles is ${angle}°. The opposite angle is ?°`, angle, 'Vertically opposite angles are equal.');
   }
 
   if (t === 4) {
     const angle = pick([40, 50, 60, 70, 80, 100, 110, 120, 130, 140]);
-    return q('polygonAngles', `One co-interior angle between parallel lines is ${angle}°. The other is ?°`, 180 - angle, 'Co-interior angles total 180°.');
+    return q('polygonAngles', `Two parallel lines are cut by a transversal. A corresponding angle is ${angle}°. The matching corresponding angle is ?°`, angle, 'Corresponding angles are equal.');
   }
 
   if (t === 5) {
-    const n = randInt(5, L === 'starter' ? 8 : 12);
-    return q('polygonAngles', `Interior angle sum of a ${n}-sided polygon is ?°`, (n - 2) * 180, 'Use (n − 2) × 180°.');
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('polygonAngles', `Two parallel lines are cut by a transversal. An alternate interior angle is ${angle}°. The matching alternate interior angle is ?°`, angle, 'Alternate interior angles are equal.');
   }
 
   if (t === 6) {
-    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
-    return q('polygonAngles', `Each exterior angle of a regular ${n}-gon is ?°`, 360 / n, 'Exterior angles total 360°.');
+    const angle = pick([40, 50, 60, 70, 80, 100, 110, 120, 130, 140]);
+    return q('polygonAngles', `One co-interior angle between parallel lines is ${angle}°. The other co-interior angle is ?°`, 180 - angle, 'Co-interior angles total 180°.');
   }
 
   if (t === 7) {
-    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
-    return q('polygonAngles', `Each interior angle of a regular ${n}-gon is ?°`, 180 - 360 / n, 'Interior and exterior angles total 180°.');
+    const relation = randInt(1, 3);
+    if (relation === 1) return q('polygonAngles', 'Two parallel lines are cut by a transversal. Angles in the same relative position are called: 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 1, 'Same relative position means corresponding.');
+    if (relation === 2) return q('polygonAngles', 'Two angles lie inside parallel lines on opposite sides of the transversal. Enter 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 2, 'Inside and opposite sides means alternate interior.');
+    return q('polygonAngles', 'Two angles lie inside parallel lines on the same side of the transversal. Enter 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 3, 'Inside and same side means co-interior.');
   }
 
   if (t === 8) {
-    const exterior = pick([24, 30, 36, 40, 45, 60, 72, 90, 120]);
-    return q('polygonAngles', `A regular polygon has exterior angle ${exterior}°. Number of sides = ?`, 360 / exterior, 'Number of sides = 360 ÷ exterior angle.');
+    const [a, b, c] = pick([[70, 90, 80], [100, 75, 95], [120, 80, 60], [65, 110, 85], [90, 125, 55]]);
+    return q('polygonAngles', `Angles around a point are ${a}°, ${b}°, ${c}° and x°. Find x.`, 360 - a - b - c, 'Angles around a point total 360°.');
   }
 
   if (t === 9) {
-    const [exterior, opposite] = pick([[110, 45], [120, 50], [130, 55], [140, 60], [150, 70]]);
-    return q('polygonAngles', `A triangle has an exterior angle of ${exterior}°. One opposite interior angle is ${opposite}°. The other is ?°`, exterior - opposite, 'An exterior angle equals the sum of the two opposite interior angles.');
+    const a = randInt(35, 80), b = randInt(35, 80);
+    return q('polygonAngles', `Two angles of a triangle are ${a}° and ${b}°. The third angle is ?°`, 180 - a - b, 'Angles in a triangle total 180°.');
   }
 
   if (t === 10) {
-    const [interior, sides] = pick([[60, 3], [90, 4], [108, 5], [120, 6], [135, 8], [140, 9], [144, 10], [150, 12], [156, 15], [160, 18]]);
-    return q('polygonAngles', `Each interior angle of a regular polygon is ${interior}°. Number of sides = ?`, sides, 'Find the exterior angle, then divide 360° by it.');
+    const [a, b, c] = pick([[80, 95, 105], [70, 110, 85], [90, 100, 75], [65, 120, 95]]);
+    return q('polygonAngles', `Three angles of a quadrilateral are ${a}°, ${b}° and ${c}°. The fourth angle is ?°`, 360 - a - b - c, 'Angles in a quadrilateral total 360°.');
   }
 
   if (t === 11) {
-    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
-    return q('polygonAngles', `A corresponding angle between parallel lines is ${angle}°. The adjacent angle on a straight line is ?°`, 180 - angle, 'Use corresponding angles, then subtract from 180°.');
+    const [exterior, opposite] = pick([[110, 45], [120, 50], [130, 55], [140, 65], [150, 70]]);
+    return q('polygonAngles', `A triangle has an exterior angle of ${exterior}°. One opposite interior angle is ${opposite}°. The other is ?°`, exterior - opposite, 'Use the exterior-angle theorem.');
   }
 
-  const [a, b, x] = pick([[2, 3, 36], [3, 2, 36], [4, 2, 30], [5, 1, 30], [3, 3, 30]]);
-  return q('polygonAngles', `Angles ${a}x° and ${b}x° form a straight line. Find x.`, x, 'Add the coefficients and set the total equal to 180°.');
-}
+  if (t === 12) {
+    const n = pick([5, 6, 7, 8, 9, 10, 12]);
+    return q('polygonAngles', `Interior angle sum of a ${n}-sided polygon is ?°`, (n - 2) * 180, 'Use (n − 2) × 180°.');
+  }
 
+  if (t === 13) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('polygonAngles', `A corresponding angle is ${angle}°. The angle adjacent to its matching angle on a straight line is ?°`, 180 - angle, 'Use corresponding angles, then supplementary angles.');
+  }
+
+  if (t === 14) {
+    const x = pick([10, 12, 15, 18, 20]);
+    const a = pick([2, 3, 4]);
+    const b = pick([10, 20, 30]);
+    const c = pick([a + 1, a + 2]);
+    const d = (a - c) * x + b;
+    return q('polygonAngles', `Alternate interior angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Alternate interior angles are equal.');
+  }
+
+  if (t === 15) {
+    const [x, a, c, b] = pick([[20, 2, 3, 20], [15, 3, 4, 15], [18, 2, 4, 18], [12, 4, 5, 24]]);
+    const d = 180 - (a + c) * x - b;
+    return q('polygonAngles', `Co-interior angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Co-interior angles total 180°.');
+  }
+
+  if (t === 16) {
+    const n = pick([5, 6, 8, 9, 10, 12, 15, 18]);
+    return q('polygonAngles', `Each exterior angle of a regular ${n}-gon is ?°`, 360 / n, 'Exterior angles total 360°.');
+  }
+
+  const [interior, sides] = pick([[60, 3], [90, 4], [108, 5], [120, 6], [135, 8], [140, 9], [144, 10], [150, 12], [156, 15], [160, 18]]);
+  return q('polygonAngles', `Each interior angle of a regular polygon is ${interior}°. Number of sides = ?`, sides, 'Find the exterior angle, then divide 360° by it.');
+}
 function y8GenPythagorasFocused() {
   const L = state.level;
   const t = L === 'starter' ? randInt(1, 2) : L === 'core' ? randInt(1, 3) : randInt(1, 5);

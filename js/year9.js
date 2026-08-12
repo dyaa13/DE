@@ -1396,75 +1396,110 @@ function y9GenStatisticsData() {
 
 function y9GenAngleReasoning() {
   const L = state.level;
-  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 12);
+  const t = L === 'starter' ? randInt(1, 8) : L === 'core' ? randInt(1, 13) : randInt(1, 18);
 
   if (t === 1) {
-    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
-    return q('angleReasoning', `Each exterior angle of a regular ${n}-gon is ?°`, 360 / n, 'Exterior angles total 360°.');
+    const angle = pick([20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70]);
+    return q('angleReasoning', `Two angles are complementary. One is ${angle}°. Find the other angle.`, 90 - angle, 'Complementary angles total 90°.');
   }
 
   if (t === 2) {
-    const n = pick([3, 4, 5, 6, 8, 9, 10, 12]);
-    return q('angleReasoning', `Each interior angle of a regular ${n}-gon is ?°`, 180 - 360 / n, 'Interior and exterior angles total 180°.');
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleReasoning', `Two angles are supplementary. One is ${angle}°. Find the other angle.`, 180 - angle, 'Supplementary angles total 180°.');
   }
 
   if (t === 3) {
-    const exterior = pick([20, 24, 30, 36, 40, 45, 60, 72, 90, 120]);
-    return q('angleReasoning', `A regular polygon has exterior angle ${exterior}°. How many sides does it have?`, 360 / exterior, 'Number of sides = 360 ÷ exterior angle.');
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleReasoning', `One of two vertically opposite angles is ${angle}°. Find the opposite angle.`, angle, 'Vertically opposite angles are equal.');
   }
 
   if (t === 4) {
-    const [exterior, opposite] = pick([[110, 45], [120, 50], [130, 55], [140, 60], [150, 70]]);
-    return q('angleReasoning', `A triangle has an exterior angle of ${exterior}°. One opposite interior angle is ${opposite}°. Find the other opposite interior angle.`, exterior - opposite, 'Use the exterior-angle theorem.');
+    const angle = pick([40, 50, 60, 70, 80, 100, 110, 120, 130, 140]);
+    return q('angleReasoning', `Two parallel lines are cut by a transversal. One corresponding angle is ${angle}°. Find its matching corresponding angle.`, angle, 'Corresponding angles are equal.');
   }
 
   if (t === 5) {
     const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
-    return q('angleReasoning', `One co-interior angle between parallel lines is ${angle}°. Find the other co-interior angle.`, 180 - angle, 'Co-interior angles total 180°.');
+    return q('angleReasoning', `Two parallel lines are cut by a transversal. One alternate interior angle is ${angle}°. Find the matching alternate interior angle.`, angle, 'Alternate interior angles are equal.');
   }
 
   if (t === 6) {
-    const [interior, sides] = pick([[60, 3], [90, 4], [108, 5], [120, 6], [135, 8], [140, 9], [144, 10], [150, 12], [156, 15], [160, 18]]);
-    return q('angleReasoning', `Each interior angle of a regular polygon is ${interior}°. How many sides does it have?`, sides, 'Find the exterior angle, then divide 360° by it.');
+    const angle = pick([40, 50, 60, 70, 80, 100, 110, 120, 130, 140]);
+    return q('angleReasoning', `One co-interior angle between parallel lines is ${angle}°. Find the other co-interior angle.`, 180 - angle, 'Co-interior angles total 180°.');
   }
 
   if (t === 7) {
-    const x = pick([10, 12, 15, 18, 20]);
-    const a = pick([2, 3, 4]);
-    const c = pick([a + 1, a + 2]);
-    const b = pick([10, 20, 30, 40]);
-    const d = 180 - (a + c) * x - b;
-    if (d < -50 || d > 80) return y9GenAngleReasoning();
-    const dText = d >= 0 ? `+ ${d}` : `− ${Math.abs(d)}`;
-    return q('angleReasoning', `Angles (${a}x + ${b})° and (${c}x ${dText})° form a straight line. Find x.`, x, 'Add the expressions and set the total to 180°.');
+    const relation = randInt(1, 3);
+    if (relation === 1) return q('angleReasoning', 'Parallel lines are cut by a transversal. Two angles occupy the same relative position at the intersections. Enter 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 1, 'Same relative position means corresponding.');
+    if (relation === 2) return q('angleReasoning', 'Parallel lines are cut by a transversal. Two angles are inside the lines and on opposite sides of the transversal. Enter 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 2, 'Inside and opposite sides means alternate interior.');
+    return q('angleReasoning', 'Parallel lines are cut by a transversal. Two angles are inside the lines and on the same side of the transversal. Enter 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 3, 'Inside and same side means co-interior.');
   }
 
   if (t === 8) {
-    const x = pick([8, 10, 12, 15, 18, 20]);
-    const a = pick([2, 3]);
-    const c = pick([4, 5, 6]);
-    const b = pick([20, 30, 40, 50]);
+    const [a, b, c] = pick([[70, 90, 80], [100, 75, 95], [120, 80, 60], [65, 110, 85], [90, 125, 55]]);
+    return q('angleReasoning', `Angles around a point are ${a}°, ${b}°, ${c}° and x°. Find x.`, 360 - a - b - c, 'Angles around a point total 360°.');
+  }
+
+  if (t === 9) {
+    const x = pick([10, 12, 15, 18, 20]);
+    const a = pick([2, 3, 4]);
+    const b = pick([10, 20, 30]);
+    const c = pick([a + 1, a + 2]);
     const d = (a - c) * x + b;
     return q('angleReasoning', `Vertically opposite angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Vertically opposite angles are equal.');
   }
 
-  if (t === 9) {
-    const exterior = pick([80, 100, 120, 140]);
-    const vertex = 180 - exterior;
-    return q('angleReasoning', `An isosceles triangle has an exterior angle of ${exterior}° at its vertex. Each equal base angle is ?°`, (180 - vertex) / 2, 'Find the interior vertex angle, then divide the remaining angle sum equally.');
-  }
-
   if (t === 10) {
-    const n = pick([5, 6, 8, 9, 10, 12, 15]);
-    return q('angleReasoning', `The interior angle sum of a polygon is ${(n - 2) * 180}°. How many sides does it have?`, n, 'Divide by 180°, then add 2.');
+    const x = pick([10, 12, 15, 18, 20]);
+    const a = pick([2, 3, 4]);
+    const b = pick([10, 20, 30]);
+    const c = pick([a + 1, a + 2]);
+    const d = (a - c) * x + b;
+    return q('angleReasoning', `Corresponding angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Corresponding angles are equal when the lines are parallel.');
   }
 
   if (t === 11) {
-    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
-    return q('angleReasoning', `A corresponding angle between parallel lines is ${angle}°. Find the angle adjacent to its matching angle on a straight line.`, 180 - angle, 'Use corresponding angles, then a straight-line total.');
+    const x = pick([10, 12, 15, 18, 20]);
+    const a = pick([2, 3, 4]);
+    const b = pick([10, 20, 30]);
+    const c = pick([a + 1, a + 2]);
+    const d = (a - c) * x + b;
+    return q('angleReasoning', `Alternate interior angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Alternate interior angles are equal.');
   }
 
-  return q('angleReasoning', 'The three angles of a triangle are x°, 2x° and 3x°. Find x.', 30, 'The angles total 180°, so 6x = 180°.');
+  if (t === 12) {
+    const [x, a, c, b] = pick([[20, 2, 3, 20], [15, 3, 4, 15], [18, 2, 4, 18], [12, 4, 5, 24]]);
+    const d = 180 - (a + c) * x - b;
+    return q('angleReasoning', `Co-interior angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Co-interior angles total 180°.');
+  }
+
+  if (t === 13) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleReasoning', `A corresponding angle is ${angle}°. Find the angle adjacent to its matching corresponding angle on a straight line.`, 180 - angle, 'Use corresponding angles first, then supplementary angles.');
+  }
+
+  if (t === 14) {
+    const n = pick([5, 6, 8, 9, 10, 12]);
+    return q('angleReasoning', `Each exterior angle of a regular ${n}-gon is ?°`, 360 / n, 'Exterior angles total 360°.');
+  }
+
+  if (t === 15) {
+    const n = pick([5, 6, 8, 9, 10, 12]);
+    return q('angleReasoning', `Each interior angle of a regular ${n}-gon is ?°`, 180 - 360 / n, 'Interior and exterior angles are supplementary.');
+  }
+
+  if (t === 16) {
+    const exterior = pick([20, 24, 30, 36, 40, 45, 60, 72]);
+    return q('angleReasoning', `A regular polygon has exterior angle ${exterior}°. How many sides does it have?`, 360 / exterior, 'Number of sides = 360 ÷ exterior angle.');
+  }
+
+  if (t === 17) {
+    const [exterior, opposite] = pick([[110, 45], [120, 50], [130, 55], [140, 65], [150, 70]]);
+    return q('angleReasoning', `A triangle has an exterior angle of ${exterior}°. One opposite interior angle is ${opposite}°. Find the other opposite interior angle.`, exterior - opposite, 'Use the exterior-angle theorem.');
+  }
+
+  const [x, a, fixed] = pick([[20, 3, 120], [15, 4, 120], [12, 5, 120], [25, 2, 130]]);
+  return q('angleReasoning', `Angles ${a}x° and ${fixed}° are supplementary. Find x.`, x, 'Supplementary angles total 180°.');
 }
 
 /* ===== YEAR 9 FINAL CURRICULUM ADDITIONS ===== */

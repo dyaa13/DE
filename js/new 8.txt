@@ -1,0 +1,111 @@
+第一优先：Probability（概率）
+
+最适合接在刚做完的 Statistics 后面，而且基本不用画图。可以分成：
+
+Impossible / unlikely / even chance / likely / certain
+Probability scale 0–1
+Simple probability as a fraction
+Favourable outcomes / total outcomes
+Coins
+Dice
+Spinners（可以纯文字描述）
+Coloured counters / balls in a bag
+Complementary probability
+Comparing probabilities
+Experimental probability
+Expected frequency
+Two-step probability
+With / without replacement
+Probability reasoning and fairness
+
+这个我认为是下一个最值得做的。
+
+第二优先：2D & 3D Shapes
+
+和Measurement分开，专门学习图形性质：
+
+triangle types
+quadrilateral types
+regular / irregular polygons
+sides / vertices / faces / edges
+nets
+prism / pyramid
+cube / cuboid
+symmetry
+shape classification
+properties and logic
+
+大部分可以纯文字完成，例如：
+
+A quadrilateral has four equal sides and four right angles. Name the shape.
+
+第三优先：Coordinates and Transformations
+
+可以做：
+
+x-axis / y-axis
+origin
+four quadrants
+read coordinates
+plot coordinates
+horizontal / vertical distance
+translation
+reflection
+rotation
+simple enlargement
+missing vertex
+coordinate patterns
+
+不过这个主题有一部分有图会明显更好，可以先做纯文字坐标版本。
+
+
+
+第五优先：Financial Mathematics / Money
+
+虽然现在很多Topic里已经散布着money应用题，但还没有系统训练：
+
+dollars and cents
+making amounts
+change
+total cost
+unit price
+best buy
+budget
+discounts
+simple percentage increase/decrease
+profit / loss
+tax
+wages
+simple interest（可以放高阶）
+multi-step shopping reasoning
+
+和Percentage有一些重合，所以可以更强调实际应用与决策。
+
+第六优先：Patterns and Sequences
+
+现在Whole Numbers和Algebra里都有一点，但还可以专门做：
+
+additive patterns
+multiplicative patterns
+alternating patterns
+missing terms
+term-to-term rules
+position-to-term
+shape-free number patterns
+tables of values
+arithmetic sequences
+reverse patterns
+multi-rule patterns
+pattern logic
+第七优先：Graphs and Charts
+
+这个就是刚才Statistics暂时没做的视觉部分：
+
+pictograms
+bar graphs
+double bar graphs
+line graphs
+pie charts
+misleading graphs
+
+但这个最好有图以后再做，我不会把它放在当前优先位置。

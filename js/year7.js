@@ -1303,7 +1303,7 @@ function y7GenFractionProblemSolving() {
 
 function y7GenAngleRelationships() {
   const L = state.level;
-  const t = L === 'starter' ? randInt(1, 5) : L === 'core' ? randInt(1, 8) : randInt(1, 12);
+  const t = L === 'starter' ? randInt(1, 8) : L === 'core' ? randInt(1, 12) : randInt(1, 16);
 
   if (t === 1) {
     const angle = pick([35, 45, 55, 65, 75, 85, 105, 115, 125, 135, 145]);
@@ -1311,18 +1311,18 @@ function y7GenAngleRelationships() {
   }
 
   if (t === 2) {
-    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
-    return q('angleRelationships', `One angle on a straight line is ${angle}°. The adjacent angle is ?°`, 180 - angle, 'Angles on a straight line total 180°.');
+    const angle = pick([15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75]);
+    return q('angleRelationships', `Two angles are complementary. One angle is ${angle}°. The other angle is ?°`, 90 - angle, 'Complementary angles total 90°.');
   }
 
   if (t === 3) {
-    const [a, b] = pick([[35, 65], [40, 75], [45, 80], [50, 60], [55, 70]]);
-    return q('angleRelationships', `Two angles of a triangle are ${a}° and ${b}°. The third angle is ?°`, 180 - a - b, 'Angles in a triangle total 180°.');
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleRelationships', `Two angles are supplementary. One angle is ${angle}°. The other angle is ?°`, 180 - angle, 'Supplementary angles total 180°.');
   }
 
   if (t === 4) {
-    const vertex = pick([40, 60, 80, 100, 120]);
-    return q('angleRelationships', `An isosceles triangle has a vertex angle of ${vertex}°. Each base angle is ?°`, (180 - vertex) / 2, 'The two base angles are equal.');
+    const [a, b, c] = pick([[70, 90, 80], [100, 75, 95], [120, 80, 60], [65, 110, 85], [90, 125, 55]]);
+    return q('angleRelationships', `Angles around a point are ${a}°, ${b}°, ${c}° and x°. Find x.`, 360 - a - b - c, 'Angles around a point total 360°.');
   }
 
   if (t === 5) {
@@ -1332,43 +1332,71 @@ function y7GenAngleRelationships() {
 
   if (t === 6) {
     const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
-    return q('angleRelationships', `Two parallel lines are cut by a transversal. An alternate interior angle is ${angle}°. The matching alternate angle is ?°`, angle, 'Alternate interior angles are equal.');
+    return q('angleRelationships', `Two parallel lines are cut by a transversal. An alternate interior angle is ${angle}°. The matching alternate interior angle is ?°`, angle, 'Alternate interior angles are equal.');
   }
 
   if (t === 7) {
     const angle = pick([40, 50, 60, 70, 80, 100, 110, 120, 130, 140]);
-    return q('angleRelationships', `Two co-interior angles lie between parallel lines. One is ${angle}°. The other is ?°`, 180 - angle, 'Co-interior angles total 180°.');
+    return q('angleRelationships', `Two co-interior angles lie between parallel lines on the same side of a transversal. One is ${angle}°. The other is ?°`, 180 - angle, 'Co-interior angles total 180°.');
   }
 
   if (t === 8) {
+    const relation = randInt(1, 3);
+    if (relation === 1) return q('angleRelationships', 'Two parallel lines are cut by a transversal. Two angles are in the same relative corner at the two intersections. Enter 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 1, 'Same relative position means corresponding angles.');
+    if (relation === 2) return q('angleRelationships', 'Two parallel lines are cut by a transversal. Two angles lie between the parallel lines on opposite sides of the transversal. Enter 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 2, 'Inside the lines and on opposite sides means alternate interior angles.');
+    return q('angleRelationships', 'Two parallel lines are cut by a transversal. Two angles lie between the parallel lines on the same side of the transversal. Enter 1=Corresponding, 2=Alternate interior, 3=Co-interior.', 3, 'Inside the lines and on the same side means co-interior angles.');
+  }
+
+  if (t === 9) {
+    const [a, b] = pick([[35, 65], [40, 75], [45, 80], [50, 60], [55, 70]]);
+    return q('angleRelationships', `Two angles of a triangle are ${a}° and ${b}°. The third angle is ?°`, 180 - a - b, 'Angles in a triangle total 180°.');
+  }
+
+  if (t === 10) {
+    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
+    return q('angleRelationships', `A corresponding angle between parallel lines is ${angle}°. The angle next to its matching angle on a straight line is ?°`, 180 - angle, 'Use corresponding angles first, then supplementary angles on a straight line.');
+  }
+
+  if (t === 11) {
+    const x = pick([12, 15, 18, 20, 24, 25, 30]);
+    const a = pick([2, 3, 4]);
+    const b = pick([10, 20, 30]);
+    const c = pick([a + 1, a + 2]);
+    const d = (a - c) * x + b;
+    return q('angleRelationships', `Vertically opposite angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Vertically opposite angles are equal.');
+  }
+
+  if (t === 12) {
+    const [x, a, c, b] = pick([[20, 2, 3, 20], [15, 3, 4, 15], [18, 2, 4, 18], [12, 4, 5, 24]]);
+    const d = 180 - (a + c) * x - b;
+    return q('angleRelationships', `Co-interior angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Co-interior angles between parallel lines total 180°.');
+  }
+
+  if (t === 13) {
     const [exterior, interior] = pick([[110, 45], [120, 50], [125, 55], [130, 60], [140, 65], [150, 70]]);
     return q('angleRelationships', `A triangle has an exterior angle of ${exterior}°. One opposite interior angle is ${interior}°. The other opposite interior angle is ?°`, exterior - interior, 'An exterior angle equals the sum of the two opposite interior angles.');
   }
 
-  if (t === 9) {
-    const multiplier = pick([2, 3, 4, 5]);
-    const x = pick([10, 12, 15, 18, 20, 24, 25, 30]);
-    return q('angleRelationships', `Vertically opposite angles are ${multiplier}x° and ${multiplier * x}°. Find x.`, x, 'Vertically opposite angles are equal.');
+  if (t === 14) {
+    const relation = chance(.5);
+    return q('angleRelationships', relation ? 'Two angles total 90°. Enter 1=Complementary, 2=Supplementary.' : 'Two angles total 180°. Enter 1=Complementary, 2=Supplementary.', relation ? 1 : 2, relation ? 'Complementary angles total 90°.' : 'Supplementary angles total 180°.');
   }
 
-  if (t === 10) {
-    const multiplier = pick([2, 3, 4, 5]);
-    const x = pick([10, 15, 20, 25, 30, 35, 40]);
-    const fixed = 180 - multiplier * x;
-    if (fixed <= 0) return y7GenAngleRelationships();
-    return q('angleRelationships', `Angles ${multiplier}x° and ${fixed}° form a straight line. Find x.`, x, 'Their sum is 180°.');
+  if (t === 15) {
+    const x = pick([10, 12, 15, 18, 20]);
+    const a = pick([2, 3, 4]);
+    const b = pick([10, 20, 30]);
+    const c = pick([a + 1, a + 2]);
+    const d = (a - c) * x + b;
+    return q('angleRelationships', `Two corresponding angles are (${a}x + ${b})° and (${c}x ${d >= 0 ? '+' : '−'} ${Math.abs(d)})°. Find x.`, x, 'Corresponding angles are equal when the lines are parallel.');
   }
 
-  if (t === 11) {
-    const angle = pick([35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145]);
-    return q('angleRelationships', `A corresponding angle between parallel lines is ${angle}°. The angle next to its matching angle on a straight line is ?°`, 180 - angle, 'First use corresponding angles, then subtract from 180°.');
-  }
-
-  const exterior = pick([80, 100, 120, 140]);
-  const vertex = 180 - exterior;
-  return q('angleRelationships', `An isosceles triangle has an exterior angle of ${exterior}° at its vertex. Each equal base angle is ?°`, (180 - vertex) / 2, 'Find the interior vertex angle, then halve the remaining triangle angle sum.');
+  const x = pick([15, 20, 25, 30]);
+  const a = pick([2, 3, 4]);
+  const fixed = 90 - a * x;
+  if (fixed <= 0) return y7GenAngleRelationships();
+  return q('angleRelationships', `Angles ${a}x° and ${fixed}° are complementary. Find x.`, x, 'Complementary angles total 90°.');
 }
-
 
 
 /* ===== YEAR 7 EASY MENTAL-MATH ADDITIONS ===== */
