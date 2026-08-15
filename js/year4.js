@@ -1,7 +1,7 @@
 'use strict';
 
 /* Year 4 configuration and question bank. */
-YEAR_CONFIGS[4] = {"title":"Year 4 Rapid Fire Mental Maths","skillLabel":"Year 4 Skill","mixed":"Mixed Year 4 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","division":"Division","placevalue":"Place Value","rounding":"Rounding & Estimation","missing":"Missing Numbers & Inverse Operations","doubles":"Doubles, Halves & Near Doubles","factors":"Factors, Multiples & Divisibility","fractions":"Fractions Basics","decimalTenths":"Decimal Tenths","time":"Time","measurements":"Measurement & Temperature","perimeterArea":"Perimeter, Area & Volume","sequences":"Sequences & Patterns","mixed":"Mixed Year 4 Skills","review":"Mistake Review","angleBasics":"Angle Basics","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","probability":"Likelihood & Simple Probability","numberBalance":"Number Sentences & Balance","shapesSymmetry":"Shapes, Symmetry & 3D Objects","dataTables":"Data Tables & Categories"},"skills":["addition","subtraction","multiplication","division","placevalue","rounding","missing","numberBalance","doubles","mentalStrategies","factors","fractions","decimalTenths","probability","angleBasics","shapesSymmetry","dataTables","time","moneyChange","calendarDates","measurements","perimeterArea","sequences"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 4 includes short, mental-friendly banks across number, fractions, decimal tenths, money, time, measurement, angles, probability, data, number sentences, shapes and symmetry."};
+YEAR_CONFIGS[4] = {"title":"Year 4 Rapid Fire Mental Maths","skillLabel":"Year 4 Skill","mixed":"Mixed Year 4 Skills","labels":{"addition":"Addition","subtraction":"Subtraction","multiplication":"Multiplication","division":"Division","timesTables":"Times Tables: × & ÷","placevalue":"Place Value","rounding":"Rounding & Estimation","missing":"Missing Numbers & Inverse Operations","doubles":"Doubles, Halves & Near Doubles","factors":"Factors, Multiples & Divisibility","fractions":"Fractions Basics","decimalTenths":"Decimal Tenths","time":"Time","measurements":"Measurement & Temperature","perimeterArea":"Perimeter, Area & Volume","sequences":"Sequences & Patterns","mixed":"Mixed Year 4 Skills","review":"Mistake Review","angleBasics":"Angle Basics","mentalStrategies":"Mental Calculation Strategies","moneyChange":"Money & Change","calendarDates":"Calendar & Dates","probability":"Likelihood & Simple Probability","numberBalance":"Number Sentences & Balance","shapesSymmetry":"Shapes, Symmetry & 3D Objects","dataTables":"Data Tables & Categories"},"skills":["addition","subtraction","multiplication","division","timesTables","placevalue","rounding","missing","numberBalance","doubles","mentalStrategies","factors","fractions","decimalTenths","probability","angleBasics","shapesSymmetry","dataTables","time","moneyChange","calendarDates","measurements","perimeterArea","sequences"],"levels":[["starter","Starter"],["core","Core"],["challenge","Challenge"]],"teacher":"Year 4 includes short, mental-friendly banks across number, times tables, fractions, decimal tenths, money, time, measurement, angles, probability, data, number sentences, shapes and symmetry."};
 BASE_STORAGE_BY_YEAR[4] = {"stars":"dyaaRapidStars","hero":"dyaaRapidHero","best":"dyaaRapidBest","mistakes":"dyaaRapidMistakes"};
 
 /* ===== YEAR 4 QUESTION GENERATORS ===== */
@@ -70,6 +70,27 @@ function y4GenDiv(){
   if(t===5){const d=pick([2,3,4,5,6,8,10]),qv=randInt(12,60);return q('division',`□ ÷ ${d} = ${qv}`,d*qv,'Multiply the divisor by the quotient.');}
   const [n,d]=pick([[1000,4],[1200,3],[1500,5],[2400,6],[3200,8],[4500,5]]);
   return q('division',`${n.toLocaleString()} ÷ ${d} = ?`,n/d,'Use place value and known division facts.');
+}
+
+
+/* Dedicated multiplication-table practice.
+   No factor of 1. Facts using 2, 3 or 4 are deliberately uncommon;
+   most questions use the 5–10 tables. */
+function y4TimesTableFactor(){
+  return chance(0.10) ? pick([2,3,4]) : pick([5,6,7,8,9,10]);
+}
+
+function y4GenTimesTables(){
+  const a=y4TimesTableFactor(), b=y4TimesTableFactor(), product=a*b;
+  // Keep the dedicated bank focused on recall: roughly half multiplication,
+  // half the matching division fact. Both factors are always at least 2.
+  if(chance(0.5)){
+    return q('timesTables',`${a} × ${b} = ?`,product,`Recall the ${a} times table.`);
+  }
+  if(chance(0.5)){
+    return q('timesTables',`${product} ÷ ${a} = ?`,b,`Think: ${a} × ? = ${product}.`);
+  }
+  return q('timesTables',`${product} ÷ ${b} = ?`,a,`Think: ${b} × ? = ${product}.`);
 }
 
 
@@ -640,6 +661,7 @@ YEAR_BANKS[4] = {
   "subtraction": y4GenSub,
   "multiplication": y4GenMul,
   "division": y4GenDiv,
+  "timesTables": y4GenTimesTables,
   "placevalue": y4GenPlaceValue,
   "rounding": y4GenRounding,
   "missing": y4GenMissing,
